@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ContentTree } from './components/ContentTree'
 import { NodeViewer } from './components/NodeViewer'
+import { Welcome } from './components/Welcome'
 import { arbolDemo } from './data/mockContent'
 import { useDwellSync, useDwellTracking } from './hooks/useDwellTracking'
 import { descargarArbolParaOffline } from './lib/offlineContent'
@@ -17,6 +18,7 @@ function encontrarCamino(raiz: ContentNode, objetivoId: string, camino: ContentN
 }
 
 function App() {
+  const [mostrarBienvenida, setMostrarBienvenida] = useState(true)
   const [nodoActualId, setNodoActualId] = useState(arbolDemo.id)
   const [descargando, setDescargando] = useState(false)
   const [descargado, setDescargado] = useState(false)
@@ -33,6 +35,14 @@ function App() {
     await descargarArbolParaOffline(arbolDemo)
     setDescargando(false)
     setDescargado(true)
+  }
+
+  if (mostrarBienvenida) {
+    return (
+      <div style={{ maxWidth: 960, margin: '0 auto', fontFamily: 'Arial, sans-serif' }}>
+        <Welcome onEntrar={() => setMostrarBienvenida(false)} />
+      </div>
+    )
   }
 
   return (

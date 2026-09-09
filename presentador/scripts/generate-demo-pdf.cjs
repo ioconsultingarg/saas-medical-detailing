@@ -36,11 +36,22 @@ function buildPdf(text) {
   return pdf
 }
 
-const pdf = buildPdf(
-  'Ficha tecnica de ejemplo\nPrincipio activo: Demo-molecula 20mg\nPosologia: 1 comprimido cada 12hs\nContenido cargado a mano para el MVP',
-)
+const fichas = [
+  {
+    archivo: 'ficha-tecnica.pdf',
+    texto:
+      'Ficha tecnica de ejemplo\nPrincipio activo: Demo-molecula 20mg\nPosologia: 1 comprimido cada 12hs\nContenido cargado a mano para el MVP',
+  },
+  {
+    archivo: 'linea-b-ficha.pdf',
+    texto:
+      'Ficha tecnica de ejemplo\nPrincipio activo: Respira-mol\nPosologia: 2 inhalaciones cada 12hs\nContenido cargado a mano para el MVP',
+  },
+]
 
 const outDir = path.join(__dirname, '..', 'public', 'content')
 fs.mkdirSync(outDir, { recursive: true })
-fs.writeFileSync(path.join(outDir, 'ficha-tecnica.pdf'), pdf, 'latin1')
-console.log('PDF generado en', path.join(outDir, 'ficha-tecnica.pdf'))
+for (const { archivo, texto } of fichas) {
+  fs.writeFileSync(path.join(outDir, archivo), buildPdf(texto), 'latin1')
+  console.log('PDF generado en', path.join(outDir, archivo))
+}

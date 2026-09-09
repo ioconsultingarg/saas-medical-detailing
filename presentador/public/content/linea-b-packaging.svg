@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#f0fdf4"/>
+  <rect x="260" y="120" width="280" height="380" rx="18" fill="#15803d"/>
+  <rect x="260" y="120" width="280" height="90" rx="18" fill="#166534"/>
+  <text x="400" y="175" font-size="26" fill="#ffffff" text-anchor="middle" font-family="Arial, sans-serif">RESPIRA-MOL</text>
+  <text x="400" y="210" font-size="16" fill="#dcfce7" text-anchor="middle" font-family="Arial, sans-serif">Inhalador — 200 dosis</text>
+  <circle cx="400" cy="360" r="70" fill="#86efac" opacity="0.6"/>
+  <text x="400" y="366" font-size="16" fill="#14532d" text-anchor="middle" font-family="Arial, sans-serif">Vía inhalada</text>
+  <rect x="300" y="470" width="200" height="24" rx="6" fill="#166534"/>
+  <text x="400" y="487" font-size="12" fill="#dcfce7" text-anchor="middle" font-family="Arial, sans-serif">Ver técnica de uso</text>
+  <text x="400" y="560" font-size="13" fill="#64748b" text-anchor="middle" font-family="Arial, sans-serif">Imagen de demo — tocar zonas resaltadas</text>
+</svg>
