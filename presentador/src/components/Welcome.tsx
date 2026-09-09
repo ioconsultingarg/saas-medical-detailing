@@ -5,7 +5,13 @@ interface Props {
 export function Welcome({ onEntrar }: Props) {
   return (
     <div style={{ textAlign: 'center', padding: '48px 16px' }}>
-      <img src="/icon.svg" alt="" width={72} height={72} style={{ marginBottom: 16 }} />
+      <img
+        src={`${import.meta.env.BASE_URL}icon.svg`}
+        alt=""
+        width={72}
+        height={72}
+        style={{ marginBottom: 16 }}
+      />
       <h1 style={{ fontSize: 24, margin: '0 0 8px', color: '#0f172a' }}>Presentador de Medical Detailing</h1>
       <p style={{ color: '#475569', maxWidth: 520, margin: '0 auto 24px' }}>
         Así se ve el material de visita médica de tu laboratorio en la tablet del APM: navegación libre por

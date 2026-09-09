@@ -1,5 +1,7 @@
 import type { ContentNode } from '../types'
 
+const contentUrl = (archivo: string) => `${import.meta.env.BASE_URL}content/${archivo}`
+
 // Contenido cargado a mano para la demo del MVP (HU-C2: en producción esto vive en Supabase, no en código).
 // Dos líneas de producto genéricas, para que el árbol se vea como un catálogo real y no un único ítem suelto.
 export const arbolDemo: ContentNode = {
@@ -18,7 +20,7 @@ export const arbolDemo: ContentNode = {
           id: 'packaging',
           titulo: 'Presentación del producto',
           tipo: 'imagen',
-          url: '/content/packaging.svg',
+          url: contentUrl('packaging.svg'),
           hotspots: [
             {
               id: 'hs-posologia',
@@ -38,7 +40,7 @@ export const arbolDemo: ContentNode = {
           id: 'eficacia',
           titulo: 'Estudio de eficacia',
           tipo: 'imagen',
-          url: '/content/eficacia.svg',
+          url: contentUrl('eficacia.svg'),
           hotspots: [
             {
               id: 'hs-video',
@@ -58,7 +60,7 @@ export const arbolDemo: ContentNode = {
           id: 'ficha-tecnica',
           titulo: 'Ficha técnica (PDF)',
           tipo: 'pdf',
-          url: '/content/ficha-tecnica.pdf',
+          url: contentUrl('ficha-tecnica.pdf'),
         },
       ],
     },
@@ -72,7 +74,7 @@ export const arbolDemo: ContentNode = {
           id: 'linea-b-packaging',
           titulo: 'Presentación del producto',
           tipo: 'imagen',
-          url: '/content/linea-b-packaging.svg',
+          url: contentUrl('linea-b-packaging.svg'),
           hotspots: [
             {
               id: 'hs-tecnica-uso',
@@ -92,7 +94,7 @@ export const arbolDemo: ContentNode = {
           id: 'linea-b-eficacia',
           titulo: 'Adherencia al tratamiento',
           tipo: 'imagen',
-          url: '/content/linea-b-eficacia.svg',
+          url: contentUrl('linea-b-eficacia.svg'),
           hotspots: [
             {
               id: 'hs-video-b',
@@ -112,7 +114,7 @@ export const arbolDemo: ContentNode = {
           id: 'linea-b-ficha',
           titulo: 'Ficha técnica (PDF)',
           tipo: 'pdf',
-          url: '/content/linea-b-ficha.pdf',
+          url: contentUrl('linea-b-ficha.pdf'),
         },
       ],
     },

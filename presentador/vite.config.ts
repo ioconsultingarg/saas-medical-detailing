@@ -4,6 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/saas-medical-detailing/',
   plugins: [
     react(),
     VitePWA({
@@ -15,10 +16,11 @@ export default defineConfig({
         theme_color: '#1e40af',
         background_color: '#ffffff',
         display: 'standalone',
-        start_url: '/',
+        start_url: '/saas-medical-detailing/',
+        scope: '/saas-medical-detailing/',
         icons: [
           {
-            src: '/icon.svg',
+            src: '/saas-medical-detailing/icon.svg',
             sizes: 'any',
             type: 'image/svg+xml',
             purpose: 'any maskable',
