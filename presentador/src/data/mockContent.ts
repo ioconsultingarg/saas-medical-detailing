@@ -25,8 +25,8 @@ export const arbolDemo: ContentNode = {
           hotspots: [
             {
               id: 'hs-posologia',
-              x: 0.5375,
-              y: 0.5,
+              x: 0.65,
+              y: 0.81,
               ancho: 0.275,
               alto: 0.0767,
               accion: {
@@ -80,8 +80,8 @@ export const arbolDemo: ContentNode = {
           hotspots: [
             {
               id: 'hs-tecnica-uso',
-              x: 0.5375,
-              y: 0.5,
+              x: 0.6375,
+              y: 0.81,
               ancho: 0.2875,
               alto: 0.0767,
               accion: {

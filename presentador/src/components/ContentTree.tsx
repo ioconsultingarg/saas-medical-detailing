@@ -5,22 +5,45 @@ interface Props {
   onSelect: (hijo: ContentNode) => void
 }
 
+function primeraImagen(nodo: ContentNode): string | null {
+  if (nodo.tipo === 'imagen' && nodo.url) return nodo.url
+  for (const hijo of nodo.children ?? []) {
+    const encontrada = primeraImagen(hijo)
+    if (encontrada) return encontrada
+  }
+  return null
+}
+
 export function ContentTree({ nodo, onSelect }: Props) {
   if (!nodo.children || nodo.children.length === 0) return null
 
   return (
-    <nav aria-label="Contenido disponible" className="catalog-grid">
-      {nodo.children.map((hijo) => (
-        <button key={hijo.id} className="catalog-card" onClick={() => onSelect(hijo)}>
-          <span className="catalog-card__icon" style={{ background: hijo.color ?? undefined }}>
-            {hijo.titulo.charAt(0)}
-          </span>
-          <span className="catalog-card__title">{hijo.titulo}</span>
-          <span className="catalog-card__meta">
-            {hijo.children ? `${hijo.children.length} secciones` : hijo.tipo}
-          </span>
-        </button>
-      ))}
+    <nav aria-label="Líneas de producto" className="line-grid">
+      {nodo.children.map((linea, i) => {
+        const preview = primeraImagen(linea)
+        return (
+          <button
+            key={linea.id}
+            className="line-card"
+            style={{ background: linea.color, animationDelay: `${i * 70}ms` }}
+            onClick={() => onSelect(linea)}
+          >
+            {preview && <img className="line-card__preview" src={preview} alt="" />}
+            <span className="line-card__veil" />
+            <span className="line-card__body">
+              <span className="line-card__texto">
+                <span className="line-card__meta">
+                  {linea.children?.length ?? 0} secciones · actualizado hoy
+                </span>
+                <span className="line-card__title">{linea.titulo}</span>
+              </span>
+              <span className="line-card__go" aria-hidden="true">
+                →
+              </span>
+            </span>
+          </button>
+        )
+      })}
     </nav>
   )
 }

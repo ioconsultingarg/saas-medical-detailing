@@ -17,13 +17,20 @@ export function Popup({ titulo, texto, onClose }: Props) {
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-card" role="dialog" aria-modal="true" aria-labelledby="popup-title" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="popup-title"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="modal-kicker">Información ampliada</div>
         <h3 id="popup-title" className="modal-title">
           {titulo}
         </h3>
         <p className="modal-text">{texto}</p>
-        <button className="btn btn-secondary" onClick={onClose}>
-          Cerrar
+        <button className="btn btn-lime" onClick={onClose}>
+          Volver a la pieza
         </button>
       </div>
     </div>

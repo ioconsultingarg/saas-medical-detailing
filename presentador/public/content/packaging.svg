@@ -38,7 +38,7 @@
   </g>
 
   <!-- pill nav button (hotspot target) -->
-  <g transform="translate(430,300)">
+  <g transform="translate(520,486)">
     <rect x="0" y="0" width="220" height="46" rx="23" fill="#0a6b5d"/>
     <text x="20" y="29" font-family="Arial, sans-serif" font-size="15" font-weight="600" fill="#ffffff">Ver posología completa</text>
     <text x="192" y="29" font-family="Arial, sans-serif" font-size="16" fill="#cfe94a">›</text>

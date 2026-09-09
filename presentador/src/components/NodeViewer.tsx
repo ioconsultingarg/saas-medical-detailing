@@ -5,9 +5,10 @@ import { Popup } from './Popup'
 
 interface Props {
   nodo: ContentNode
+  ambiente: string
 }
 
-export function NodeViewer({ nodo }: Props) {
+export function NodeViewer({ nodo, ambiente }: Props) {
   const [popup, setPopup] = useState<{ titulo: string; texto: string } | null>(null)
 
   function handleHotspot(hotspot: Hotspot) {
@@ -18,20 +19,29 @@ export function NodeViewer({ nodo }: Props) {
     }
   }
 
+  const tieneHotspots = Boolean(nodo.hotspots && nodo.hotspots.length > 0)
+
   return (
-    <div className="stage">
-      <div className="stage-header">
-        <span className="stage-title">{nodo.titulo}</span>
-        <span className="badge">{nodo.tipo}</span>
+    <div className="stage-wrap" style={{ background: ambiente }}>
+      <div className="stage">
+        <div className="stage-screen" key={nodo.id}>
+          {nodo.tipo === 'imagen' && <img src={nodo.url} alt={nodo.titulo} />}
+          {nodo.tipo === 'pdf' && <iframe src={nodo.url} title={nodo.titulo} />}
+          {nodo.tipo === 'video' && <video src={nodo.url} controls />}
+
+          {tieneHotspots && <HotspotOverlay hotspots={nodo.hotspots!} onHotspot={handleHotspot} />}
+        </div>
       </div>
 
-      <div className="stage-body">
-        {nodo.tipo === 'imagen' && <img src={nodo.url} alt={nodo.titulo} />}
-        {nodo.tipo === 'pdf' && <iframe src={nodo.url} title={nodo.titulo} />}
-        {nodo.tipo === 'video' && <video src={nodo.url} controls />}
-
-        {nodo.hotspots && nodo.hotspots.length > 0 && (
-          <HotspotOverlay hotspots={nodo.hotspots} onHotspot={handleHotspot} />
+      <div className="stage-caption">
+        <span className="stage-caption__title">{nodo.titulo}</span>
+        {tieneHotspots ? (
+          <span className="hint">
+            <span className="hint-dot" />
+            Tocá los puntos para ampliar
+          </span>
+        ) : (
+          <span className="badge">{nodo.tipo}</span>
         )}
       </div>
 

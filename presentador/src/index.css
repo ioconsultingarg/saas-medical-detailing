@@ -1,27 +1,57 @@
+@import 'tailwindcss';
+
+/* Dark mode por clase en <html>, controlado desde useTheme() */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-display: 'Sora', system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --color-brand-50: #eaf6f3;
+  --color-brand-100: #cfe9e2;
+  --color-brand-400: #2fa08f;
+  --color-brand-500: #148675;
+  --color-brand-600: #0f6e63;
+  --color-brand-700: #0a5349;
+  --color-brand-900: #07211e;
+
+  --color-lime-accent: #cfe94a;
+  --color-coral-accent: #e8674f;
+}
+
+/* ---------- Tokens del visor interno (claro / oscuro) ---------- */
+
 :root {
   --ink: #0e1b1a;
   --ink-soft: #3f524f;
-  --paper: #f6f8f7;
+  --paper: #f4f6f5;
   --surface: #ffffff;
   --border: #dde5e2;
   --border-soft: #e8eeec;
-
   --brand: #0f6e63;
-  --brand-dark: #0b544c;
+  --brand-dark: #0a5349;
   --brand-tint: #e4f2ee;
-
   --accent: #e8674f;
-  --accent-tint: #fbe9e5;
-
-  --font-display: 'Sora', system-ui, 'Segoe UI', sans-serif;
-  --font-body: 'IBM Plex Sans', system-ui, 'Segoe UI', sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
-
-  --shadow-card: 0 1px 2px rgba(14, 27, 26, 0.04), 0 8px 24px -8px rgba(14, 27, 26, 0.1);
-  --shadow-lift: 0 4px 8px rgba(14, 27, 26, 0.06), 0 16px 32px -12px rgba(14, 27, 26, 0.16);
-  --shadow-modal: 0 24px 60px -16px rgba(14, 27, 26, 0.35);
+  --stage-shell: #0f1416;
 
   color-scheme: light;
+}
+
+.dark {
+  --ink: #eaf2f0;
+  --ink-soft: #9db3af;
+  --paper: #06100f;
+  --surface: #0d1a18;
+  --border: #1e2f2c;
+  --border-soft: #172725;
+  --brand: #2fa08f;
+  --brand-dark: #148675;
+  --brand-tint: #0f2a26;
+  --accent: #f07a63;
+  --stage-shell: #050c0b;
+
+  color-scheme: dark;
 }
 
 * {
@@ -35,6 +65,7 @@ body {
   color: var(--ink);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #root {
@@ -57,10 +88,13 @@ button:focus-visible,
 a:focus-visible {
   outline: 2px solid var(--brand);
   outline-offset: 2px;
+  border-radius: 6px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.001ms !important;
     transition-duration: 0.001ms !important;
   }
