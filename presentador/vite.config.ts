@@ -13,7 +13,7 @@ export default defineConfig({
         name: 'Presentador Medical Detailing',
         short_name: 'Presentador',
         description: 'Visor interactivo de material de detailing para APMs',
-        theme_color: '#1e40af',
+        theme_color: '#0f6e63',
         background_color: '#ffffff',
         display: 'standalone',
         start_url: '/saas-medical-detailing/',

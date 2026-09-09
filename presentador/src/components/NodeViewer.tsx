@@ -19,24 +19,21 @@ export function NodeViewer({ nodo }: Props) {
   }
 
   return (
-    <div style={{ position: 'relative', width: '100%', maxWidth: 800, margin: '0 auto' }}>
-      {nodo.tipo === 'imagen' && (
-        <img src={nodo.url} alt={nodo.titulo} style={{ width: '100%', display: 'block', borderRadius: 8 }} />
-      )}
-      {nodo.tipo === 'pdf' && (
-        <iframe
-          src={nodo.url}
-          title={nodo.titulo}
-          style={{ width: '100%', height: '75vh', border: '1px solid #e2e8f0', borderRadius: 8 }}
-        />
-      )}
-      {nodo.tipo === 'video' && (
-        <video src={nodo.url} controls style={{ width: '100%', borderRadius: 8 }} />
-      )}
+    <div className="stage">
+      <div className="stage-header">
+        <span className="stage-title">{nodo.titulo}</span>
+        <span className="badge">{nodo.tipo}</span>
+      </div>
 
-      {nodo.hotspots && nodo.hotspots.length > 0 && (
-        <HotspotOverlay hotspots={nodo.hotspots} onHotspot={handleHotspot} />
-      )}
+      <div className="stage-body">
+        {nodo.tipo === 'imagen' && <img src={nodo.url} alt={nodo.titulo} />}
+        {nodo.tipo === 'pdf' && <iframe src={nodo.url} title={nodo.titulo} />}
+        {nodo.tipo === 'video' && <video src={nodo.url} controls />}
+
+        {nodo.hotspots && nodo.hotspots.length > 0 && (
+          <HotspotOverlay hotspots={nodo.hotspots} onHotspot={handleHotspot} />
+        )}
+      </div>
 
       {popup && <Popup titulo={popup.titulo} texto={popup.texto} onClose={() => setPopup(null)} />}
     </div>

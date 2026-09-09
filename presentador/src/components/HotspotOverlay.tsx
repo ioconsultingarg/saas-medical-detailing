@@ -11,22 +11,22 @@ export function HotspotOverlay({ hotspots, onHotspot }: Props) {
       {hotspots.map((hotspot) => (
         <button
           key={hotspot.id}
+          className="hotspot-hit"
           onClick={() => onHotspot(hotspot)}
           aria-label={
             hotspot.accion.tipo === 'abrir_popup' ? hotspot.accion.titulo : 'Reproducir video'
           }
           style={{
-            position: 'absolute',
             left: `${hotspot.x * 100}%`,
             top: `${hotspot.y * 100}%`,
             width: `${hotspot.ancho * 100}%`,
             height: `${hotspot.alto * 100}%`,
-            background: 'rgba(37, 99, 235, 0.18)',
-            border: '2px dashed rgba(37, 99, 235, 0.6)',
-            borderRadius: 6,
-            cursor: 'pointer',
           }}
-        />
+        >
+          <span className="hotspot-marker" aria-hidden="true">
+            +
+          </span>
+        </button>
       ))}
     </div>
   )

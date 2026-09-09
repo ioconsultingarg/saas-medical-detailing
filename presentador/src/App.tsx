@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import './App.css'
 import { ContentTree } from './components/ContentTree'
 import { NodeViewer } from './components/NodeViewer'
 import { Welcome } from './components/Welcome'
@@ -39,44 +40,49 @@ function App() {
 
   if (mostrarBienvenida) {
     return (
-      <div style={{ maxWidth: 960, margin: '0 auto', fontFamily: 'Arial, sans-serif' }}>
+      <div className="app-shell">
         <Welcome onEntrar={() => setMostrarBienvenida(false)} />
       </div>
     )
   }
 
   return (
-    <div style={{ maxWidth: 960, margin: '0 auto', padding: 24, fontFamily: 'Arial, sans-serif' }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <h1 style={{ fontSize: 20, margin: 0 }}>Presentador — Medical Detailing (demo)</h1>
-        <button onClick={handleDescargarOffline} disabled={descargando}>
-          {descargado ? 'Contenido disponible offline ✓' : descargando ? 'Descargando…' : 'Descargar para uso offline'}
+    <div className="app-shell">
+      <header className="app-header">
+        <div className="brand">
+          <img src={`${import.meta.env.BASE_URL}icon.svg`} alt="" />
+          <div>
+            <div className="brand-name">Presentador</div>
+            <div className="brand-tag">Medical Detailing · demo</div>
+          </div>
+        </div>
+        <button
+          className={`btn btn-secondary ${descargado ? 'is-done' : ''}`}
+          onClick={handleDescargarOffline}
+          disabled={descargando}
+        >
+          {descargado ? 'Disponible offline ✓' : descargando ? 'Descargando…' : 'Descargar para offline'}
         </button>
       </header>
 
-      <nav aria-label="Ruta actual" style={{ marginBottom: 16, color: '#64748b', fontSize: 14 }}>
-        {camino.map((nodo, i) => (
-          <span key={nodo.id}>
-            {i > 0 && ' / '}
-            <button
-              onClick={() => setNodoActualId(nodo.id)}
-              style={{
-                border: 'none',
-                background: 'none',
-                cursor: 'pointer',
-                color: i === camino.length - 1 ? '#0f172a' : '#2563eb',
-                fontWeight: i === camino.length - 1 ? 600 : 400,
-                padding: 0,
-              }}
-            >
-              {nodo.titulo}
-            </button>
-          </span>
-        ))}
-      </nav>
+      <main className="app-main">
+        <nav aria-label="Ruta actual" className="breadcrumb">
+          {camino.map((nodo, i) => (
+            <span key={nodo.id} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              {i > 0 && <span className="breadcrumb-sep">/</span>}
+              <button
+                className={`breadcrumb-item ${i === camino.length - 1 ? 'is-current' : ''}`}
+                onClick={() => setNodoActualId(nodo.id)}
+              >
+                {nodo.titulo}
+              </button>
+            </span>
+          ))}
+        </nav>
 
-      {!esHoja && <ContentTree nodo={nodoActual} onSelect={(hijo) => setNodoActualId(hijo.id)} />}
-      {esHoja && <NodeViewer nodo={nodoActual} />}
+        {!esHoja && <ContentTree nodo={nodoActual} onSelect={(hijo) => setNodoActualId(hijo.id)} />}
+        {esHoja && <NodeViewer nodo={nodoActual} />}
+      </main>
     </div>
   )
 }

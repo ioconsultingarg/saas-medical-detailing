@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 interface Props {
   titulo: string
   texto: string
@@ -5,32 +7,22 @@ interface Props {
 }
 
 export function Popup({ titulo, texto, onClose }: Props) {
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [onClose])
+
   return (
-    <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        background: 'rgba(15, 23, 42, 0.5)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 50,
-      }}
-      onClick={onClose}
-    >
-      <div
-        style={{
-          background: 'white',
-          borderRadius: 12,
-          padding: 24,
-          maxWidth: 420,
-          boxShadow: '0 20px 40px rgba(0,0,0,0.2)',
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <h3 style={{ marginTop: 0, color: '#0f172a' }}>{titulo}</h3>
-        <p style={{ color: '#334155' }}>{texto}</p>
-        <button onClick={onClose} style={{ marginTop: 8 }}>
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="modal-card" role="dialog" aria-modal="true" aria-labelledby="popup-title" onClick={(e) => e.stopPropagation()}>
+        <h3 id="popup-title" className="modal-title">
+          {titulo}
+        </h3>
+        <p className="modal-text">{texto}</p>
+        <button className="btn btn-secondary" onClick={onClose}>
           Cerrar
         </button>
       </div>
