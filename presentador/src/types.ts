@@ -19,6 +19,8 @@ export interface ContentNode {
   url: string
   hotspots?: Hotspot[]
   children?: ContentNode[]
+  /** color de marca de la línea de producto, usado en la barra de tabs y acentos (solo en nodos con children) */
+  color?: string
 }
 
 export interface DwellEvent {

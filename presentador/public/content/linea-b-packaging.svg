@@ -1,12 +1,53 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
-  <rect width="800" height="600" fill="#f0fdf4"/>
-  <rect x="260" y="120" width="280" height="380" rx="18" fill="#15803d"/>
-  <rect x="260" y="120" width="280" height="90" rx="18" fill="#166534"/>
-  <text x="400" y="175" font-size="26" fill="#ffffff" text-anchor="middle" font-family="Arial, sans-serif">RESPIRA-MOL</text>
-  <text x="400" y="210" font-size="16" fill="#dcfce7" text-anchor="middle" font-family="Arial, sans-serif">Inhalador — 200 dosis</text>
-  <circle cx="400" cy="360" r="70" fill="#86efac" opacity="0.6"/>
-  <text x="400" y="366" font-size="16" fill="#14532d" text-anchor="middle" font-family="Arial, sans-serif">Vía inhalada</text>
-  <rect x="300" y="470" width="200" height="24" rx="6" fill="#166534"/>
-  <text x="400" y="487" font-size="12" fill="#dcfce7" text-anchor="middle" font-family="Arial, sans-serif">Ver técnica de uso</text>
-  <text x="400" y="560" font-size="13" fill="#64748b" text-anchor="middle" font-family="Arial, sans-serif">Imagen de demo — tocar zonas resaltadas</text>
+  <defs>
+    <linearGradient id="respBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1f6fb2"/>
+      <stop offset="100%" stop-color="#144f85"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#respBg)"/>
+  <path d="M0 480 C160 430 260 540 420 500 C580 460 660 520 800 480 L800 600 L0 600 Z" fill="#f5a623" opacity="0.9"/>
+
+  <g transform="translate(40,34)">
+    <circle cx="12" cy="12" r="12" fill="#f5a623"/>
+    <text x="40" y="14" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#ffffff">Respira-mol</text>
+    <text x="40" y="32" font-family="Arial, sans-serif" font-size="13" fill="#dcecfb">Inhalador — 200 dosis</text>
+  </g>
+
+  <text x="40" y="128" font-family="Arial, sans-serif" font-size="30" fill="#ffffff">Una técnica <tspan font-weight="700">fácil de repetir</tspan></text>
+
+  <g transform="translate(60,180)" font-family="Arial, sans-serif">
+    <path d="M20 220 C 120 60, 260 60, 340 160 S 520 260, 620 90" fill="none" stroke="#ffffff" stroke-width="3" stroke-dasharray="2 10" opacity="0.6"/>
+
+    <g transform="translate(0,205)">
+      <circle r="22" fill="#ffffff"/>
+      <text y="6" text-anchor="middle" font-size="18" font-weight="700" fill="#144f85">1</text>
+      <text y="46" text-anchor="middle" font-size="14" font-weight="600" fill="#ffffff">agitar antes de usar</text>
+    </g>
+    <g transform="translate(320,150)">
+      <circle r="22" fill="#ffffff"/>
+      <text y="6" text-anchor="middle" font-size="18" font-weight="700" fill="#144f85">2</text>
+      <text y="46" text-anchor="middle" font-size="14" font-weight="600" fill="#ffffff">2 inhalaciones, cada 12hs</text>
+    </g>
+    <g transform="translate(600,85)">
+      <circle r="22" fill="#f5a623"/>
+      <text y="6" text-anchor="middle" font-size="18" font-weight="700" fill="#144f85">3</text>
+      <text y="46" text-anchor="middle" font-size="14" font-weight="600" fill="#ffffff">enjuagar la boca</text>
+    </g>
+  </g>
+
+  <g transform="translate(430,300)">
+    <rect x="0" y="0" width="230" height="46" rx="23" fill="#144f85"/>
+    <text x="20" y="29" font-family="Arial, sans-serif" font-size="15" font-weight="600" fill="#ffffff">Ver técnica completa</text>
+    <text x="202" y="29" font-family="Arial, sans-serif" font-size="16" fill="#f5a623">›</text>
+  </g>
+
+  <g transform="translate(40,552)" font-family="Arial, sans-serif">
+    <text x="0" y="14" font-size="15" font-weight="700" fill="#ffffff" letter-spacing="0.5">LABORATORIO DEMO</text>
+    <circle cx="200" cy="8" r="13" fill="#ffffff" opacity="0.9"/>
+    <text x="200" y="12" font-size="9" font-weight="700" fill="#144f85" text-anchor="middle">REF</text>
+    <circle cx="234" cy="8" r="13" fill="#ffffff" opacity="0.9"/>
+    <text x="234" y="12" font-size="9" font-weight="700" fill="#144f85" text-anchor="middle">DEMO</text>
+    <text x="440" y="14" font-size="10" fill="#e8f1fb" opacity="0.9">Contenido de demostración — reemplazar por ficha técnica real.</text>
+  </g>
 </svg>

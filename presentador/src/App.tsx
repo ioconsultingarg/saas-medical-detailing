@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import { ContentTree } from './components/ContentTree'
 import { NodeViewer } from './components/NodeViewer'
+import { TabBar } from './components/TabBar'
 import { Welcome } from './components/Welcome'
 import { arbolDemo } from './data/mockContent'
 import { useDwellSync, useDwellTracking } from './hooks/useDwellTracking'
@@ -18,6 +19,11 @@ function encontrarCamino(raiz: ContentNode, objetivoId: string, camino: ContentN
   return null
 }
 
+function primeraHoja(nodo: ContentNode): ContentNode {
+  if (!nodo.children || nodo.children.length === 0) return nodo
+  return primeraHoja(nodo.children[0])
+}
+
 function App() {
   const [mostrarBienvenida, setMostrarBienvenida] = useState(true)
   const [nodoActualId, setNodoActualId] = useState(arbolDemo.id)
@@ -26,10 +32,11 @@ function App() {
 
   const camino = encontrarCamino(arbolDemo, nodoActualId) ?? [arbolDemo]
   const nodoActual = camino[camino.length - 1]
-  const esHoja = !nodoActual.children || nodoActual.children.length === 0
+  const enCatalogo = camino.length === 1
+  const linea = camino.length > 1 ? camino[1] : null
 
   useDwellSync()
-  useDwellTracking(esHoja ? nodoActual.id : null)
+  useDwellTracking(!enCatalogo ? nodoActual.id : null)
 
   async function handleDescargarOffline() {
     setDescargando(true)
@@ -49,6 +56,11 @@ function App() {
   return (
     <div className="app-shell">
       <header className="app-header">
+        <button className="hamburger" aria-label="Volver al catálogo" onClick={() => setNodoActualId(arbolDemo.id)}>
+          <span />
+          <span />
+          <span />
+        </button>
         <div className="brand">
           <img src={`${import.meta.env.BASE_URL}icon.svg`} alt="" />
           <div>
@@ -65,24 +77,36 @@ function App() {
         </button>
       </header>
 
-      <main className="app-main">
-        <nav aria-label="Ruta actual" className="breadcrumb">
-          {camino.map((nodo, i) => (
-            <span key={nodo.id} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              {i > 0 && <span className="breadcrumb-sep">/</span>}
-              <button
-                className={`breadcrumb-item ${i === camino.length - 1 ? 'is-current' : ''}`}
-                onClick={() => setNodoActualId(nodo.id)}
-              >
-                {nodo.titulo}
-              </button>
-            </span>
-          ))}
-        </nav>
+      <div className="device-frame">
+        <div className="device-notch" />
+        <div className="device-screen">
+          <main className="app-main">
+            {!enCatalogo && (
+              <nav aria-label="Ruta actual" className="breadcrumb">
+                <button className="breadcrumb-item" onClick={() => setNodoActualId(arbolDemo.id)}>
+                  {arbolDemo.titulo}
+                </button>
+                <span className="breadcrumb-sep">/</span>
+                <span className="breadcrumb-item is-current">{linea!.titulo}</span>
+              </nav>
+            )}
 
-        {!esHoja && <ContentTree nodo={nodoActual} onSelect={(hijo) => setNodoActualId(hijo.id)} />}
-        {esHoja && <NodeViewer nodo={nodoActual} />}
-      </main>
+            {enCatalogo && <ContentTree nodo={arbolDemo} onSelect={(hijo) => setNodoActualId(primeraHoja(hijo).id)} />}
+
+            {!enCatalogo && linea && (
+              <>
+                <TabBar
+                  items={linea.children ?? []}
+                  currentId={nodoActual.id}
+                  color={linea.color ?? '#0f6e63'}
+                  onSelect={(item) => setNodoActualId(item.id)}
+                />
+                <NodeViewer nodo={nodoActual} />
+              </>
+            )}
+          </main>
+        </div>
+      </div>
     </div>
   )
 }
