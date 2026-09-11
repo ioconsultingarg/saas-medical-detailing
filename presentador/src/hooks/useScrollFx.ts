@@ -1,5 +1,37 @@
 import { useEffect, useRef, useState } from 'react'
 
+function prefiereMenosMovimiento() {
+  return typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
+/**
+ * Desplazamiento sutil para capas decorativas del fondo.
+ * Nunca aplicar a texto ni a controles: marea y perjudica la lectura.
+ */
+export function useParallax(factor = 0.08) {
+  const [desplazamiento, setDesplazamiento] = useState(0)
+
+  useEffect(() => {
+    if (prefiereMenosMovimiento()) return
+
+    let pendiente = false
+    function onScroll() {
+      if (pendiente) return
+      pendiente = true
+      requestAnimationFrame(() => {
+        setDesplazamiento(window.scrollY * factor)
+        pendiente = false
+      })
+    }
+
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [factor])
+
+  return desplazamiento
+}
+
 /** true una vez que el scroll pasó el umbral — para el menú que cambia al hacer scroll */
 export function useScrolled(umbral = 24) {
   const [pasado, setPasado] = useState(false)

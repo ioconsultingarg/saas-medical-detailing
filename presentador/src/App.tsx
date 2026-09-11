@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Check, ChevronLeft, Download, LayoutGrid } from 'lucide-react'
 import './App.css'
 import { ContentTree } from './components/ContentTree'
 import { Landing } from './components/Landing'
@@ -24,15 +25,6 @@ function encontrarCamino(raiz: ContentNode, objetivoId: string, camino: ContentN
 function primeraHoja(nodo: ContentNode): ContentNode {
   if (!nodo.children || nodo.children.length === 0) return nodo
   return primeraHoja(nodo.children[0])
-}
-
-function primeraImagen(nodo: ContentNode): string {
-  if (nodo.tipo === 'imagen' && nodo.url) return nodo.url
-  for (const hijo of nodo.children ?? []) {
-    const encontrada = primeraImagen(hijo)
-    if (encontrada) return encontrada
-  }
-  return ''
 }
 
 function ambienteDe(hex: string): string {
@@ -83,12 +75,7 @@ function App() {
 
   if (mostrarBienvenida) {
     return (
-      <Landing
-        onEntrar={() => setMostrarBienvenida(false)}
-        previewUrl={primeraImagen(arbolDemo)}
-        tema={tema}
-        alternarTema={alternar}
-      />
+      <Landing onEntrar={() => setMostrarBienvenida(false)} tema={tema} alternarTema={alternar} />
     )
   }
 
@@ -96,13 +83,11 @@ function App() {
     <div className="app-shell">
       <header className="app-header">
         <button className="hamburger" aria-label="Volver al catálogo" onClick={() => setNodoActualId(arbolDemo.id)}>
-          <span />
-          <span />
-          <span />
+          <LayoutGrid size={18} />
         </button>
         <div className="brand">
           <img src={`${import.meta.env.BASE_URL}icon.svg`} alt="" />
-          <div>
+          <div className="brand-texto">
             <div className="brand-name">Presentador</div>
             <div className="brand-tag">Laboratorio Demo S.A.</div>
           </div>
@@ -113,7 +98,11 @@ function App() {
           onClick={handleDescargarOffline}
           disabled={descargando}
         >
-          {descargado ? 'Disponible offline ✓' : descargando ? 'Descargando…' : 'Descargar para offline'}
+          {descargado ? <Check size={16} /> : <Download size={16} />}
+          <span className="btn-label-largo">
+            {descargado ? 'Disponible offline' : descargando ? 'Descargando…' : 'Descargar para offline'}
+          </span>
+          <span className="btn-label-corto">{descargado ? 'Listo' : 'Offline'}</span>
         </button>
       </header>
 
@@ -132,7 +121,8 @@ function App() {
           <>
             <div className="viewer-bar">
               <button className="back-pill" onClick={() => setNodoActualId(arbolDemo.id)}>
-                ← Catálogo
+                <ChevronLeft size={15} />
+                Catálogo
               </button>
               <TabBar
                 items={secciones}

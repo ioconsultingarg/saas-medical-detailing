@@ -250,32 +250,36 @@
 }
 
 .hamburger {
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   border-radius: 11px;
   border: 1px solid rgba(255, 255, 255, 0.16);
   background: rgba(255, 255, 255, 0.06);
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
   cursor: pointer;
   transition: background-color 0.15s ease, border-color 0.15s ease;
   flex-shrink: 0;
 }
 
-.hamburger span {
-  width: 15px;
-  height: 2px;
-  border-radius: 2px;
-  background: #cfe94a;
-  transition: transform 0.2s ease;
+.hamburger {
+  color: #cfe94a;
 }
 
 .hamburger:hover {
   background: rgba(207, 233, 74, 0.14);
   border-color: rgba(207, 233, 74, 0.5);
+}
+
+/* Feedback inmediato al presionar: en tablet no hay hover, sin esto los botones se sienten muertos */
+.hamburger:active,
+.btn:active,
+.tab-item:active,
+.back-pill:active,
+.line-card:active,
+.hotspot-hit:active {
+  transform: scale(0.97);
 }
 
 .brand {
@@ -284,12 +288,25 @@
   gap: 10px;
   margin-right: auto;
   min-width: 0;
+  overflow: hidden;
 }
 
 .brand img {
   width: 30px;
   height: 30px;
   flex-shrink: 0;
+}
+
+.brand-texto {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.brand-name,
+.brand-tag {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .brand-name {
@@ -306,9 +323,13 @@
   letter-spacing: 0.09em;
   color: rgba(233, 244, 241, 0.55);
   text-transform: uppercase;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+}
+
+/* En pantallas angostas el nombre del laboratorio no entra: se oculta antes de desbordar */
+@media (max-width: 600px) {
+  .brand-texto {
+    display: none;
+  }
 }
 
 /* ============================================================
@@ -329,10 +350,6 @@
   align-items: center;
   gap: 9px;
   white-space: nowrap;
-}
-
-.btn:active {
-  transform: translateY(1px);
 }
 
 .btn-lime {
@@ -364,7 +381,23 @@
   border-color: rgba(255, 255, 255, 0.16);
   color: rgba(255, 255, 255, 0.92);
   font-size: 13px;
-  padding: 9px 15px;
+  padding: 11px 15px;
+  flex-shrink: 0;
+}
+
+/* El texto largo del botón no entra en pantallas chicas: queda solo el ícono */
+.btn-label-corto {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  .btn-label-largo {
+    display: none;
+  }
+
+  .btn-label-corto {
+    display: inline;
+  }
 }
 
 .btn-ghost-dark:hover {

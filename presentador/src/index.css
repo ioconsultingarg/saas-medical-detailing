@@ -58,6 +58,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html,
 body {
   margin: 0;
@@ -89,6 +93,15 @@ a:focus-visible {
   outline: 2px solid var(--brand);
   outline-offset: 2px;
   border-radius: 6px;
+}
+
+@keyframes barra {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
