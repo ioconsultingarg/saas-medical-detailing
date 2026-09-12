@@ -1,8 +1,11 @@
+import type { CSSProperties } from 'react'
+import { ArrowRight } from 'lucide-react'
+import { partirTitulo } from '../lib/titulos'
 import type { ContentNode } from '../types'
 
 interface Props {
   nodo: ContentNode
-  onSelect: (hijo: ContentNode) => void
+  onSelect: (linea: ContentNode) => void
 }
 
 function primeraImagen(nodo: ContentNode): string | null {
@@ -21,24 +24,34 @@ export function ContentTree({ nodo, onSelect }: Props) {
     <nav aria-label="Líneas de producto" className="line-grid">
       {nodo.children.map((linea, i) => {
         const preview = primeraImagen(linea)
+        const { categoria, producto } = partirTitulo(linea.titulo)
+        const secciones = linea.children ?? []
+
         return (
           <button
             key={linea.id}
             className="line-card"
-            style={{ background: linea.color, animationDelay: `${i * 70}ms` }}
+            style={{ '--line': linea.color ?? '#0f6e63', animationDelay: `${i * 80}ms` } as CSSProperties}
             onClick={() => onSelect(linea)}
           >
-            {preview && <img className="line-card__preview" src={preview} alt="" />}
-            <span className="line-card__veil" />
+            <span className="line-card__media">
+              {preview && <img src={preview} alt="" />}
+              <span className="line-card__count">{secciones.length} secciones</span>
+            </span>
+
             <span className="line-card__body">
-              <span className="line-card__texto">
-                <span className="line-card__meta">
-                  {linea.children?.length ?? 0} secciones · actualizado hoy
-                </span>
-                <span className="line-card__title">{linea.titulo}</span>
+              <span className="line-card__text">
+                {categoria && (
+                  <span className="line-card__product">
+                    <span className="line-card__dot" aria-hidden="true" />
+                    {categoria}
+                  </span>
+                )}
+                <span className="line-card__title">{producto}</span>
+                <span className="line-card__sections">{secciones.map((s) => s.titulo).join(' · ')}</span>
               </span>
               <span className="line-card__go" aria-hidden="true">
-                →
+                <ArrowRight size={20} />
               </span>
             </span>
           </button>
