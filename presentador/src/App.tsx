@@ -6,17 +6,23 @@ import { Biblioteca } from './screens/Biblioteca'
 import { Compartir } from './screens/Compartir'
 import { Constructor } from './screens/Constructor'
 import { Hoy } from './screens/Hoy'
+import { Login } from './screens/Login'
 import { Presentar } from './screens/Presentar'
 import { Registro } from './screens/Registro'
 import { Stock } from './screens/Stock'
 import { DemoProvider } from './state/demo'
+import { SesionProvider, useSesion } from './state/sesion'
 
 function Rutas() {
   const ruta = useRuta()
+  const { sesion } = useSesion()
 
   useEffect(() => {
     window.scrollTo({ top: 0 })
-  }, [ruta.nombre])
+  }, [ruta.nombre, sesion])
+
+  // sin sesión se muestra el ingreso; la ruta pedida se conserva y se abre al entrar
+  if (!sesion) return <Login />
 
   if (ruta.nombre === 'presentar') return <Presentar presentacionId={ruta.presentacionId} />
 
@@ -35,8 +41,10 @@ function Rutas() {
 
 export default function App() {
   return (
-    <DemoProvider>
-      <Rutas />
-    </DemoProvider>
+    <SesionProvider>
+      <DemoProvider>
+        <Rutas />
+      </DemoProvider>
+    </SesionProvider>
   )
 }

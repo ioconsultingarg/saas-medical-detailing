@@ -1,9 +1,11 @@
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { Boxes, CalendarRange, CloudOff, Library, RefreshCw, Stethoscope } from 'lucide-react'
 import { cronometro } from '../lib/formato'
 import type { Ruta } from '../lib/ruta'
 import { useAhora } from '../lib/tiempo'
 import { nombreCorto, useDemo } from '../state/demo'
+import { useSesion } from '../state/sesion'
+import { iniciales, MenuCuenta } from './MenuCuenta'
 
 const navegacion = [
   { href: '#/', etiqueta: 'Hoy', Icono: CalendarRange, activa: (r: Ruta) => r.nombre === 'hoy' },
@@ -74,6 +76,9 @@ function VisitaEnCurso() {
 
 export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
   const { apm } = useDemo()
+  const { sesion } = useSesion()
+  const [cuentaAbierta, setCuentaAbierta] = useState(false)
+  const nombre = sesion?.nombre ?? apm.nombre
 
   return (
     <div className="min-h-dvh">
@@ -111,18 +116,19 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
             )
           })}
         </ul>
-        <div className="mt-auto flex flex-col items-center gap-1 text-center">
-          <span
-            aria-hidden="true"
-            className="flex size-10 items-center justify-center rounded-full bg-sunken text-[13px] font-semibold text-ink-2"
-          >
-            {apm.nombre
-              .split(' ')
-              .map((p) => p[0])
-              .join('')}
+        <button
+          type="button"
+          onClick={() => setCuentaAbierta(true)}
+          aria-haspopup="dialog"
+          aria-expanded={cuentaAbierta}
+          aria-label={`Cuenta de ${nombre}`}
+          className="press mt-auto flex w-[72px] cursor-pointer flex-col items-center gap-1 rounded-xl py-2 text-[12px] font-medium text-ink-3 hover:bg-sunken hover:text-ink"
+        >
+          <span aria-hidden="true" className="flex size-10 items-center justify-center rounded-full bg-sunken text-[13px] font-semibold text-ink-2">
+            {iniciales(nombre)}
           </span>
-          <span className="sr-only">{apm.nombre}</span>
-        </div>
+          Cuenta
+        </button>
       </nav>
 
       <div className="md:pl-[88px]">
@@ -140,6 +146,18 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
             <div className="ml-auto flex min-w-0 items-center gap-2">
               <VisitaEnCurso />
               <EstadoConexion />
+              <button
+                type="button"
+                onClick={() => setCuentaAbierta(true)}
+                aria-haspopup="dialog"
+                aria-expanded={cuentaAbierta}
+                aria-label={`Cuenta de ${nombre}`}
+                className="press flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full md:hidden"
+              >
+                <span aria-hidden="true" className="flex size-9 items-center justify-center rounded-full bg-ink text-[13px] font-semibold text-white">
+                  {iniciales(nombre)}
+                </span>
+              </button>
             </div>
           </div>
         </div>
@@ -174,6 +192,8 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
           })}
         </ul>
       </nav>
+
+      <MenuCuenta abierto={cuentaAbierta} onCerrar={() => setCuentaAbierta(false)} />
     </div>
   )
 }
