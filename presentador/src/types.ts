@@ -1,26 +1,90 @@
-export type NodeTipo = 'pdf' | 'imagen' | 'video'
+export type ProductoId = 'cardio' | 'respira'
 
-export interface Hotspot {
-  id: string
-  // coordenadas normalizadas 0-1 relativas al contenido, para ser responsive
-  x: number
-  y: number
-  ancho: number
-  alto: number
-  accion:
-    | { tipo: 'abrir_popup'; titulo: string; texto: string }
-    | { tipo: 'reproducir_video'; url: string }
+export interface Producto {
+  id: ProductoId
+  marca: string
+  detalle: string
+  linea: string
+  color: string
+  /** secundario de marca para resaltar la cifra clave (lima / ámbar en la spec) */
+  acento: string
+  /** texto legible sobre el acento */
+  sobreAcento: string
+  colorOscuro: string
+  tinte: string
 }
 
-export interface ContentNode {
+export interface Medico {
+  nombre: string
+  especialidad: string
+  telefono: string
+  email: string
+}
+
+export interface Visita {
+  id: string
+  hora: string
+  medico: Medico
+  consultorio: string
+  direccion: string
+  barrio: string
+  lat: number
+  lng: number
+  productosInteres: ProductoId[]
+  nota: string
+}
+
+export type EstadoVisita = 'pendiente' | 'en_curso' | 'completada'
+
+export interface RegistroVisita {
+  estado: EstadoVisita
+  checkIn?: number
+  checkOut?: number
+  distanciaCheckIn?: number
+  calificacion?: number
+  etiquetas?: string[]
+  nota?: string
+  firma?: string
+  muestras?: number
+  productos?: ProductoId[]
+}
+
+export type TipoItemStock = 'comercial' | 'muestra' | 'material'
+
+export interface ItemStock {
+  sku: string
+  productoId: ProductoId | null
+  nombre: string
+  tipo: TipoItemStock
+  unidades: number
+  umbralBajo: number
+}
+
+export type NivelStock = 'alto' | 'bajo' | 'sin'
+
+export interface Diapositiva {
+  id: string
+  productoId: ProductoId
+  titulo: string
+}
+
+export interface Presentacion {
   id: string
   titulo: string
-  tipo: NodeTipo
-  url: string
-  hotspots?: Hotspot[]
-  children?: ContentNode[]
-  /** color de marca de la línea de producto, usado en la barra de tabs y acentos (solo en nodos con children) */
-  color?: string
+  descripcion: string
+  diapositivas: string[]
+  tipo: 'oficial' | 'personal'
+  creada?: number
+}
+
+export type TipoOutbox = 'checkin' | 'checkout' | 'pedido' | 'envio'
+
+export interface ItemOutbox {
+  id: string
+  tipo: TipoOutbox
+  resumen: string
+  creado: number
+  sincronizado: number | null
 }
 
 export interface DwellEvent {

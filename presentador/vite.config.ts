@@ -12,12 +12,13 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'Presentador Medical Detailing',
+        name: 'Presentador · App del visitador médico',
         short_name: 'Presentador',
-        description: 'Visor interactivo de material de detailing para APMs',
-        theme_color: '#0f6e63',
-        background_color: '#ffffff',
+        description: 'Ruta del día, presentaciones interactivas, stock y cierre de visita para APMs',
+        theme_color: '#f5f6f8',
+        background_color: '#f5f6f8',
         display: 'standalone',
+        orientation: 'any',
         start_url: '/saas-medical-detailing/',
         scope: '/saas-medical-detailing/',
         icons: [
@@ -30,11 +31,25 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,ico}'],
+        globPatterns: ['**/*.{js,css,html,svg,ico,woff2,pdf}'],
+        // el modelo 3D (three.js) supera el límite por defecto de 2 MB
+        maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
         // sin esto, una versión nueva queda esperando y el usuario sigue viendo la anterior
         skipWaiting: true,
         clientsClaim: true,
         cleanupOutdatedCaches: true,
+        runtimeCaching: [
+          {
+            // teselas del mapa ya vistas: quedan disponibles sin conexión
+            urlPattern: /^https:\/\/tile\.openstreetmap\.org\/.*/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'teselas-mapa',
+              expiration: { maxEntries: 600, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+        ],
       },
     }),
   ],
