@@ -34,6 +34,8 @@ export interface Curso {
   obligatorio: boolean
   asignadoPor: string
   diasParaVencer: number
+  /** video de portada en public/media */
+  medio?: string
   lecciones: Leccion[]
   evaluacion: Pregunta[]
 }
@@ -99,6 +101,7 @@ export const cursos: Curso[] = [
     obligatorio: true,
     asignadoPor: 'Gerencia de producto · Línea cardiometabólica',
     diasParaVencer: 9,
+    medio: 'curso-cardio',
     lecciones: [
       { id: 'c-l1', titulo: 'Mecanismo de acción', tipo: 'video', minutos: 3, recursoId: 'c-video' },
       {
@@ -192,6 +195,7 @@ export const cursos: Curso[] = [
     obligatorio: true,
     asignadoPor: 'Gerencia de producto · Línea respiratoria',
     diasParaVencer: 3,
+    medio: 'curso-respira',
     lecciones: [
       { id: 'r-l1', titulo: 'Técnica paso a paso', tipo: 'video', minutos: 2, recursoId: 'r-tecnica' },
       { id: 'r-l2', titulo: 'Mecanismo broncodilatador', tipo: 'video', minutos: 2, recursoId: 'r-video' },
@@ -257,6 +261,7 @@ export const cursos: Curso[] = [
     obligatorio: true,
     asignadoPor: 'Asuntos Médicos y Compliance',
     diasParaVencer: 240,
+    medio: 'curso-etica',
     lecciones: [
       {
         id: 'e-l1',

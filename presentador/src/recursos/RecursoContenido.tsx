@@ -2,7 +2,7 @@ import { lazy, Suspense, useId, useState } from 'react'
 import { ExternalLink } from 'lucide-react'
 import { productos } from '../data/productos'
 import type { Recurso } from '../data/recursos'
-import { VideoEscena } from './VideoEscena'
+import { VideoRecurso } from './VideoRecurso'
 
 const Modelo3D = lazy(() => import('./Modelo3D'))
 
@@ -163,7 +163,7 @@ export function RecursoContenido({ recurso }: { recurso: Recurso }) {
     case 'grafico':
       return <GraficoInteractivo r={recurso} />
     case 'video':
-      return <VideoEscena r={recurso} />
+      return <VideoRecurso r={recurso} />
     case 'documento':
       return <Documento r={recurso} />
     case 'modelo3d':

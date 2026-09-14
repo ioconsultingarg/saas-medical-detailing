@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { ArrowRight, CheckCircle2, Flame, Lock, ShieldCheck, Target, Trophy, Zap } from 'lucide-react'
 import { BarraProgreso, ChipVencimiento, IconoCurso, IconoDeInsignia, Quiz, siguientePaso } from '../components/academia'
 import { iniciales } from '../components/MenuCuenta'
+import { VideoPortada } from '../components/Medio'
 import { Sheet } from '../components/Sheet'
 import { EncabezadoPantalla } from '../components/ui'
 import { cursos, desafioSemanal, equipo, insignias, XP } from '../data/academia'
@@ -45,8 +46,13 @@ export function Academia() {
               const total = enCurso.lecciones.length + 1
               const destino = paso.tipo === 'leccion' ? paso.leccion.id : 'evaluacion'
               return (
-                <section aria-label="Continuar capacitación" className="animate-entrar overflow-hidden rounded-2xl bg-ink text-white">
-                  <div className="p-5 md:p-6">
+                <section aria-label="Continuar capacitación" className="animate-entrar relative overflow-hidden rounded-2xl bg-ink text-white">
+                  <VideoPortada
+                    nombre={enCurso.medio}
+                    modo="unaVez"
+                    className="absolute inset-y-0 right-0 hidden w-[46%] md:block [mask-image:linear-gradient(to_right,transparent,black_45%)]"
+                  />
+                  <div className="relative p-5 md:p-6">
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <span className="eyebrow text-white/60">{hechas > 0 ? 'Seguí donde dejaste' : 'Empezá tu próxima capacitación'}</span>
                       <ChipVencimiento progreso={p} vencimiento={estado.vencimientos[enCurso.id] ?? 0} />
@@ -62,7 +68,7 @@ export function Academia() {
                       </span>
                     </div>
                   </div>
-                  <div className="flex flex-wrap gap-2 px-5 pb-5 md:px-6 md:pb-6">
+                  <div className="relative flex flex-wrap gap-2 px-5 pb-5 md:px-6 md:pb-6">
                     <a href={`#/academia/curso/${enCurso.id}?l=${destino}`} className="btn bg-white text-ink hover:bg-white/90">
                       {paso.tipo === 'leccion' ? (hechas > 0 ? 'Continuar lección' : 'Empezar') : 'Rendir evaluación'}
                       <ArrowRight size={17} aria-hidden="true" />

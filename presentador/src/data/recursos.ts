@@ -36,6 +36,8 @@ export type Recurso =
       productoId: ProductoId
       titulo: string
       escena: 'cardio-mecanismo' | 'respira-mecanismo' | 'respira-tecnica'
+      /** video real en public/media; si todavía no existe se usa la animación generada */
+      medio?: string
       duracion: number
       capitulos: { desde: number; texto: string }[]
     }
@@ -123,6 +125,7 @@ export const recursos: Record<string, Recurso> = {
     productoId: 'cardio',
     titulo: 'Mecanismo de acción',
     escena: 'cardio-mecanismo',
+    medio: 'mecanismo-cardio',
     duracion: 14,
     capitulos: [
       { desde: 0, texto: 'El hígado produce colesterol y lo libera a la sangre como LDL.' },
@@ -197,6 +200,7 @@ export const recursos: Record<string, Recurso> = {
     productoId: 'respira',
     titulo: 'Mecanismo de acción',
     escena: 'respira-mecanismo',
+    medio: 'mecanismo-respira',
     duracion: 12,
     capitulos: [
       { desde: 0, texto: 'En la broncoconstricción el músculo liso estrecha la vía aérea.' },
@@ -219,6 +223,7 @@ export const recursos: Record<string, Recurso> = {
     productoId: 'respira',
     titulo: 'Técnica inhalatoria paso a paso',
     escena: 'respira-tecnica',
+    medio: 'tecnica-inhalatoria',
     duracion: 16,
     capitulos: [
       { desde: 0, texto: '1. Agitá el inhalador durante 5 segundos.' },

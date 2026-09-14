@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { BadgeCheck, Clock, Copy, GraduationCap, Layers, Pencil, Play, Plus, Sparkles, Trash2 } from 'lucide-react'
+import { VideoPortada } from '../components/Medio'
 import { cursos } from '../data/academia'
 import { useAcademia } from '../state/academia'
 import { ChipProducto, EncabezadoPantalla, MonogramaProducto, Segmentado } from '../components/ui'
@@ -15,15 +16,17 @@ import { presentacionSugerida } from './Hoy'
 
 type Filtro = 'todas' | ProductoId | 'mias'
 
-function Portada({ id }: { id: string }) {
+function Portada({ id, medio }: { id: string; medio?: string }) {
   const Componente = componentesDiapositiva[id]
   if (!Componente) return <div className="lienzo bg-sunken" />
   return (
-    <div inert className="pointer-events-none">
-      <Lienzo>
-        <Componente />
-      </Lienzo>
-    </div>
+    <VideoPortada nombre={medio} modo="hover">
+      <div inert className="pointer-events-none">
+        <Lienzo>
+          <Componente />
+        </Lienzo>
+      </div>
+    </VideoPortada>
   )
 }
 
@@ -67,7 +70,7 @@ function TarjetaPresentacion({ p, destacada }: { p: Presentacion; destacada?: bo
     <article className={`card group flex flex-col overflow-hidden transition-shadow duration-200 hover:shadow-(--shadow-float) ${destacada ? 'ring-2 ring-ink' : ''}`}>
       <a href={`#/presentar/${p.id}`} className="relative block overflow-hidden border-b border-line" aria-label={`Presentar ${p.titulo}`} tabIndex={-1}>
         <div className="transition-transform duration-300 ease-(--ease-fluid) group-hover:scale-[1.015]">
-          <Portada id={p.diapositivas[0]} />
+          <Portada id={p.diapositivas[0]} medio={p.medio} />
         </div>
         <span className="material absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[12px] font-medium text-ink">
           {p.tipo === 'oficial' ? 'Oficial · aprobada' : 'Mi presentación'}

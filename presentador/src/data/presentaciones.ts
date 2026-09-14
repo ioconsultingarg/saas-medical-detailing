@@ -23,6 +23,7 @@ export const presentacionesOficiales: Presentacion[] = [
     titulo: 'Demo-molécula · Visita completa',
     descripcion: 'Del problema clínico a la posología, con estudios y modelo 3D.',
     diapositivas: ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'],
+    medio: 'portada-cardio',
     tipo: 'oficial',
   },
   {
@@ -30,6 +31,7 @@ export const presentacionesOficiales: Presentacion[] = [
     titulo: 'Demo-molécula · Mensaje clave',
     descripcion: 'Versión de 3 minutos para agendas cortas.',
     diapositivas: ['c1', 'c4', 'c6'],
+    medio: 'portada-cardio',
     tipo: 'oficial',
   },
   {
@@ -37,6 +39,7 @@ export const presentacionesOficiales: Presentacion[] = [
     titulo: 'Respira-mol · Visita completa',
     descripcion: 'Control de síntomas, mecanismo, técnica y adherencia.',
     diapositivas: ['r1', 'r2', 'r3', 'r4', 'r5', 'r6'],
+    medio: 'portada-respira',
     tipo: 'oficial',
   },
   {
@@ -44,6 +47,7 @@ export const presentacionesOficiales: Presentacion[] = [
     titulo: 'Respira-mol · Técnica y adherencia',
     descripcion: 'Foco en el uso correcto del inhalador.',
     diapositivas: ['r1', 'r4', 'r5'],
+    medio: 'portada-respira',
     tipo: 'oficial',
   },
 ]

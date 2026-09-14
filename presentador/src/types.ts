@@ -75,6 +75,8 @@ export interface Presentacion {
   diapositivas: string[]
   tipo: 'oficial' | 'personal'
   creada?: number
+  /** video de portada en public/media */
+  medio?: string
 }
 
 export type TipoOutbox = 'checkin' | 'checkout' | 'pedido' | 'envio'

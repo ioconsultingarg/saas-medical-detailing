@@ -264,6 +264,64 @@
   border: 0;
 }
 
+/* Entradas de las diapositivas: una sola orquestación al aparecer la pantalla */
+@keyframes diapo-entra {
+  from {
+    opacity: 0;
+    transform: translateY(1.4cqw);
+  }
+}
+
+@keyframes aparece-escala {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+@keyframes barra-crece {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes trazo {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes fundido {
+  from {
+    opacity: 0;
+  }
+}
+
+.diapo-entra {
+  animation: diapo-entra 640ms var(--ease-fluid) both;
+}
+
+.aparece-escala {
+  animation: aparece-escala 700ms var(--ease-fluid) both;
+}
+
+.barra-crece {
+  transform-origin: left center;
+  animation: barra-crece 900ms var(--ease-fluid) both;
+}
+
+.trazo-dibuja {
+  stroke-dasharray: 1;
+  animation: trazo 1300ms var(--ease-move) both;
+}
+
+.fundido {
+  animation: fundido 400ms ease both;
+}
+
 @media (prefers-reduced-transparency: reduce) {
   .material {
     background: #fff;
