@@ -1,9 +1,10 @@
 import { useState, type ReactNode } from 'react'
-import { Boxes, CalendarRange, CloudOff, Library, RefreshCw, Stethoscope } from 'lucide-react'
+import { Boxes, CalendarRange, CloudOff, GraduationCap, Library, RefreshCw, Stethoscope } from 'lucide-react'
 import { cronometro } from '../lib/formato'
 import type { Ruta } from '../lib/ruta'
 import { useAhora } from '../lib/tiempo'
 import { nombreCorto, useDemo } from '../state/demo'
+import { useAcademia } from '../state/academia'
 import { useSesion } from '../state/sesion'
 import { iniciales, MenuCuenta } from './MenuCuenta'
 
@@ -11,6 +12,7 @@ const navegacion = [
   { href: '#/', etiqueta: 'Hoy', Icono: CalendarRange, activa: (r: Ruta) => r.nombre === 'hoy' },
   { href: '#/biblioteca', etiqueta: 'Biblioteca', Icono: Library, activa: (r: Ruta) => r.nombre === 'biblioteca' || r.nombre === 'constructor' },
   { href: '#/stock', etiqueta: 'Stock', Icono: Boxes, activa: (r: Ruta) => r.nombre === 'stock' },
+  { href: '#/academia', etiqueta: 'Academia', Icono: GraduationCap, activa: (r: Ruta) => r.nombre === 'academia' || r.nombre === 'curso' },
   { href: '#/actividad', etiqueta: 'Actividad', Icono: RefreshCw, activa: (r: Ruta) => r.nombre === 'actividad' },
 ]
 
@@ -77,6 +79,7 @@ function VisitaEnCurso() {
 export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
   const { apm } = useDemo()
   const { sesion } = useSesion()
+  const { pendientes: cursosPendientes } = useAcademia()
   const [cuentaAbierta, setCuentaAbierta] = useState(false)
   const nombre = sesion?.nombre ?? apm.nombre
 
@@ -105,12 +108,20 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
                 <a
                   href={href}
                   aria-current={actual ? 'page' : undefined}
-                  className={`press flex w-[72px] flex-col items-center gap-1 rounded-xl py-2.5 text-[12px] font-medium ${
+                  className={`press relative flex w-[72px] flex-col items-center gap-1 rounded-xl py-2.5 text-[12px] font-medium ${
                     actual ? 'bg-ink text-white' : 'text-ink-3 hover:bg-sunken hover:text-ink'
                   }`}
                 >
                   <Icono size={21} strokeWidth={actual ? 2.2 : 1.8} aria-hidden="true" />
                   {etiqueta}
+                  {href === '#/academia' && cursosPendientes > 0 && (
+                    <>
+                      <span aria-hidden="true" className="num absolute top-1.5 right-3 min-w-4 rounded-full bg-warn px-1 text-[10px] leading-4 text-white">
+                        {cursosPendientes}
+                      </span>
+                      <span className="sr-only">, {cursosPendientes} cursos pendientes</span>
+                    </>
+                  )}
                 </a>
               </li>
             )
@@ -172,7 +183,7 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
         aria-label="Principal"
         className="material fixed inset-x-0 bottom-0 z-40 border-t border-line/70 pb-[env(safe-area-inset-bottom)] md:hidden"
       >
-        <ul className="grid grid-cols-4">
+        <ul className="grid grid-cols-5">
           {navegacion.map(({ href, etiqueta, Icono, activa }) => {
             const actual = activa(ruta)
             return (
@@ -182,10 +193,16 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
                   aria-current={actual ? 'page' : undefined}
                   className={`press flex min-h-16 flex-col items-center justify-center gap-1 text-[11px] font-medium ${actual ? 'text-ink' : 'text-ink-3'}`}
                 >
-                  <span className={`flex h-7 w-12 items-center justify-center rounded-full ${actual ? 'bg-ink text-white' : ''}`}>
+                  <span className={`relative flex h-7 w-12 items-center justify-center rounded-full ${actual ? 'bg-ink text-white' : ''}`}>
                     <Icono size={19} strokeWidth={actual ? 2.2 : 1.8} aria-hidden="true" />
+                    {href === '#/academia' && cursosPendientes > 0 && (
+                      <span aria-hidden="true" className="num absolute -top-0.5 right-1 min-w-4 rounded-full bg-warn px-1 text-[10px] leading-4 text-white">
+                        {cursosPendientes}
+                      </span>
+                    )}
                   </span>
                   {etiqueta}
+                  {href === '#/academia' && cursosPendientes > 0 && <span className="sr-only">, {cursosPendientes} cursos pendientes</span>}
                 </a>
               </li>
             )

@@ -5,6 +5,8 @@ const numero = new Intl.NumberFormat('es-AR')
 export const hora = (ts: number) => reloj.format(ts)
 export const fechaLarga = (d = new Date()) => fecha.format(d)
 export const miles = (n: number) => numero.format(n)
+const fechaCortaFmt = new Intl.DateTimeFormat('es-AR', { day: 'numeric', month: 'short', year: 'numeric' })
+export const fechaCorta = (ts: number) => fechaCortaFmt.format(ts)
 
 export function minutos(ms: number) {
   return Math.max(1, Math.round(ms / 60000))

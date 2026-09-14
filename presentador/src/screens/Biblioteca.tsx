@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
-import { Clock, Copy, Layers, Pencil, Play, Plus, Sparkles, Trash2 } from 'lucide-react'
+import { BadgeCheck, Clock, Copy, GraduationCap, Layers, Pencil, Play, Plus, Sparkles, Trash2 } from 'lucide-react'
+import { cursos } from '../data/academia'
+import { useAcademia } from '../state/academia'
 import { ChipProducto, EncabezadoPantalla, MonogramaProducto, Segmentado } from '../components/ui'
 import { visitasDelDia } from '../data/agenda'
 import { minutosEstimados, presentacionesOficiales, productosDe } from '../data/presentaciones'
@@ -22,6 +24,30 @@ function Portada({ id }: { id: string }) {
         <Componente />
       </Lienzo>
     </div>
+  )
+}
+
+/** Vincula cada presentación con la certificación del visitador en ese producto */
+function EstadoCapacitacion({ productosIds }: { productosIds: ProductoId[] }) {
+  const { estado } = useAcademia()
+  return (
+    <>
+      {productosIds.map((id) => {
+        const curso = cursos.find((c) => c.productoId === id)
+        if (!curso) return null
+        return estado.progreso[curso.id]?.certificado ? (
+          <span key={id} className="chip border-transparent bg-ok-soft text-ok">
+            <BadgeCheck size={12} aria-hidden="true" />
+            Certificada
+          </span>
+        ) : (
+          <a key={id} href={`#/academia/curso/${curso.id}`} className="chip press border-transparent bg-warn-soft text-warn hover:brightness-95">
+            <GraduationCap size={12} aria-hidden="true" />
+            Capacitación pendiente
+          </a>
+        )
+      })}
+    </>
   )
 }
 
@@ -62,6 +88,7 @@ function TarjetaPresentacion({ p, destacada }: { p: Presentacion; destacada?: bo
             <Clock size={12} aria-hidden="true" />
             <span className="num">~{minutosEstimados(p)}</span> min
           </span>
+          <EstadoCapacitacion productosIds={productosP} />
         </div>
         <div className="mt-auto flex flex-wrap gap-2 pt-4">
           <a href={`#/presentar/${p.id}`} className="btn-primary flex-1">

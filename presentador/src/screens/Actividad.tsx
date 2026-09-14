@@ -4,6 +4,7 @@ import { EncabezadoPantalla } from '../components/ui'
 import { presentacionesOficiales } from '../data/presentaciones'
 import { hace, hora } from '../lib/formato'
 import { useAhora } from '../lib/tiempo'
+import { useAcademia } from '../state/academia'
 import { useDemo } from '../state/demo'
 import type { TipoOutbox } from '../types'
 
@@ -11,6 +12,7 @@ const iconos: Record<TipoOutbox, typeof LogIn> = { checkin: LogIn, checkout: Log
 
 export function Actividad() {
   const { estado, online, pendientes, despachar, avisar } = useDemo()
+  const { reiniciar: reiniciarAcademia } = useAcademia()
   const ahora = useAhora(10000)
   const [confirmando, setConfirmando] = useState(false)
 
@@ -132,6 +134,7 @@ export function Actividad() {
             onClick={() => {
               if (!confirmando) return setConfirmando(true)
               despachar({ tipo: 'reiniciar' })
+              reiniciarAcademia()
               setConfirmando(false)
               avisar('Demo reiniciada', 'info')
             }}
