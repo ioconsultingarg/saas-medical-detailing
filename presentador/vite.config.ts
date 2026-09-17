@@ -40,6 +40,17 @@ export default defineConfig({
         cleanupOutdatedCaches: true,
         runtimeCaching: [
           {
+            // videos de public/media: se guardan al verlos y quedan para la visita sin señal
+            urlPattern: ({ url }) => url.pathname.includes('/media/'),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'videos',
+              expiration: { maxEntries: 20, maxAgeSeconds: 60 * 60 * 24 * 60 },
+              cacheableResponse: { statuses: [0, 200] },
+              rangeRequests: true,
+            },
+          },
+          {
             // teselas del mapa ya vistas: quedan disponibles sin conexión
             urlPattern: /^https:\/\/tile\.openstreetmap\.org\/.*/,
             handler: 'CacheFirst',
