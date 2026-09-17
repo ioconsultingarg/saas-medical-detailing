@@ -10,6 +10,7 @@ export const apm = {
 export const visitasDelDia: Visita[] = [
   {
     id: 'v1',
+    medicoId: 'm1',
     hora: '08:30',
     medico: {
       nombre: 'Dra. Laura Méndez',
@@ -27,6 +28,7 @@ export const visitasDelDia: Visita[] = [
   },
   {
     id: 'v2',
+    medicoId: 'm2',
     hora: '09:30',
     medico: {
       nombre: 'Dr. Martín Ibarra',
@@ -44,6 +46,7 @@ export const visitasDelDia: Visita[] = [
   },
   {
     id: 'v3',
+    medicoId: 'm3',
     hora: '10:30',
     medico: {
       nombre: 'Dra. Sofía Guerrero',
@@ -61,6 +64,7 @@ export const visitasDelDia: Visita[] = [
   },
   {
     id: 'v4',
+    medicoId: 'm4',
     hora: '11:45',
     medico: {
       nombre: 'Dr. Pablo Ferreyra',
@@ -78,6 +82,7 @@ export const visitasDelDia: Visita[] = [
   },
   {
     id: 'v5',
+    medicoId: 'm5',
     hora: '13:30',
     medico: {
       nombre: 'Dra. Valeria Ríos',
@@ -95,6 +100,7 @@ export const visitasDelDia: Visita[] = [
   },
   {
     id: 'v6',
+    medicoId: 'm6',
     hora: '14:30',
     medico: {
       nombre: 'Dr. Esteban Navarro',
@@ -112,6 +118,7 @@ export const visitasDelDia: Visita[] = [
   },
   {
     id: 'v7',
+    medicoId: 'm7',
     hora: '16:00',
     medico: {
       nombre: 'Dra. Carolina Paz',
@@ -129,6 +136,7 @@ export const visitasDelDia: Visita[] = [
   },
   {
     id: 'v8',
+    medicoId: 'm8',
     hora: '17:15',
     medico: {
       nombre: 'Dr. Julián Acosta',

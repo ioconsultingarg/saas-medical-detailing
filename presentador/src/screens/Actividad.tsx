@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { CheckCircle2, CloudOff, FileText, LogIn, LogOut, Package, RefreshCw, RotateCcw, Send, Wifi } from 'lucide-react'
+import { AudioLines, CalendarPlus, CheckCircle2, CloudOff, Database, FileText, LogIn, LogOut, Package, PenLine, RefreshCw, RotateCcw, Send, ShieldAlert, Wifi } from 'lucide-react'
+import { operacionOutbox } from '../lib/api'
 import { EncabezadoPantalla } from '../components/ui'
 import { presentacionesOficiales } from '../data/presentaciones'
 import { hace, hora } from '../lib/formato'
@@ -8,7 +9,16 @@ import { useAcademia } from '../state/academia'
 import { useDemo } from '../state/demo'
 import type { TipoOutbox } from '../types'
 
-const iconos: Record<TipoOutbox, typeof LogIn> = { checkin: LogIn, checkout: LogOut, pedido: Package, envio: Send }
+const iconos: Record<TipoOutbox, typeof LogIn> = {
+  checkin: LogIn,
+  checkout: LogOut,
+  pedido: Package,
+  envio: Send,
+  firma: PenLine,
+  voz: AudioLines,
+  farmacovigilancia: ShieldAlert,
+  plan: CalendarPlus,
+}
 
 export function Actividad() {
   const { estado, online, pendientes, despachar, avisar } = useDemo()
@@ -54,7 +64,12 @@ export function Actividad() {
                     </span>
                     <div className="min-w-0 flex-1">
                       <div className="truncate text-[15px] font-medium text-ink">{o.resumen}</div>
-                      <div className="num text-[12px] text-ink-3">{hora(o.creado)}</div>
+                      <div className="flex min-w-0 flex-wrap items-center gap-x-2 text-[12px] text-ink-3">
+                        <span className="num">{hora(o.creado)}</span>
+                        <span className="num truncate" translate="no">
+                          {operacionOutbox[o.tipo].metodo} {operacionOutbox[o.tipo].ruta}
+                        </span>
+                      </div>
                     </div>
                     {o.sincronizado ? (
                       <span className="inline-flex items-center gap-1 text-[12px] font-medium whitespace-nowrap text-ok">
@@ -107,6 +122,29 @@ export function Actividad() {
               />
               <span aria-hidden="true" className="relative h-7 w-12 shrink-0 rounded-full bg-line-2 transition-colors duration-200 peer-checked:bg-ink peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent after:absolute after:top-1 after:left-1 after:size-5 after:rounded-full after:bg-white after:shadow after:transition-transform after:duration-200 peer-checked:after:translate-x-5" />
             </label>
+          </section>
+
+          <section aria-labelledby="titulo-local" className="card p-5">
+            <h2 id="titulo-local" className="flex items-center gap-2 text-[16px] font-semibold text-ink">
+              <Database size={17} aria-hidden="true" className="text-ink-3" />
+              Guardado en esta tablet
+            </h2>
+            <dl className="mt-3 grid grid-cols-2 gap-2">
+              {[
+                { t: 'Visitas de hoy', v: Object.keys(estado.registros).length },
+                { t: 'Firmas', v: Object.values(estado.registros).filter((r) => r.firma).length },
+                { t: 'Entregas por lote', v: estado.entregas.length },
+                { t: 'Reportes por voz', v: estado.outbox.filter((o) => o.tipo === 'voz').length },
+              ].map((x) => (
+                <div key={x.t} className="rounded-xl bg-sunken px-3 py-2.5">
+                  <dt className="text-[12px] text-ink-3">{x.t}</dt>
+                  <dd className="num text-[20px] font-medium text-ink">{x.v}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="mt-3 text-[12px] leading-relaxed text-ink-3">
+              Cada movimiento se guarda primero en la base local y se envía en segundo plano con una clave de idempotencia: si la señal se corta a mitad de camino, nunca se duplica.
+            </p>
           </section>
 
           <section aria-labelledby="titulo-offline" className="card p-5">

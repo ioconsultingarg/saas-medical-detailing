@@ -23,6 +23,8 @@ export interface Medico {
 
 export interface Visita {
   id: string
+  /** ficha del médico en el CRM */
+  medicoId: string
   hora: string
   medico: Medico
   consultorio: string
@@ -47,6 +49,8 @@ export interface RegistroVisita {
   firma?: string
   muestras?: number
   productos?: ProductoId[]
+  /** el registro se completó a partir de un reporte por voz */
+  origen?: 'manual' | 'voz'
 }
 
 export type TipoItemStock = 'comercial' | 'muestra' | 'material'
@@ -58,6 +62,9 @@ export interface ItemStock {
   tipo: TipoItemStock
   unidades: number
   umbralBajo: number
+  /** trazabilidad: lote vigente y vencimiento (AAAA-MM) */
+  lote?: string
+  vencimiento?: string
 }
 
 export type NivelStock = 'alto' | 'bajo' | 'sin'
@@ -79,7 +86,7 @@ export interface Presentacion {
   medio?: string
 }
 
-export type TipoOutbox = 'checkin' | 'checkout' | 'pedido' | 'envio'
+export type TipoOutbox = 'checkin' | 'checkout' | 'pedido' | 'envio' | 'firma' | 'voz' | 'farmacovigilancia' | 'plan'
 
 export interface ItemOutbox {
   id: string
@@ -87,6 +94,22 @@ export interface ItemOutbox {
   resumen: string
   creado: number
   sincronizado: number | null
+}
+
+export type EstadoFirma = 'digital' | 'papel' | 'pendiente'
+
+/** Entrega de muestras médicas: una fila por lote, firmada por el profesional */
+export interface EntregaMuestra {
+  id: string
+  medicoId: string
+  visitaId: string | null
+  fecha: number
+  sku: string
+  lote: string
+  vencimiento: string
+  cantidad: number
+  firma: EstadoFirma
+  sincronizado: boolean
 }
 
 export interface DwellEvent {

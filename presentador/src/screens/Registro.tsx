@@ -1,10 +1,12 @@
 import { useEffect, useId, useRef, useState, type PointerEvent as EventoPuntero } from 'react'
-import { CalendarRange, Check, Clock, Eraser, Layers, Package, Star } from 'lucide-react'
+import { CalendarRange, Check, Clock, Eraser, Layers, Package, Sparkles, Star } from 'lucide-react'
+import { ReporteVoz } from '../components/ReporteVoz'
 import { Sheet } from '../components/Sheet'
 import { StockPanel } from '../components/StockPanel'
 import { diapositivaPorId } from '../data/presentaciones'
 import { cronometro } from '../lib/formato'
 import { ir } from '../lib/ruta'
+import type { ExtraccionVoz } from '../lib/extraccionVoz'
 import { useAhora } from '../lib/tiempo'
 import { nombreCorto, useDemo } from '../state/demo'
 
@@ -16,6 +18,16 @@ const textosCalificacion = [
   'Receptivo · interés en probar el tratamiento',
   'Muy receptivo · alta intención de prescripción',
 ]
+
+/** Marca de los campos que completó la IA: el APM igual revisa antes de guardar */
+function MarcaIA() {
+  return (
+    <span className="chip ml-2 border-transparent bg-accent-soft align-middle text-accent">
+      <Sparkles size={12} aria-hidden="true" />
+      Completado por IA
+    </span>
+  )
+}
 
 const etiquetas = ['Pidió estudios', 'Interesado en muestras', 'Objeción de costo', 'Objeción de cobertura', 'Volver en 15 días', 'Derivar a MSL']
 
@@ -154,6 +166,7 @@ export function Registro() {
   const [enPapel, setEnPapel] = useState(false)
   const [errores, setErrores] = useState<{ calificacion?: boolean; firma?: boolean }>({})
   const [stockAbierto, setStockAbierto] = useState(false)
+  const [porVoz, setPorVoz] = useState(false)
   const idNota = useId()
   const idFirma = useId()
   const refEstrellas = useRef<HTMLDivElement>(null)
@@ -172,9 +185,22 @@ export function Registro() {
     if (nuevos.calificacion) return refEstrellas.current?.querySelector('button')?.focus()
     if (nuevos.firma) return refFirma.current?.scrollIntoView({ block: 'center', behavior: 'smooth' })
     const nombre = nombreCorto(visitaActiva!)
-    despachar({ tipo: 'cerrar', calificacion, etiquetas: marcadas, nota: nota.trim(), firma: firma ?? (enPapel ? 'papel' : null) })
+    despachar({ tipo: 'cerrar', calificacion, etiquetas: marcadas, nota: nota.trim(), firma: firma ?? (enPapel ? 'papel' : null), origen: porVoz ? 'voz' : 'manual' })
     avisar(online ? `Visita con ${nombre} cerrada y sincronizada` : `Visita con ${nombre} guardada · se sincroniza al volver la señal`, online ? 'ok' : 'warn')
     ir('/')
+  }
+
+  function aplicarVoz(ex: ExtraccionVoz) {
+    setCalificacion(ex.calificacion)
+    setMarcadas(ex.etiquetas.filter((e) => etiquetas.includes(e)))
+    setNota(ex.resumen)
+    setErrores({})
+    setPorVoz(true)
+    const items = ex.items.filter((i) => i.disponible > 0).map((i) => ({ sku: i.sku, cantidad: i.disponible }))
+    if (items.length) despachar({ tipo: 'entregar', items })
+    despachar({ tipo: 'reporteVoz', resumen: `Reporte por voz procesado · ${nombreCorto(visitaActiva!)} · ${Math.round(ex.cobertura * 100)} % de campos` })
+    avisar(items.length ? 'Registro completado · revisá y pedí la firma de las muestras' : 'Registro completado · revisá antes de guardar')
+    if (items.some((i) => i.sku.includes('-MM-'))) window.setTimeout(() => refFirma.current?.scrollIntoView({ block: 'center', behavior: 'smooth' }), 350)
   }
 
   return (
@@ -200,11 +226,14 @@ export function Registro() {
         ))}
       </dl>
 
+      <ReporteVoz visita={visitaActiva} onAplicar={aplicarVoz} />
+
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
         <div className="flex flex-col gap-6">
           <section aria-labelledby="titulo-receptividad" className="card p-5">
             <h2 id="titulo-receptividad" className="text-[16px] font-semibold text-ink">
               Receptividad del médico
+              {porVoz && <MarcaIA />}
             </h2>
             <div ref={refEstrellas} role="group" aria-labelledby="titulo-receptividad" aria-describedby="texto-calificacion" className="mt-4 flex gap-2">
               {[1, 2, 3, 4, 5].map((n) => (
@@ -250,6 +279,7 @@ export function Registro() {
             <label htmlFor={idNota} className="text-[16px] font-semibold text-ink">
               Nota para la próxima visita
             </label>
+            {porVoz && <MarcaIA />}
             <textarea
               id={idNota}
               name="nota"

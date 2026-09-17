@@ -1,0 +1,307 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Presentador API",
+    "version": "1.0.0",
+    "summary": "API pública de la plataforma de e-detailing y CRM para fuerzas de venta farmacéuticas.",
+    "description": "La app móvil y las integraciones (SAP, Salesforce, Veeva, data warehouse) usan este mismo contrato. Todas las escrituras aceptan Idempotency-Key para reintentos seguros desde dispositivos sin conexión. Las listas se paginan con cursor y admiten updated_since para sincronización delta."
+  },
+  "servers": [{ "url": "https://api.presentador.app", "description": "Producción" }, { "url": "https://sandbox.api.presentador.app", "description": "Sandbox" }],
+  "security": [{ "oauth2": [] }],
+  "tags": [
+    { "name": "HCPs", "description": "Fichero médico" },
+    { "name": "Visits", "description": "Visitas, check-in y cierre" },
+    { "name": "Samples", "description": "Entregas de muestras e inventario por lote" },
+    { "name": "Content", "description": "Presentaciones y envíos" },
+    { "name": "AI", "description": "Reportes por voz y consultas en lenguaje natural" },
+    { "name": "Compliance", "description": "Firmas y farmacovigilancia" },
+    { "name": "Webhooks", "description": "Suscripción a eventos" }
+  ],
+  "paths": {
+    "/v1/hcps": {
+      "get": {
+        "tags": ["HCPs"],
+        "summary": "Listar profesionales",
+        "parameters": [
+          { "$ref": "#/components/parameters/UpdatedSince" },
+          { "$ref": "#/components/parameters/Cursor" },
+          { "$ref": "#/components/parameters/Limit" },
+          { "name": "territory", "in": "query", "schema": { "type": "string" } },
+          { "name": "segment", "in": "query", "schema": { "type": "string", "enum": ["A", "B", "C"] } },
+          { "name": "rep_id", "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Página de profesionales", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/HcpPage" } } } }
+        }
+      },
+      "post": {
+        "tags": ["HCPs"],
+        "summary": "Crear o actualizar un profesional por ID externo (upsert)",
+        "parameters": [{ "$ref": "#/components/parameters/IdempotencyKey" }],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Hcp" } } } },
+        "responses": { "200": { "description": "Actualizado" }, "201": { "description": "Creado" } }
+      }
+    },
+    "/v1/hcps/{id}": {
+      "get": {
+        "tags": ["HCPs"],
+        "summary": "Obtener la ficha de un profesional",
+        "parameters": [{ "$ref": "#/components/parameters/Id" }],
+        "responses": {
+          "200": { "description": "Ficha", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Hcp" } } } },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/v1/visits": {
+      "get": {
+        "tags": ["Visits"],
+        "summary": "Listar visitas (sincronización delta)",
+        "parameters": [{ "$ref": "#/components/parameters/UpdatedSince" }, { "$ref": "#/components/parameters/Cursor" }, { "$ref": "#/components/parameters/Limit" }],
+        "responses": { "200": { "description": "Página de visitas", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/VisitPage" } } } } }
+      }
+    },
+    "/v1/visits/{id}/check-in": {
+      "post": {
+        "tags": ["Visits"],
+        "summary": "Registrar check-in con geolocalización",
+        "parameters": [{ "$ref": "#/components/parameters/Id" }, { "$ref": "#/components/parameters/IdempotencyKey" }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "required": ["at", "lat", "lng"], "properties": { "at": { "type": "string", "format": "date-time" }, "lat": { "type": "number" }, "lng": { "type": "number" }, "accuracy_m": { "type": "number" } } } } }
+        },
+        "responses": { "201": { "description": "Check-in registrado", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Visit" } } } } }
+      }
+    },
+    "/v1/visits/{id}": {
+      "patch": {
+        "tags": ["Visits"],
+        "summary": "Cerrar o actualizar una visita",
+        "description": "Usa control de concurrencia optimista con If-Match. Si el registro cambió en el servidor, responde 409 con la versión vigente.",
+        "parameters": [
+          { "$ref": "#/components/parameters/Id" },
+          { "$ref": "#/components/parameters/IdempotencyKey" },
+          { "name": "If-Match", "in": "header", "schema": { "type": "string" } }
+        ],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/VisitUpdate" } } } },
+        "responses": {
+          "200": { "description": "Visita actualizada", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Visit" } } } },
+          "409": { "description": "Conflicto de versión" }
+        }
+      }
+    },
+    "/v1/visit-plans": {
+      "post": {
+        "tags": ["Visits"],
+        "summary": "Crear un plan de visitas para uno o varios representantes",
+        "parameters": [{ "$ref": "#/components/parameters/IdempotencyKey" }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "required": ["hcp_ids"], "properties": { "hcp_ids": { "type": "array", "items": { "type": "string" } }, "due_by": { "type": "string", "format": "date" }, "reason": { "type": "string" } } } } }
+        },
+        "responses": { "201": { "description": "Plan creado" } }
+      }
+    },
+    "/v1/sample-deliveries": {
+      "post": {
+        "tags": ["Samples"],
+        "summary": "Registrar una entrega de muestras por lote",
+        "description": "Descuenta el stock del representante, valida vencimiento y cupo, y genera el documento de material en el ERP (movimiento 201 en SAP).",
+        "parameters": [{ "$ref": "#/components/parameters/IdempotencyKey" }],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SampleDeliveryRequest" } } } },
+        "responses": {
+          "201": { "description": "Entrega registrada", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SampleDelivery" } } } },
+          "422": { "description": "Sin stock, lote vencido o cupo excedido" }
+        }
+      }
+    },
+    "/v1/inventory": {
+      "get": {
+        "tags": ["Samples"],
+        "summary": "Stock asignado a un representante",
+        "parameters": [{ "name": "rep_id", "in": "query", "required": true, "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "Inventario", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Inventory" } } } } }
+      }
+    },
+    "/v1/content-shares": {
+      "post": {
+        "tags": ["Content"],
+        "summary": "Enviar material aprobado por WhatsApp, correo o SMS",
+        "parameters": [{ "$ref": "#/components/parameters/IdempotencyKey" }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "required": ["hcp_id", "channel", "content_ids"], "properties": { "hcp_id": { "type": "string" }, "channel": { "type": "string", "enum": ["whatsapp", "email", "sms"] }, "content_ids": { "type": "array", "items": { "type": "string" } } } } } }
+        },
+        "responses": { "201": { "description": "Envío en cola" }, "403": { "description": "Sin consentimiento del profesional para ese canal" } }
+      }
+    },
+    "/v1/signatures": {
+      "post": {
+        "tags": ["Compliance"],
+        "summary": "Guardar la firma de recepción de muestras",
+        "parameters": [{ "$ref": "#/components/parameters/IdempotencyKey" }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "required": ["visit_id", "image", "signed_at"], "properties": { "visit_id": { "type": "string" }, "image": { "type": "string", "contentEncoding": "base64", "contentMediaType": "image/png" }, "signed_at": { "type": "string", "format": "date-time" }, "device_id": { "type": "string" } } } } }
+        },
+        "responses": { "201": { "description": "Firma guardada con sello de tiempo y hash" } }
+      }
+    },
+    "/v1/adverse-events": {
+      "post": {
+        "tags": ["Compliance"],
+        "summary": "Notificar un posible evento adverso a Farmacovigilancia",
+        "parameters": [{ "$ref": "#/components/parameters/IdempotencyKey" }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "required": ["visit_id", "product_id", "description", "reported_at"], "properties": { "visit_id": { "type": "string" }, "product_id": { "type": "string" }, "description": { "type": "string" }, "source": { "type": "string", "enum": ["voice_report", "manual"] }, "reported_at": { "type": "string", "format": "date-time" } } } } }
+        },
+        "responses": { "201": { "description": "Notificación registrada; plazo regulatorio de 24 h" } }
+      }
+    },
+    "/v1/voice-reports": {
+      "post": {
+        "tags": ["AI"],
+        "summary": "Procesar un reporte de visita dictado",
+        "description": "Transcribe el audio, extrae entidades y devuelve campos del CRM para revisión. Nunca guarda la visita sin confirmación del representante.",
+        "parameters": [{ "$ref": "#/components/parameters/IdempotencyKey" }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "required": ["visit_id", "audio_url"], "properties": { "visit_id": { "type": "string" }, "audio_url": { "type": "string" }, "language": { "type": "string", "default": "es-AR" } } } } }
+        },
+        "responses": { "200": { "description": "Extracción lista", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/VoiceReport" } } } }, "202": { "description": "En proceso; se notifica por webhook voice_report.processed" } }
+      }
+    },
+    "/v1/insights/query": {
+      "post": {
+        "tags": ["AI"],
+        "summary": "Consulta en lenguaje natural sobre los datos de la fuerza de ventas",
+        "description": "Solo lectura. Respeta los permisos por territorio del usuario. Devuelve la respuesta, las filas, la consulta generada y sus fuentes.",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "required": ["question"], "properties": { "question": { "type": "string" }, "conversation_id": { "type": "string" } } } } } },
+        "responses": { "200": { "description": "Respuesta", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InsightAnswer" } } } } }
+      }
+    },
+    "/v1/webhooks": {
+      "post": {
+        "tags": ["Webhooks"],
+        "summary": "Suscribirse a eventos",
+        "description": "Cada entrega lleva la cabecera Presentador-Signature (HMAC-SHA256). Reintentos exponenciales durante 72 h.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "required": ["url", "events"], "properties": { "url": { "type": "string", "format": "uri" }, "events": { "type": "array", "items": { "$ref": "#/components/schemas/EventType" } } } } } }
+        },
+        "responses": { "201": { "description": "Suscripción creada" } }
+      }
+    }
+  },
+  "webhooks": {
+    "event": {
+      "post": {
+        "summary": "Evento de la plataforma",
+        "requestBody": { "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Event" } } } },
+        "responses": { "200": { "description": "Recibido" } }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "oauth2": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": { "tokenUrl": "https://auth.presentador.app/oauth/token", "scopes": { "hcps:read": "Leer fichero médico", "visits:write": "Registrar visitas", "samples:write": "Registrar entregas", "insights:read": "Consultar el asistente" } },
+          "authorizationCode": { "authorizationUrl": "https://auth.presentador.app/oauth/authorize", "tokenUrl": "https://auth.presentador.app/oauth/token", "scopes": {} }
+        }
+      }
+    },
+    "parameters": {
+      "Id": { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } },
+      "IdempotencyKey": { "name": "Idempotency-Key", "in": "header", "required": true, "schema": { "type": "string", "format": "uuid" } },
+      "UpdatedSince": { "name": "updated_since", "in": "query", "schema": { "type": "string", "format": "date-time" } },
+      "Cursor": { "name": "cursor", "in": "query", "schema": { "type": "string" } },
+      "Limit": { "name": "limit", "in": "query", "schema": { "type": "integer", "minimum": 1, "maximum": 500, "default": 100 } }
+    },
+    "responses": {
+      "NotFound": { "description": "No encontrado", "content": { "application/problem+json": { "schema": { "$ref": "#/components/schemas/Problem" } } } }
+    },
+    "schemas": {
+      "Problem": { "type": "object", "properties": { "type": { "type": "string" }, "title": { "type": "string" }, "status": { "type": "integer" }, "detail": { "type": "string" } } },
+      "ExternalIds": { "type": "object", "properties": { "salesforce": { "type": "string" }, "veeva": { "type": "string" }, "sap_bp": { "type": "string" } } },
+      "Hcp": {
+        "type": "object",
+        "required": ["id", "name", "specialty", "license"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "specialty": { "type": "string" },
+          "license": { "type": "string" },
+          "segment": { "type": "string", "enum": ["A", "B", "C"] },
+          "institution": { "type": "string" },
+          "territory": { "type": "string" },
+          "rep_id": { "type": "string" },
+          "consent": { "type": "object", "properties": { "whatsapp": { "type": "boolean" }, "email": { "type": "boolean" }, "sms": { "type": "boolean" } } },
+          "metrics": { "type": "object", "readOnly": true, "properties": { "days_since_visit": { "type": "integer" }, "rx_change_qoq": { "type": "number" }, "market_share": { "type": "number" } } },
+          "external_ids": { "$ref": "#/components/schemas/ExternalIds" },
+          "updated_at": { "type": "string", "format": "date-time", "readOnly": true }
+        }
+      },
+      "HcpPage": { "type": "object", "properties": { "data": { "type": "array", "items": { "$ref": "#/components/schemas/Hcp" } }, "next_cursor": { "type": ["string", "null"] } } },
+      "Visit": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "hcp_id": { "type": "string" },
+          "rep_id": { "type": "string" },
+          "status": { "type": "string", "enum": ["planned", "in_progress", "completed", "cancelled"] },
+          "check_in": { "type": ["object", "null"], "properties": { "at": { "type": "string", "format": "date-time" }, "distance_m": { "type": "number" } } },
+          "check_out": { "type": ["string", "null"], "format": "date-time" },
+          "rating": { "type": ["integer", "null"], "minimum": 1, "maximum": 5 },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "notes": { "type": "string" },
+          "products": { "type": "array", "items": { "type": "string" } },
+          "slides_dwell_ms": { "type": "object", "additionalProperties": { "type": "integer" } },
+          "source": { "type": "string", "enum": ["manual", "voice"] },
+          "version": { "type": "integer" },
+          "external_ids": { "$ref": "#/components/schemas/ExternalIds" }
+        }
+      },
+      "VisitUpdate": { "type": "object", "properties": { "status": { "type": "string" }, "rating": { "type": "integer" }, "tags": { "type": "array", "items": { "type": "string" } }, "notes": { "type": "string" }, "signature_id": { "type": "string" } } },
+      "VisitPage": { "type": "object", "properties": { "data": { "type": "array", "items": { "$ref": "#/components/schemas/Visit" } }, "next_cursor": { "type": ["string", "null"] } } },
+      "SampleDeliveryRequest": {
+        "type": "object",
+        "required": ["visit_id", "hcp_id", "items"],
+        "properties": {
+          "visit_id": { "type": "string" },
+          "hcp_id": { "type": "string" },
+          "items": { "type": "array", "items": { "type": "object", "required": ["sku", "lot", "quantity"], "properties": { "sku": { "type": "string" }, "lot": { "type": "string" }, "quantity": { "type": "integer", "minimum": 1 } } } },
+          "signature_id": { "type": "string" }
+        }
+      },
+      "SampleDelivery": { "type": "object", "properties": { "id": { "type": "string" }, "hcp_id": { "type": "string" }, "sku": { "type": "string" }, "lot": { "type": "string" }, "expiry": { "type": "string" }, "quantity": { "type": "integer" }, "signature": { "type": "string", "enum": ["digital", "paper", "pending"] }, "erp_document": { "type": "string" } } },
+      "Inventory": { "type": "object", "properties": { "rep_id": { "type": "string" }, "as_of": { "type": "string", "format": "date-time" }, "items": { "type": "array", "items": { "type": "object", "properties": { "sku": { "type": "string" }, "type": { "type": "string" }, "units": { "type": "integer" }, "lot": { "type": ["string", "null"] }, "expiry": { "type": ["string", "null"] } } } } } },
+      "VoiceReport": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "status": { "type": "string", "enum": ["processing", "processed", "failed"] },
+          "transcript": { "type": "string" },
+          "extracted": {
+            "type": "object",
+            "properties": {
+              "hcp_id": { "type": "string" },
+              "products": { "type": "array", "items": { "type": "string" } },
+              "samples": { "type": "array", "items": { "type": "object", "properties": { "sku": { "type": "string" }, "quantity": { "type": "integer" } } } },
+              "rating": { "type": "integer" },
+              "tags": { "type": "array", "items": { "type": "string" } },
+              "next_step": { "type": ["string", "null"] },
+              "adverse_event": { "type": "object", "properties": { "detected": { "type": "boolean" }, "excerpt": { "type": "string" } } }
+            }
+          },
+          "requires_review": { "type": "boolean", "const": true }
+        }
+      },
+      "InsightAnswer": { "type": "object", "properties": { "answer": { "type": "string" }, "rows": { "type": "array", "items": { "type": "object" } }, "sql": { "type": "string" }, "sources": { "type": "array", "items": { "type": "string" } } } },
+      "EventType": { "type": "string", "enum": ["visit.checked_in", "visit.closed", "sample.delivered", "content.shared", "signature.captured", "voice_report.processed", "adverse_event.reported", "visit_plan.created", "hcp.updated"] },
+      "Event": { "type": "object", "properties": { "id": { "type": "string" }, "type": { "$ref": "#/components/schemas/EventType" }, "created_at": { "type": "string", "format": "date-time" }, "data": { "type": "object" } } }
+    }
+  }
+}

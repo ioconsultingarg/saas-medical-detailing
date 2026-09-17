@@ -3,7 +3,7 @@ import { apm, registrosIniciales, visitasDelDia } from '../data/agenda'
 import { diapositivaPorId } from '../data/presentaciones'
 import { stockInicial } from '../data/stock'
 import { minutos } from '../lib/formato'
-import type { ItemOutbox, ItemStock, Presentacion, ProductoId, RegistroVisita, TipoOutbox, Visita } from '../types'
+import type { EntregaMuestra, ItemOutbox, ItemStock, Presentacion, ProductoId, RegistroVisita, TipoOutbox, Visita } from '../types'
 
 export interface ItemCarrito {
   sku: string
@@ -11,7 +11,7 @@ export interface ItemCarrito {
 }
 
 export interface EstadoDemo {
-  version: 3
+  version: 4
   registros: Record<string, RegistroVisita>
   visitaActivaId: string | null
   stock: ItemStock[]
@@ -23,11 +23,19 @@ export interface EstadoDemo {
   hotspotsVistos: string[]
   tiempos: Record<string, number>
   enviados: string[]
+  /** entregas de muestras y material registradas en esta sesión (trazabilidad por lote) */
+  entregas: EntregaMuestra[]
+  /** médicos incluidos en planes de visita creados desde el asistente */
+  planificados: string[]
 }
 
 type Accion =
   | { tipo: 'checkin'; visitaId: string; distancia: number }
-  | { tipo: 'cerrar'; calificacion: number; etiquetas: string[]; nota: string; firma: string | null }
+  | { tipo: 'cerrar'; calificacion: number; etiquetas: string[]; nota: string; firma: string | null; origen: 'manual' | 'voz' }
+  | { tipo: 'entregar'; items: ItemCarrito[] }
+  | { tipo: 'reporteVoz'; resumen: string }
+  | { tipo: 'farmacovigilancia'; fragmento: string }
+  | { tipo: 'plan'; medicos: string[]; resumen: string }
   | { tipo: 'carrito'; sku: string; delta: number }
   | { tipo: 'vaciarCarrito' }
   | { tipo: 'pedido' }
@@ -40,12 +48,12 @@ type Accion =
   | { tipo: 'sincronizar' }
   | { tipo: 'reiniciar' }
 
-const CLAVE = 'presentador-demo-v3'
+const CLAVE = 'presentador-demo-v4'
 export const CUPO_MUESTRAS = 20
 
 function estadoInicial(): EstadoDemo {
   return {
-    version: 3,
+    version: 4,
     registros: registrosIniciales(),
     visitaActivaId: null,
     stock: stockInicial.map((s) => ({ ...s })),
@@ -57,6 +65,8 @@ function estadoInicial(): EstadoDemo {
     hotspotsVistos: [],
     tiempos: {},
     enviados: [],
+    entregas: [],
+    planificados: [],
   }
 }
 
@@ -65,7 +75,7 @@ function cargar(): EstadoDemo {
     const crudo = localStorage.getItem(CLAVE)
     if (crudo) {
       const guardado = JSON.parse(crudo) as EstadoDemo
-      if (guardado.version === 3) return guardado
+      if (guardado.version === 4) return guardado
     }
   } catch {
     // almacenamiento bloqueado: la demo arranca de cero en memoria
@@ -82,6 +92,46 @@ function entradaOutbox(tipo: TipoOutbox, resumen: string): ItemOutbox {
 export function nombreCorto(v: Visita) {
   const partes = v.medico.nombre.split(' ')
   return `${partes[0]} ${partes[partes.length - 1]}`
+}
+
+/** Descuenta stock y deja trazada cada entrega (lote, vencimiento, firma pendiente) */
+function aplicarEntrega(estado: EstadoDemo, lista: ItemCarrito[]) {
+  let unidades = 0
+  let muestras = 0
+  const visita = visitasDelDia.find((v) => v.id === estado.visitaActivaId)
+  const nuevas: EntregaMuestra[] = []
+  const stock = estado.stock.map((s) => {
+    const pedido = lista.find((c) => c.sku === s.sku)
+    if (!pedido) return s
+    const cantidad = Math.min(pedido.cantidad, s.unidades)
+    if (cantidad <= 0) return s
+    unidades += cantidad
+    if (s.tipo === 'muestra') muestras += cantidad
+    if (visita && s.tipo !== 'comercial') {
+      secuencia += 1
+      nuevas.push({
+        id: `e-${Date.now()}-${secuencia}`,
+        medicoId: visita.medicoId,
+        visitaId: visita.id,
+        fecha: Date.now(),
+        sku: s.sku,
+        lote: s.lote ?? 'S/L',
+        vencimiento: s.vencimiento ?? '',
+        cantidad,
+        firma: s.tipo === 'muestra' ? 'pendiente' : 'digital',
+        sincronizado: false,
+      })
+    }
+    return { ...s, unidades: s.unidades - cantidad }
+  })
+  const registros =
+    visita && estado.registros[visita.id]
+      ? {
+          ...estado.registros,
+          [visita.id]: { ...estado.registros[visita.id], muestras: (estado.registros[visita.id].muestras ?? 0) + muestras },
+        }
+      : estado.registros
+  return { stock, registros, unidades, visita, entregas: [...nuevas, ...estado.entregas] }
 }
 
 function reducir(estado: EstadoDemo, accion: Accion): EstadoDemo {
@@ -129,9 +179,16 @@ function reducir(estado: EstadoDemo, accion: Accion): EstadoDemo {
             nota: accion.nota,
             firma: accion.firma ?? undefined,
             productos,
+            origen: accion.origen,
           },
         },
+        entregas: estado.entregas.map((e) =>
+          e.visitaId === id && e.firma === 'pendiente' ? { ...e, firma: accion.firma === 'papel' ? 'papel' : 'digital' } : e,
+        ),
         outbox: [
+          ...(accion.firma && accion.firma !== 'papel'
+            ? [entradaOutbox('firma', `Firma de recepción de ${previo?.muestras ?? 0} muestras · ${nombreCorto(visita)}`)]
+            : []),
           entradaOutbox('checkout', `Visita cerrada · ${nombreCorto(visita)} · ${minutos(checkOut - (previo?.checkIn ?? checkOut))} min`),
           ...estado.outbox,
         ],
@@ -149,33 +206,38 @@ function reducir(estado: EstadoDemo, accion: Accion): EstadoDemo {
       return { ...estado, carrito: [] }
     case 'pedido': {
       if (estado.carrito.length === 0) return estado
-      let unidades = 0
-      let muestras = 0
-      const stock = estado.stock.map((s) => {
-        const pedido = estado.carrito.find((c) => c.sku === s.sku)
-        if (!pedido) return s
-        const cantidad = Math.min(pedido.cantidad, s.unidades)
-        unidades += cantidad
-        if (s.tipo === 'muestra') muestras += cantidad
-        return { ...s, unidades: s.unidades - cantidad }
-      })
-      const visita = visitasDelDia.find((v) => v.id === estado.visitaActivaId)
-      const destino = visita ? ` para ${nombreCorto(visita)}` : ''
-      const registros =
-        visita && estado.registros[visita.id]
-          ? {
-              ...estado.registros,
-              [visita.id]: { ...estado.registros[visita.id], muestras: (estado.registros[visita.id].muestras ?? 0) + muestras },
-            }
-          : estado.registros
+      const r = aplicarEntrega(estado, estado.carrito)
+      const destino = r.visita ? ` para ${nombreCorto(r.visita)}` : ''
       return {
         ...estado,
-        stock,
-        registros,
+        stock: r.stock,
+        registros: r.registros,
+        entregas: r.entregas,
         carrito: [],
-        outbox: [entradaOutbox('pedido', `Pedido de ${unidades} u. en ${estado.carrito.length} ítems${destino}`), ...estado.outbox],
+        outbox: [entradaOutbox('pedido', `Pedido de ${r.unidades} u. en ${estado.carrito.length} ítems${destino}`), ...estado.outbox],
       }
     }
+    case 'entregar': {
+      const r = aplicarEntrega(estado, accion.items)
+      if (r.unidades === 0) return estado
+      return {
+        ...estado,
+        stock: r.stock,
+        registros: r.registros,
+        entregas: r.entregas,
+        outbox: [entradaOutbox('pedido', `Entrega de ${r.unidades} u. dictada por voz${r.visita ? ` · ${nombreCorto(r.visita)}` : ''}`), ...estado.outbox],
+      }
+    }
+    case 'reporteVoz':
+      return { ...estado, outbox: [entradaOutbox('voz', accion.resumen), ...estado.outbox] }
+    case 'farmacovigilancia':
+      return { ...estado, outbox: [entradaOutbox('farmacovigilancia', `Posible evento adverso notificado · “${accion.fragmento}”`), ...estado.outbox] }
+    case 'plan':
+      return {
+        ...estado,
+        planificados: [...new Set([...estado.planificados, ...accion.medicos])],
+        outbox: [entradaOutbox('plan', accion.resumen), ...estado.outbox],
+      }
     case 'guardarPresentacion': {
       const resto = estado.personales.filter((p) => p.id !== accion.presentacion.id)
       return { ...estado, personales: [accion.presentacion, ...resto] }
@@ -210,6 +272,7 @@ function reducir(estado: EstadoDemo, accion: Accion): EstadoDemo {
       return {
         ...estado,
         stockActualizado: ahora,
+        entregas: estado.entregas.map((e) => (e.sincronizado ? e : { ...e, sincronizado: true })),
         outbox: estado.outbox.map((o) => (o.sincronizado ? o : { ...o, sincronizado: ahora })),
       }
     }

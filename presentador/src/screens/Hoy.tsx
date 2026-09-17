@@ -131,7 +131,10 @@ export function Hoy() {
                 </div>
                 <h2 className="mt-3 text-[24px] leading-tight font-semibold">{destacada.medico.nombre}</h2>
                 <p className={`mt-1 text-[15px] ${visitaActiva ? 'text-white/70' : 'text-ink-3'}`}>
-                  {destacada.medico.especialidad} · {destacada.consultorio}
+                  {destacada.medico.especialidad} · {destacada.consultorio} ·{' '}
+                  <a href={`#/medicos/${destacada.medicoId}`} className={`font-medium underline underline-offset-2 ${visitaActiva ? 'text-white' : 'text-ink'}`}>
+                    Ver ficha
+                  </a>
                 </p>
                 <p className={`mt-3 border-l-2 pl-3 text-[14px] leading-relaxed ${visitaActiva ? 'border-white/25 text-white/85' : 'border-line-2 text-ink-2'}`}>
                   {destacada.nota}

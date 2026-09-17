@@ -3,6 +3,10 @@ import { Shell } from './components/Shell'
 import { useRuta } from './lib/ruta'
 import { Academia } from './screens/Academia'
 import { Actividad } from './screens/Actividad'
+import { Asistente } from './screens/Asistente'
+import { Integraciones } from './screens/Integraciones'
+import { Medico } from './screens/Medico'
+import { Medicos } from './screens/Medicos'
 import { Biblioteca } from './screens/Biblioteca'
 import { Compartir } from './screens/Compartir'
 import { Constructor } from './screens/Constructor'
@@ -19,7 +23,7 @@ import { SesionProvider, useSesion } from './state/sesion'
 function Rutas() {
   const ruta = useRuta()
   const { sesion } = useSesion()
-  const pantalla = ruta.nombre === 'curso' ? `curso:${ruta.cursoId}:${ruta.leccionId ?? ''}` : ruta.nombre
+  const pantalla = ruta.nombre === 'curso' ? `curso:${ruta.cursoId}:${ruta.leccionId ?? ''}` : ruta.nombre === 'medico' ? `medico:${ruta.medicoId}` : ruta.nombre
 
   useEffect(() => {
     window.scrollTo({ top: 0 })
@@ -41,6 +45,10 @@ function Rutas() {
       {ruta.nombre === 'academia' && <Academia />}
       {ruta.nombre === 'curso' && <Curso key={ruta.cursoId} cursoId={ruta.cursoId} leccionId={ruta.leccionId} />}
       {ruta.nombre === 'actividad' && <Actividad />}
+      {ruta.nombre === 'medicos' && <Medicos />}
+      {ruta.nombre === 'medico' && <Medico key={ruta.medicoId} medicoId={ruta.medicoId} />}
+      {ruta.nombre === 'asistente' && <Asistente />}
+      {ruta.nombre === 'integraciones' && <Integraciones />}
     </Shell>
   )
 }

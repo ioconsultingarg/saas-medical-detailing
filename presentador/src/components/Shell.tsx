@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react'
-import { Boxes, CalendarRange, CloudOff, GraduationCap, Library, RefreshCw, Stethoscope } from 'lucide-react'
+import { Boxes, CalendarRange, ChevronRight, CloudOff, Ellipsis, GraduationCap, Library, Plug, RefreshCw, Sparkles, Stethoscope, Users } from 'lucide-react'
 import { cronometro } from '../lib/formato'
 import type { Ruta } from '../lib/ruta'
 import { useAhora } from '../lib/tiempo'
@@ -7,14 +7,33 @@ import { nombreCorto, useDemo } from '../state/demo'
 import { useAcademia } from '../state/academia'
 import { useSesion } from '../state/sesion'
 import { iniciales, MenuCuenta } from './MenuCuenta'
+import { Sheet } from './Sheet'
 
-const navegacion = [
-  { href: '#/', etiqueta: 'Hoy', Icono: CalendarRange, activa: (r: Ruta) => r.nombre === 'hoy' },
-  { href: '#/biblioteca', etiqueta: 'Biblioteca', Icono: Library, activa: (r: Ruta) => r.nombre === 'biblioteca' || r.nombre === 'constructor' },
-  { href: '#/stock', etiqueta: 'Stock', Icono: Boxes, activa: (r: Ruta) => r.nombre === 'stock' },
-  { href: '#/academia', etiqueta: 'Academia', Icono: GraduationCap, activa: (r: Ruta) => r.nombre === 'academia' || r.nombre === 'curso' },
-  { href: '#/actividad', etiqueta: 'Actividad', Icono: RefreshCw, activa: (r: Ruta) => r.nombre === 'actividad' },
+interface ItemNav {
+  href: string
+  etiqueta: string
+  detalle: string
+  Icono: typeof CalendarRange
+  activa: (r: Ruta) => boolean
+}
+
+const campo: ItemNav[] = [
+  { href: '#/', etiqueta: 'Hoy', detalle: 'Agenda y ruta del día', Icono: CalendarRange, activa: (r) => r.nombre === 'hoy' },
+  { href: '#/medicos', etiqueta: 'Médicos', detalle: 'Fichero y trazabilidad', Icono: Users, activa: (r) => r.nombre === 'medicos' || r.nombre === 'medico' },
+  { href: '#/biblioteca', etiqueta: 'Biblioteca', detalle: 'Presentaciones', Icono: Library, activa: (r) => r.nombre === 'biblioteca' || r.nombre === 'constructor' },
+  { href: '#/stock', etiqueta: 'Stock', detalle: 'Inventario y muestras', Icono: Boxes, activa: (r) => r.nombre === 'stock' },
+  { href: '#/academia', etiqueta: 'Academia', detalle: 'Capacitación y certificaciones', Icono: GraduationCap, activa: (r) => r.nombre === 'academia' || r.nombre === 'curso' },
 ]
+
+const gestion: ItemNav[] = [
+  { href: '#/asistente', etiqueta: 'Asistente', detalle: 'Preguntale a los datos con IA', Icono: Sparkles, activa: (r) => r.nombre === 'asistente' },
+  { href: '#/integraciones', etiqueta: 'API', detalle: 'SAP, Salesforce y webhooks', Icono: Plug, activa: (r) => r.nombre === 'integraciones' },
+  { href: '#/actividad', etiqueta: 'Actividad', detalle: 'Sincronización sin conexión', Icono: RefreshCw, activa: (r) => r.nombre === 'actividad' },
+]
+
+/** En celular entran 4 destinos de campo; el resto va en "Más" */
+const barraInferior = campo.slice(0, 4)
+const enMas = [campo[4], ...gestion]
 
 function Logo() {
   return (
@@ -76,12 +95,24 @@ function VisitaEnCurso() {
   )
 }
 
+function Insignia({ cantidad, className }: { cantidad: number; className: string }) {
+  if (cantidad <= 0) return null
+  return (
+    <span aria-hidden="true" className={`num absolute min-w-4 rounded-full bg-warn px-1 text-[10px] leading-4 text-white ${className}`}>
+      {cantidad}
+    </span>
+  )
+}
+
 export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
   const { apm } = useDemo()
   const { sesion } = useSesion()
   const { pendientes: cursosPendientes } = useAcademia()
   const [cuentaAbierta, setCuentaAbierta] = useState(false)
+  const [masAbierto, setMasAbierto] = useState(false)
   const nombre = sesion?.nombre ?? apm.nombre
+  const masActivo = enMas.some((i) => i.activa(ruta))
+  const avisoCursos = cursosPendientes > 0 ? <span className="sr-only">, {cursosPendientes} cursos pendientes</span> : null
 
   return (
     <div className="min-h-dvh">
@@ -95,45 +126,53 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
       {/* Riel lateral: tablet y desktop */}
       <nav
         aria-label="Principal"
-        className="fixed inset-y-0 left-0 z-40 hidden w-[88px] flex-col items-center border-r border-line bg-surface pt-[calc(16px+env(safe-area-inset-top))] pb-6 md:flex"
+        className="fixed inset-y-0 left-0 z-40 hidden w-[88px] flex-col items-center border-r border-line bg-surface pt-[calc(14px+env(safe-area-inset-top))] pb-4 md:flex"
       >
-        <a href="#/" aria-label="Presentador, inicio" className="press mb-6 rounded-xl p-1.5">
+        <a href="#/" aria-label="Presentador, inicio" className="press mb-4 shrink-0 rounded-xl p-1.5">
           <Logo />
         </a>
-        <ul className="flex flex-col gap-1.5">
-          {navegacion.map(({ href, etiqueta, Icono, activa }) => {
-            const actual = activa(ruta)
-            return (
-              <li key={href}>
-                <a
-                  href={href}
-                  aria-current={actual ? 'page' : undefined}
-                  className={`press relative flex w-[72px] flex-col items-center gap-1 rounded-xl py-2.5 text-[12px] font-medium ${
-                    actual ? 'bg-ink text-white' : 'text-ink-3 hover:bg-sunken hover:text-ink'
-                  }`}
-                >
-                  <Icono size={21} strokeWidth={actual ? 2.2 : 1.8} aria-hidden="true" />
-                  {etiqueta}
-                  {href === '#/academia' && cursosPendientes > 0 && (
-                    <>
-                      <span aria-hidden="true" className="num absolute top-1.5 right-3 min-w-4 rounded-full bg-warn px-1 text-[10px] leading-4 text-white">
-                        {cursosPendientes}
-                      </span>
-                      <span className="sr-only">, {cursosPendientes} cursos pendientes</span>
-                    </>
-                  )}
-                </a>
-              </li>
-            )
-          })}
-        </ul>
+        <div className="flex min-h-0 flex-1 flex-col items-center overflow-y-auto">
+          {[campo, gestion].map((grupo, g) => (
+            <ul key={g} className="flex flex-col gap-1" aria-label={g === 0 ? 'Trabajo de campo' : 'Gestión'}>
+              {g === 1 && (
+                <li aria-hidden="true" className="mx-auto my-2 flex w-[60px] flex-col items-center gap-1">
+                  <span className="h-px w-full bg-line" />
+                  <span className="font-mono text-[9px] tracking-[0.1em] text-ink-3 uppercase">Gestión</span>
+                </li>
+              )}
+              {grupo.map(({ href, etiqueta, Icono, activa }) => {
+                const actual = activa(ruta)
+                return (
+                  <li key={href}>
+                    <a
+                      href={href}
+                      aria-current={actual ? 'page' : undefined}
+                      className={`press relative flex w-[72px] flex-col items-center gap-1 rounded-xl py-2 text-[12px] font-medium ${
+                        actual ? 'bg-ink text-white' : 'text-ink-3 hover:bg-sunken hover:text-ink'
+                      }`}
+                    >
+                      <Icono size={20} strokeWidth={actual ? 2.2 : 1.8} aria-hidden="true" />
+                      {etiqueta === 'API' ? <span aria-label="Integraciones y API">API</span> : etiqueta}
+                      {href === '#/academia' && (
+                        <>
+                          <Insignia cantidad={cursosPendientes} className="top-1 right-3" />
+                          {avisoCursos}
+                        </>
+                      )}
+                    </a>
+                  </li>
+                )
+              })}
+            </ul>
+          ))}
+        </div>
         <button
           type="button"
           onClick={() => setCuentaAbierta(true)}
           aria-haspopup="dialog"
           aria-expanded={cuentaAbierta}
           aria-label={`Cuenta de ${nombre}`}
-          className="press mt-auto flex w-[72px] cursor-pointer flex-col items-center gap-1 rounded-xl py-2 text-[12px] font-medium text-ink-3 hover:bg-sunken hover:text-ink"
+          className="press mt-3 flex w-[72px] shrink-0 cursor-pointer flex-col items-center gap-1 rounded-xl py-2 text-[12px] font-medium text-ink-3 hover:bg-sunken hover:text-ink"
         >
           <span aria-hidden="true" className="flex size-10 items-center justify-center rounded-full bg-sunken text-[13px] font-semibold text-ink-2">
             {iniciales(nombre)}
@@ -184,7 +223,7 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
         className="material fixed inset-x-0 bottom-0 z-40 border-t border-line/70 pb-[env(safe-area-inset-bottom)] md:hidden"
       >
         <ul className="grid grid-cols-5">
-          {navegacion.map(({ href, etiqueta, Icono, activa }) => {
+          {barraInferior.map(({ href, etiqueta, Icono, activa }) => {
             const actual = activa(ruta)
             return (
               <li key={href}>
@@ -195,20 +234,60 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
                 >
                   <span className={`relative flex h-7 w-12 items-center justify-center rounded-full ${actual ? 'bg-ink text-white' : ''}`}>
                     <Icono size={19} strokeWidth={actual ? 2.2 : 1.8} aria-hidden="true" />
-                    {href === '#/academia' && cursosPendientes > 0 && (
-                      <span aria-hidden="true" className="num absolute -top-0.5 right-1 min-w-4 rounded-full bg-warn px-1 text-[10px] leading-4 text-white">
-                        {cursosPendientes}
-                      </span>
-                    )}
                   </span>
                   {etiqueta}
-                  {href === '#/academia' && cursosPendientes > 0 && <span className="sr-only">, {cursosPendientes} cursos pendientes</span>}
                 </a>
               </li>
             )
           })}
+          <li>
+            <button
+              type="button"
+              onClick={() => setMasAbierto(true)}
+              aria-haspopup="dialog"
+              aria-expanded={masAbierto}
+              aria-current={masActivo ? 'page' : undefined}
+              className={`press flex min-h-16 w-full cursor-pointer flex-col items-center justify-center gap-1 text-[11px] font-medium ${masActivo ? 'text-ink' : 'text-ink-3'}`}
+            >
+              <span className={`relative flex h-7 w-12 items-center justify-center rounded-full ${masActivo ? 'bg-ink text-white' : ''}`}>
+                <Ellipsis size={19} strokeWidth={masActivo ? 2.2 : 1.8} aria-hidden="true" />
+                <Insignia cantidad={cursosPendientes} className="-top-0.5 right-1" />
+              </span>
+              Más
+              {avisoCursos}
+            </button>
+          </li>
         </ul>
       </nav>
+
+      <Sheet abierto={masAbierto} onCerrar={() => setMasAbierto(false)} titulo="Más">
+        <ul className="flex flex-col gap-2">
+          {enMas.map(({ href, etiqueta, detalle, Icono, activa }) => (
+            <li key={href}>
+              <a
+                href={href}
+                onClick={() => setMasAbierto(false)}
+                aria-current={activa(ruta) ? 'page' : undefined}
+                className="press flex min-h-16 items-center gap-3 rounded-2xl border border-line px-4 py-3 hover:bg-sunken"
+              >
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-sunken text-ink-2">
+                  <Icono size={19} aria-hidden="true" />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="flex items-center gap-2 text-[15px] font-semibold text-ink">
+                    {etiqueta === 'API' ? 'Integraciones y API' : etiqueta}
+                    {href === '#/academia' && cursosPendientes > 0 && (
+                      <span className="num rounded-full bg-warn px-1.5 text-[11px] leading-5 text-white">{cursosPendientes}</span>
+                    )}
+                  </span>
+                  <span className="block text-[13px] text-ink-3">{detalle}</span>
+                </span>
+                <ChevronRight size={18} aria-hidden="true" className="text-ink-3" />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </Sheet>
 
       <MenuCuenta abierto={cuentaAbierta} onCerrar={() => setCuentaAbierta(false)} />
     </div>
