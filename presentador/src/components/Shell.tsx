@@ -1,11 +1,12 @@
-import { useState, type ReactNode } from 'react'
-import { Boxes, CalendarRange, ChevronRight, CloudOff, Ellipsis, GraduationCap, Library, Plug, RefreshCw, Sparkles, Stethoscope, Users } from 'lucide-react'
+import { useEffect, useState, type ReactNode } from 'react'
+import { Boxes, CalendarRange, ChevronRight, CircleHelp, CloudOff, Ellipsis, GraduationCap, Library, Plug, RefreshCw, Sparkles, Stethoscope, Users } from 'lucide-react'
 import { cronometro } from '../lib/formato'
 import type { Ruta } from '../lib/ruta'
 import { useAhora } from '../lib/tiempo'
 import { nombreCorto, useDemo } from '../state/demo'
 import { useAcademia } from '../state/academia'
 import { useSesion } from '../state/sesion'
+import { Ayuda } from './Ayuda'
 import { iniciales, MenuCuenta } from './MenuCuenta'
 import { Sheet } from './Sheet'
 
@@ -110,6 +111,21 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
   const { pendientes: cursosPendientes } = useAcademia()
   const [cuentaAbierta, setCuentaAbierta] = useState(false)
   const [masAbierto, setMasAbierto] = useState(false)
+  const [ayudaAbierta, setAyudaAbierta] = useState(false)
+
+  // la tecla ? abre la ayuda desde cualquier pantalla, salvo mientras se escribe
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      const foco = document.activeElement
+      const escribiendo = foco instanceof HTMLElement && (foco.tagName === 'INPUT' || foco.tagName === 'TEXTAREA' || foco.isContentEditable)
+      if (e.key === '?' && !escribiendo) {
+        e.preventDefault()
+        setAyudaAbierta(true)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   const nombre = sesion?.nombre ?? apm.nombre
   const masActivo = enMas.some((i) => i.activa(ruta))
   const avisoCursos = cursosPendientes > 0 ? <span className="sr-only">, {cursosPendientes} cursos pendientes</span> : null
@@ -128,7 +144,7 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
         aria-label="Principal"
         className="fixed inset-y-0 left-0 z-40 hidden w-[88px] flex-col items-center border-r border-line bg-surface pt-[calc(14px+env(safe-area-inset-top))] pb-4 md:flex"
       >
-        <a href="#/" aria-label="Presentador, inicio" className="press mb-4 shrink-0 rounded-xl p-1.5">
+        <a href="#/" aria-label="IO-Pharma, inicio" className="press mb-4 shrink-0 rounded-xl p-1.5">
           <Logo />
         </a>
         <div className="flex min-h-0 flex-1 flex-col items-center overflow-y-auto">
@@ -184,7 +200,7 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
       <div className="md:pl-[88px]">
         <div className="material sticky top-0 z-30 border-b border-line/70 pt-[env(safe-area-inset-top)]">
           <div className="mx-auto flex h-16 max-w-[1440px] items-center gap-3 px-4 sm:px-6 lg:px-8">
-            <a href="#/" className="press -ml-1.5 flex size-11 items-center justify-center rounded-xl md:hidden" aria-label="Presentador, inicio">
+            <a href="#/" className="press -ml-1.5 flex size-11 items-center justify-center rounded-xl md:hidden" aria-label="IO-Pharma, inicio">
               <Logo />
             </a>
             <div className="hidden min-w-0 items-center gap-2 text-[13px] text-ink-3 md:flex">
@@ -196,6 +212,17 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
             <div className="ml-auto flex min-w-0 items-center gap-2">
               <VisitaEnCurso />
               <EstadoConexion />
+              <button
+                type="button"
+                onClick={() => setAyudaAbierta(true)}
+                aria-haspopup="dialog"
+                aria-expanded={ayudaAbierta}
+                aria-label="Ayuda (tecla ?)"
+                title="Ayuda · tecla ?"
+                className="press flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full text-ink-3 hover:bg-sunken hover:text-ink"
+              >
+                <CircleHelp size={20} aria-hidden="true" />
+              </button>
               <button
                 type="button"
                 onClick={() => setCuentaAbierta(true)}
@@ -289,6 +316,7 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
         </ul>
       </Sheet>
 
+      <Ayuda abierto={ayudaAbierta} onCerrar={() => setAyudaAbierta(false)} ruta={ruta} />
       <MenuCuenta abierto={cuentaAbierta} onCerrar={() => setCuentaAbierta(false)} />
     </div>
   )

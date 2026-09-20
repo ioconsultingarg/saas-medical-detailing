@@ -1,12 +1,12 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Presentador API",
+    "title": "IO-Pharma API",
     "version": "1.0.0",
     "summary": "API pública de la plataforma de e-detailing y CRM para fuerzas de venta farmacéuticas.",
     "description": "La app móvil y las integraciones (SAP, Salesforce, Veeva, data warehouse) usan este mismo contrato. Todas las escrituras aceptan Idempotency-Key para reintentos seguros desde dispositivos sin conexión. Las listas se paginan con cursor y admiten updated_since para sincronización delta."
   },
-  "servers": [{ "url": "https://api.presentador.app", "description": "Producción" }, { "url": "https://sandbox.api.presentador.app", "description": "Sandbox" }],
+  "servers": [{ "url": "https://api.iopharma.app", "description": "Producción" }, { "url": "https://sandbox.api.iopharma.app", "description": "Sandbox" }],
   "security": [{ "oauth2": [] }],
   "tags": [
     { "name": "HCPs", "description": "Fichero médico" },
@@ -185,7 +185,7 @@
       "post": {
         "tags": ["Webhooks"],
         "summary": "Suscribirse a eventos",
-        "description": "Cada entrega lleva la cabecera Presentador-Signature (HMAC-SHA256). Reintentos exponenciales durante 72 h.",
+        "description": "Cada entrega lleva la cabecera IOPharma-Signature (HMAC-SHA256). Reintentos exponenciales durante 72 h.",
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "type": "object", "required": ["url", "events"], "properties": { "url": { "type": "string", "format": "uri" }, "events": { "type": "array", "items": { "$ref": "#/components/schemas/EventType" } } } } } }
@@ -208,8 +208,8 @@
       "oauth2": {
         "type": "oauth2",
         "flows": {
-          "clientCredentials": { "tokenUrl": "https://auth.presentador.app/oauth/token", "scopes": { "hcps:read": "Leer fichero médico", "visits:write": "Registrar visitas", "samples:write": "Registrar entregas", "insights:read": "Consultar el asistente" } },
-          "authorizationCode": { "authorizationUrl": "https://auth.presentador.app/oauth/authorize", "tokenUrl": "https://auth.presentador.app/oauth/token", "scopes": {} }
+          "clientCredentials": { "tokenUrl": "https://auth.iopharma.app/oauth/token", "scopes": { "hcps:read": "Leer fichero médico", "visits:write": "Registrar visitas", "samples:write": "Registrar entregas", "insights:read": "Consultar el asistente" } },
+          "authorizationCode": { "authorizationUrl": "https://auth.iopharma.app/oauth/authorize", "tokenUrl": "https://auth.iopharma.app/oauth/token", "scopes": {} }
         }
       }
     },

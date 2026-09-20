@@ -12,9 +12,9 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'Presentador · App del visitador médico',
-        short_name: 'Presentador',
-        description: 'Ruta del día, presentaciones interactivas, stock y cierre de visita para APMs',
+        name: 'IO-Pharma · e-detailing y CRM para laboratorios',
+        short_name: 'IO-Pharma',
+        description: 'Ruta del día, presentaciones interactivas, stock, academia y cierre de visita para visitadores médicos',
         theme_color: '#f5f6f8',
         background_color: '#f5f6f8',
         display: 'standalone',

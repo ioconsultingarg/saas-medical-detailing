@@ -75,7 +75,17 @@ function cargar(): EstadoDemo {
     const crudo = localStorage.getItem(CLAVE)
     if (crudo) {
       const guardado = JSON.parse(crudo) as EstadoDemo
-      if (guardado.version === 4) return guardado
+      // los nombres, lotes y umbrales vienen del catálogo: si el producto cambió de marca,
+      // la sesión guardada no debe seguir mostrando la anterior
+      if (guardado.version === 4) {
+        return {
+          ...guardado,
+          stock: guardado.stock.map((s) => {
+            const actual = stockInicial.find((x) => x.sku === s.sku)
+            return actual ? { ...actual, unidades: s.unidades } : s
+          }),
+        }
+      }
     }
   } catch {
     // almacenamiento bloqueado: la demo arranca de cero en memoria

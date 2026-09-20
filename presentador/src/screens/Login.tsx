@@ -127,8 +127,8 @@ export function Login() {
         <div className="flex items-center gap-3">
           <Logo size={36} />
           <div className="leading-tight">
-            <div className="text-[16px] font-semibold text-ink">Presentador</div>
-            <div className="text-[12px] text-ink-3">App del visitador médico</div>
+            <div className="text-[16px] font-semibold text-ink">IO-Pharma</div>
+            <div className="text-[12px] text-ink-3">e-detailing y CRM para laboratorios</div>
           </div>
         </div>
 

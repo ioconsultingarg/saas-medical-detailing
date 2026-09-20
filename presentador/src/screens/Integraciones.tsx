@@ -149,7 +149,7 @@ export function Integraciones() {
   const ep = endpoints.find((e) => e.id === endpointId)!
   const eventos = estado.outbox.filter((o) => o.sincronizado).slice(0, 6)
   const curl = [
-    `curl -X ${ep.metodo} https://api.presentador.app${ep.ruta} \\`,
+    `curl -X ${ep.metodo} https://api.iopharma.app${ep.ruta} \\`,
     `  -H "Authorization: Bearer $TOKEN" \\`,
     ...(ep.metodo !== 'GET' ? [`  -H "Idempotency-Key: $(uuidgen)" \\`, `  -H "Content-Type: application/json" \\`, `  -d '${JSON.stringify(ep.cuerpo)}'`] : [`  -H "Accept: application/json"`]),
   ].join('\n')
@@ -370,7 +370,7 @@ export function Integraciones() {
                 <table className="w-full text-left text-[13px]">
                   <thead className="bg-sunken/60 text-[12px] text-ink-3">
                     <tr>
-                      <th scope="col" className="px-3 py-2 font-medium">Presentador</th>
+                      <th scope="col" className="px-3 py-2 font-medium">IO-Pharma</th>
                       <th scope="col" className="px-3 py-2 font-medium">{conector.nombre}</th>
                     </tr>
                   </thead>
