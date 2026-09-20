@@ -15,6 +15,7 @@ export type Ruta =
   | { nombre: 'medico'; medicoId: string }
   | { nombre: 'asistente' }
   | { nombre: 'integraciones' }
+  | { nombre: 'pieza'; piezaId: string }
 
 export function leerRuta(hash = window.location.hash): Ruta {
   const [camino, consulta = ''] = hash.replace(/^#\/?/, '').split('?')
@@ -40,6 +41,8 @@ export function leerRuta(hash = window.location.hash): Ruta {
         : { nombre: 'academia' }
     case 'medicos':
       return partes[1] ? { nombre: 'medico', medicoId: decodeURIComponent(partes[1]) } : { nombre: 'medicos' }
+    case 'video':
+      return partes[1] ? { nombre: 'pieza', piezaId: decodeURIComponent(partes[1]) } : { nombre: 'biblioteca' }
     case 'asistente':
       return { nombre: 'asistente' }
     case 'integraciones':

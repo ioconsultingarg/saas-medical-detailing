@@ -126,12 +126,12 @@ export const recursos: Record<string, Recurso> = {
     titulo: 'Mecanismo de acción',
     escena: 'cardio-mecanismo',
     medio: 'mecanismo-cardio',
-    duracion: 14,
+    duracion: 15,
     capitulos: [
       { desde: 0, texto: 'El hígado produce colesterol y lo libera a la sangre como LDL.' },
-      { desde: 4, texto: 'Demo-molécula inhibe la síntesis hepática de colesterol.' },
-      { desde: 8, texto: 'El hepatocito expone más receptores y capta LDL circulante.' },
-      { desde: 11, texto: 'Resultado: menos LDL en sangre y menor avance de la placa.' },
+      { desde: 4, texto: 'Demo-molécula inhibe la síntesis y el hepatocito expone más receptores.' },
+      { desde: 8, texto: 'Con menos LDL circulante, la placa deja de crecer.' },
+      { desde: 12, texto: 'Resultado: la luz de la arteria vuelve a ampliarse.' },
     ],
   },
   'c-3d': {

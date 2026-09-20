@@ -7,6 +7,7 @@ import { Asistente } from './screens/Asistente'
 import { Integraciones } from './screens/Integraciones'
 import { Medico } from './screens/Medico'
 import { Medicos } from './screens/Medicos'
+import { PiezaVideo } from './screens/PiezaVideo'
 import { Biblioteca } from './screens/Biblioteca'
 import { Compartir } from './screens/Compartir'
 import { Constructor } from './screens/Constructor'
@@ -33,6 +34,7 @@ function Rutas() {
   if (!sesion) return <Login />
 
   if (ruta.nombre === 'presentar') return <Presentar presentacionId={ruta.presentacionId} />
+  if (ruta.nombre === 'pieza') return <PiezaVideo key={ruta.piezaId} piezaId={ruta.piezaId} />
 
   return (
     <Shell ruta={ruta}>
