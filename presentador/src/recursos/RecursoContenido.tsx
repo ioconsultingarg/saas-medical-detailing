@@ -1,6 +1,7 @@
-import { lazy, Suspense, useId, useState } from 'react'
-import { ExternalLink } from 'lucide-react'
+import { lazy, Suspense, useId, useRef, useState } from 'react'
+import { FileText } from 'lucide-react'
 import { productos } from '../data/productos'
+import { prefiereMenosMovimiento } from '../lib/tiempo'
 import type { Recurso } from '../data/recursos'
 import { VideoRecurso } from './VideoRecurso'
 
@@ -144,14 +145,69 @@ function GraficoInteractivo({ r }: { r: Extract<Recurso, { tipo: 'grafico' }> })
   )
 }
 
+/** Ficha técnica legible dentro de la app: nada de PDF incrustado en un panel angosto */
 function Documento({ r }: { r: Extract<Recurso, { tipo: 'documento' }> }) {
+  const p = productos[r.productoId]
+  const [seccion, setSeccion] = useState(r.secciones[0].titulo)
+  const refs = useRef<Record<string, HTMLElement | null>>({})
+
+  function irA(titulo: string) {
+    setSeccion(titulo)
+    refs.current[titulo]?.scrollIntoView({ behavior: prefiereMenosMovimiento() ? 'auto' : 'smooth', block: 'start' })
+  }
+
   return (
-    <div className="flex h-full flex-col gap-3">
-      <iframe src={r.url} title={r.titulo} className="h-[62dvh] w-full rounded-xl border border-line bg-sunken" />
-      <a href={r.url} target="_blank" rel="noreferrer" className="btn-secondary self-start">
-        <ExternalLink size={16} aria-hidden="true" />
-        Abrir en otra pestaña
-      </a>
+    <div className="flex flex-col gap-4">
+      <header className="rounded-xl p-4" style={{ background: p.tinte }}>
+        <div className="flex flex-wrap items-center gap-2">
+          <FileText size={16} aria-hidden="true" style={{ color: p.color }} />
+          <span className="num text-[12px] font-medium" style={{ color: p.colorOscuro }}>
+            {r.version} · {r.vigencia}
+          </span>
+        </div>
+        <p className="mt-1.5 text-[15px] leading-snug font-semibold text-ink">{r.encabezado}</p>
+      </header>
+
+      <nav aria-label="Secciones de la ficha" className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {r.secciones.map((s) => (
+          <button
+            key={s.titulo}
+            type="button"
+            aria-pressed={s.titulo === seccion}
+            onClick={() => irA(s.titulo)}
+            className={`press min-h-9 shrink-0 cursor-pointer rounded-full border px-3 text-[13px] font-medium whitespace-nowrap ${
+              s.titulo === seccion ? 'border-transparent bg-ink text-white' : 'border-line bg-surface text-ink-2 hover:border-line-2'
+            }`}
+          >
+            {s.titulo}
+          </button>
+        ))}
+      </nav>
+
+      <div className="flex flex-col gap-5">
+        {r.secciones.map((s) => (
+          <section
+            key={s.titulo}
+            ref={(el) => void (refs.current[s.titulo] = el)}
+            className="scroll-mt-4 border-b border-line pb-5 last:border-0 last:pb-0"
+          >
+            <h3 className="text-[13px] font-semibold tracking-wide text-ink uppercase">{s.titulo}</h3>
+            {s.parrafo && <p className="mt-2 text-[15px] leading-relaxed text-ink-2">{s.parrafo}</p>}
+            {s.items && (
+              <ul className="mt-2 flex flex-col gap-1.5">
+                {s.items.map((it) => (
+                  <li key={it} className="flex gap-2.5 text-[15px] leading-relaxed text-ink-2">
+                    <span aria-hidden="true" className="mt-2 size-1.5 shrink-0 rounded-full" style={{ background: p.color }} />
+                    {it}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        ))}
+      </div>
+
+      <p className="rounded-xl bg-sunken p-3 text-[12px] leading-relaxed text-ink-3">{r.pie}</p>
     </div>
   )
 }

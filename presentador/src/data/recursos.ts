@@ -55,10 +55,13 @@ export type Recurso =
       tipo: 'documento'
       productoId: ProductoId
       titulo: string
-      url: string
+      /** ficha técnica: se muestra dentro de la app, sin salir de la presentación */
+      version: string
+      vigencia: string
+      encabezado: string
+      secciones: { titulo: string; parrafo?: string; items?: string[] }[]
+      pie: string
     }
-
-const base = import.meta.env.BASE_URL
 
 export const recursos: Record<string, Recurso> = {
   'c-epidemiologia': {
@@ -185,7 +188,61 @@ export const recursos: Record<string, Recurso> = {
     tipo: 'documento',
     productoId: 'cardio',
     titulo: 'Ficha técnica · Lipvera',
-    url: `${base}content/ficha-tecnica.pdf`,
+    version: 'Versión 3.1',
+    vigencia: 'Vigente desde 03/2026',
+    encabezado: 'Lipvera 20 mg · comprimidos recubiertos · Venta bajo receta archivada',
+    secciones: [
+      {
+        titulo: 'Composición',
+        parrafo: 'Cada comprimido recubierto contiene lipverastatina cálcica 20 mg. Excipientes: celulosa microcristalina, lactosa monohidrato, croscarmelosa sódica, estearato de magnesio.',
+      },
+      {
+        titulo: 'Indicaciones',
+        parrafo: 'Hipercolesterolemia primaria y dislipidemia mixta en adultos con riesgo cardiovascular alto o muy alto, como complemento de la dieta y del cambio de hábitos.',
+      },
+      {
+        titulo: 'Posología',
+        items: [
+          'Dosis habitual: 20 mg una vez por día, con o sin alimentos.',
+          'Preferentemente por la noche, siempre en el mismo horario.',
+          'Reevaluar el perfil lipídico a las 4 semanas y ajustar según criterio médico.',
+          'No se requiere ajuste por edad en mayores de 65 años sin insuficiencia renal.',
+        ],
+      },
+      {
+        titulo: 'Contraindicaciones',
+        items: [
+          'Hipersensibilidad conocida al principio activo o a cualquiera de los excipientes.',
+          'Enfermedad hepática activa o elevación persistente de transaminasas.',
+          'Embarazo, lactancia y mujeres en edad fértil sin anticoncepción eficaz.',
+        ],
+      },
+      {
+        titulo: 'Advertencias y precauciones',
+        items: [
+          'Controlar transaminasas antes de iniciar y a las 12 semanas.',
+          'Ante mialgias con CK diez veces por encima del límite normal, suspender el tratamiento.',
+          'Precaución en insuficiencia renal moderada a grave y en hipotiroidismo no tratado.',
+        ],
+      },
+      {
+        titulo: 'Interacciones',
+        parrafo: 'Inhibidores potentes de CYP3A4 (claritromicina, itraconazol, ritonavir), gemfibrozil, ciclosporina y consumo habitual de jugo de pomelo aumentan la exposición al fármaco.',
+      },
+      {
+        titulo: 'Reacciones adversas',
+        items: [
+          'Frecuentes: mialgias 3,1 %, cefalea 2,4 %, náuseas 1,6 %.',
+          'Poco frecuentes: elevación de transaminasas 0,8 %.',
+          'Raras: rabdomiólisis, menos de 0,1 %.',
+        ],
+      },
+      {
+        titulo: 'Presentación y conservación',
+        parrafo: 'Envases por 30 y 60 comprimidos recubiertos. Conservar a temperatura inferior a 30 °C, protegido de la humedad y fuera del alcance de los niños.',
+      },
+    ],
+    pie: 'Documento de demostración. Lipvera es una marca ficticia: no corresponde a ningún medicamento real ni reemplaza a un prospecto autorizado.',
   },
   'r-impacto': {
     id: 'r-impacto',
@@ -266,6 +323,59 @@ export const recursos: Record<string, Recurso> = {
     tipo: 'documento',
     productoId: 'respira',
     titulo: 'Ficha técnica · Respirel',
-    url: `${base}content/linea-b-ficha.pdf`,
+    version: 'Versión 2.4',
+    vigencia: 'Vigente desde 05/2026',
+    encabezado: 'Respirel 200 mcg · inhalador presurizado · Venta bajo receta',
+    secciones: [
+      {
+        titulo: 'Composición',
+        parrafo: 'Cada dosis liberada contiene respirelol 200 mcg. Propelente: HFA-134a. Envase presurizado con contador de dosis.',
+      },
+      {
+        titulo: 'Indicaciones',
+        parrafo: 'Tratamiento de mantenimiento de la obstrucción bronquial en adultos con asma persistente o EPOC moderada a grave.',
+      },
+      {
+        titulo: 'Posología',
+        items: [
+          'Dos inhalaciones cada 12 horas, siempre a la misma hora.',
+          'Dosis máxima: 8 inhalaciones por día.',
+          'Usar aerocámara en adultos mayores o con poca fuerza inspiratoria.',
+          'Enjuagar la boca después de cada aplicación.',
+        ],
+      },
+      {
+        titulo: 'Contraindicaciones',
+        items: [
+          'Hipersensibilidad al principio activo o al propelente.',
+          'No está indicado para el alivio de la crisis aguda.',
+        ],
+      },
+      {
+        titulo: 'Advertencias y precauciones',
+        items: [
+          'No suspender el tratamiento sin indicación médica, aunque los síntomas mejoren.',
+          'Controlar la frecuencia cardíaca en pacientes con cardiopatía isquémica o arritmias.',
+          'Puede producir temblor fino de manos durante los primeros días.',
+        ],
+      },
+      {
+        titulo: 'Interacciones',
+        parrafo: 'Betabloqueantes no selectivos reducen su efecto. Los diuréticos de asa y los corticoides sistémicos aumentan el riesgo de hipokalemia.',
+      },
+      {
+        titulo: 'Reacciones adversas',
+        items: [
+          'Frecuentes: temblor, cefalea.',
+          'Poco frecuentes: palpitaciones, candidiasis orofaríngea cuando no se enjuaga la boca.',
+          'Raras: broncoespasmo paradójico, que obliga a suspender de inmediato.',
+        ],
+      },
+      {
+        titulo: 'Presentación y conservación',
+        parrafo: 'Envases por 120 y 200 dosis con contador. Conservar a temperatura inferior a 30 °C. No perforar ni exponer al calor, aun estando vacío.',
+      },
+    ],
+    pie: 'Documento de demostración. Respirel es una marca ficticia: no corresponde a ningún medicamento real ni reemplaza a un prospecto autorizado.',
   },
 }
