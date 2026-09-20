@@ -17,6 +17,7 @@ export const operacionOutbox: Record<TipoOutbox, { metodo: 'POST' | 'PATCH'; rut
   voz: { metodo: 'POST', ruta: '/v1/voice-reports', evento: 'voice_report.processed' },
   farmacovigilancia: { metodo: 'POST', ruta: '/v1/adverse-events', evento: 'adverse_event.reported' },
   plan: { metodo: 'POST', ruta: '/v1/visit-plans', evento: 'visit_plan.created' },
+  pieza: { metodo: 'PATCH', ruta: '/v1/content/{id}', evento: 'content.published' },
 }
 
 export interface Endpoint {
@@ -176,7 +177,7 @@ export const endpoints: Endpoint[] = [
     ruta: '/v1/webhooks',
     resumen: 'Suscripción a eventos firmados con HMAC-SHA256 para ERPs y CRMs externos',
     grupo: 'Eventos',
-    cuerpo: { url: 'https://erp.laboratorio.com/hooks/presentador', events: ['visit.closed', 'sample.delivered', 'adverse_event.reported'] },
+    cuerpo: { url: 'https://erp.laboratorio.com/hooks/iopharma', events: ['visit.closed', 'sample.delivered', 'adverse_event.reported'] },
     respuesta: () => ({ id: 'wh_31c7', secret: 'whsec_••••••••', status: 'active' }),
   },
 ]

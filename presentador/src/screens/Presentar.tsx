@@ -4,7 +4,7 @@ import { BarraAnotacion, CapaAnotacion, coloresLapiz, type Trazo } from '../comp
 import { Sheet } from '../components/Sheet'
 import { StockPanel } from '../components/StockPanel'
 import { ChipProducto, MonogramaProducto } from '../components/ui'
-import { diapositivaPorId, presentacionesOficiales, productosDe } from '../data/presentaciones'
+import { diapositivaPorId, presentacionesOficiales, presentacionPublicable, productosDe } from '../data/presentaciones'
 import { productos } from '../data/productos'
 import { recursos } from '../data/recursos'
 import { ir } from '../lib/ruta'
@@ -96,7 +96,7 @@ function CapaPagina({ angulo, z, sombra, children }: { angulo: number; z: number
 export function Presentar({ presentacionId }: { presentacionId: string }) {
   const { estado, visitaActiva, despachar, avisar } = useDemo()
   const presentacion = useMemo(
-    () => [...estado.personales, ...presentacionesOficiales].find((p) => p.id === presentacionId) ?? null,
+    () => [...estado.personales, presentacionPublicable, ...presentacionesOficiales].find((p) => p.id === presentacionId) ?? null,
     [estado.personales, presentacionId],
   )
   const ids = useMemo(() => (presentacion?.diapositivas ?? []).filter((id) => componentesDiapositiva[id]), [presentacion])

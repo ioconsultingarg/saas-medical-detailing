@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useState, type ReactNode } from 'react'
 import { apm, registrosIniciales, visitasDelDia } from '../data/agenda'
 import { diapositivaPorId } from '../data/presentaciones'
+import { cupoInicial, eventosAdversos, piezas, type EstadoEvento, type EstadoPieza } from '../data/portal'
 import { stockInicial } from '../data/stock'
 import { minutos } from '../lib/formato'
 import type { EntregaMuestra, ItemOutbox, ItemStock, Presentacion, ProductoId, RegistroVisita, TipoOutbox, Visita } from '../types'
@@ -27,6 +28,13 @@ export interface EstadoDemo {
   entregas: EntregaMuestra[]
   /** médicos incluidos en planes de visita creados desde el asistente */
   planificados: string[]
+  /* ---- portal del laboratorio ---- */
+  /** estado de cada pieza de material, si cambió respecto del catálogo */
+  piezas: Record<string, EstadoPieza>
+  /** cupo mensual de muestras por médico, por producto */
+  cupos: Record<string, number>
+  /** seguimiento de los posibles eventos adversos */
+  eventos: Record<string, EstadoEvento>
 }
 
 type Accion =
@@ -36,6 +44,9 @@ type Accion =
   | { tipo: 'reporteVoz'; resumen: string }
   | { tipo: 'farmacovigilancia'; fragmento: string }
   | { tipo: 'plan'; medicos: string[]; resumen: string }
+  | { tipo: 'pieza'; id: string; estado: EstadoPieza }
+  | { tipo: 'cupo'; productoId: string; valor: number }
+  | { tipo: 'evento'; id: string; estado: EstadoEvento }
   | { tipo: 'carrito'; sku: string; delta: number }
   | { tipo: 'vaciarCarrito' }
   | { tipo: 'pedido' }
@@ -67,6 +78,9 @@ function estadoInicial(): EstadoDemo {
     enviados: [],
     entregas: [],
     planificados: [],
+    piezas: Object.fromEntries(piezas.map((p) => [p.id, p.estadoInicial])),
+    cupos: { ...cupoInicial },
+    eventos: Object.fromEntries(eventosAdversos.map((e) => [e.id, e.estadoInicial])),
   }
 }
 
@@ -78,8 +92,13 @@ function cargar(): EstadoDemo {
       // los nombres, lotes y umbrales vienen del catálogo: si el producto cambió de marca,
       // la sesión guardada no debe seguir mostrando la anterior
       if (guardado.version === 4) {
+        const base = estadoInicial()
         return {
+          ...base,
           ...guardado,
+          piezas: { ...base.piezas, ...guardado.piezas },
+          cupos: { ...base.cupos, ...guardado.cupos },
+          eventos: { ...base.eventos, ...guardado.eventos },
           stock: guardado.stock.map((s) => {
             const actual = stockInicial.find((x) => x.sku === s.sku)
             return actual ? { ...actual, unidades: s.unidades } : s
@@ -242,6 +261,25 @@ function reducir(estado: EstadoDemo, accion: Accion): EstadoDemo {
       return { ...estado, outbox: [entradaOutbox('voz', accion.resumen), ...estado.outbox] }
     case 'farmacovigilancia':
       return { ...estado, outbox: [entradaOutbox('farmacovigilancia', `Posible evento adverso notificado · “${accion.fragmento}”`), ...estado.outbox] }
+    case 'pieza': {
+      const etiquetas: Record<EstadoPieza, string> = {
+        borrador: 'vuelta a borrador',
+        revision: 'enviada a revisión médica',
+        aprobada: 'aprobada por Asuntos Médicos',
+        publicada: 'publicada en las tablets',
+        vencida: 'retirada de las tablets',
+      }
+      const pieza = piezas.find((p) => p.id === accion.id)
+      return {
+        ...estado,
+        piezas: { ...estado.piezas, [accion.id]: accion.estado },
+        outbox: [entradaOutbox('pieza', `${pieza?.titulo ?? 'Pieza'} · ${etiquetas[accion.estado]}`), ...estado.outbox],
+      }
+    }
+    case 'cupo':
+      return { ...estado, cupos: { ...estado.cupos, [accion.productoId]: accion.valor } }
+    case 'evento':
+      return { ...estado, eventos: { ...estado.eventos, [accion.id]: accion.estado } }
     case 'plan':
       return {
         ...estado,

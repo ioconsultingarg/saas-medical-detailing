@@ -1,11 +1,11 @@
 import { useId, useRef, useState, type FormEvent } from 'react'
 import { ArrowRight, CalendarRange, CloudOff, Eye, EyeOff, KeyRound, Lock, MapPin, ShieldCheck } from 'lucide-react'
-import { MonogramaProducto } from '../components/ui'
+import { MonogramaProducto, Segmentado } from '../components/ui'
 import { apm, visitasDelDia } from '../data/agenda'
 import { productos } from '../data/productos'
 import { fechaLarga } from '../lib/formato'
 import { useDemo } from '../state/demo'
-import { CUENTA_DEMO, useSesion } from '../state/sesion'
+import { CUENTAS, useSesion, type Rol } from '../state/sesion'
 
 function Logo({ size = 40 }: { size?: number }) {
   return (
@@ -92,6 +92,7 @@ export function Login() {
   const [verClave, setVerClave] = useState(false)
   const [recordar, setRecordar] = useState(true)
   const [enviando, setEnviando] = useState(false)
+  const [perfil, setPerfil] = useState<Rol>('apm')
   const [error, setError] = useState<{ campo: 'email' | 'clave'; mensaje: string } | null>(null)
 
   async function onSubmit(e: FormEvent) {
@@ -115,9 +116,9 @@ export function Login() {
     }
   }
 
-  function completar() {
-    setEmail(CUENTA_DEMO.email)
-    setClave(CUENTA_DEMO.clave)
+  function completar(r: Rol = perfil) {
+    setEmail(CUENTAS[r].email)
+    setClave(CUENTAS[r].clave)
     setError(null)
   }
 
@@ -239,21 +240,40 @@ export function Login() {
               </span>
               <div className="min-w-0 flex-1">
                 <h2 id="titulo-cuenta-demo" className="text-[14px] font-semibold text-ink">
-                  Cuenta de demostración
+                  Cuentas de demostración
                 </h2>
-                <dl className="mt-1.5 grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-0.5 text-[13px]">
+                <p className="mt-1 text-[13px] leading-snug text-ink-3">
+                  La misma plataforma tiene dos puertas: la tablet del visitador y el portal del laboratorio.
+                </p>
+                <div className="mt-3">
+                  <Segmentado<Rol>
+                    etiqueta="Perfil de la demostración"
+                    valor={perfil}
+                    onCambio={(r) => {
+                      setPerfil(r)
+                      completar(r)
+                    }}
+                    opciones={[
+                      { valor: 'apm', texto: 'Visitador' },
+                      { valor: 'lab', texto: 'Laboratorio' },
+                    ]}
+                  />
+                </div>
+                <dl className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-0.5 text-[13px]">
+                  <dt className="text-ink-3">Perfil</dt>
+                  <dd className="truncate text-ink-2">{CUENTAS[perfil].cargo}</dd>
                   <dt className="text-ink-3">Correo</dt>
                   <dd className="num truncate text-ink-2" translate="no">
-                    {CUENTA_DEMO.email}
+                    {CUENTAS[perfil].email}
                   </dd>
                   <dt className="text-ink-3">Clave</dt>
                   <dd className="num text-ink-2" translate="no">
-                    {CUENTA_DEMO.clave}
+                    {CUENTAS[perfil].clave}
                   </dd>
                 </dl>
               </div>
             </div>
-            <button type="button" onClick={completar} className="btn-secondary mt-3 w-full">
+            <button type="button" onClick={() => completar()} className="btn-secondary mt-3 w-full">
               Completar datos
             </button>
           </section>

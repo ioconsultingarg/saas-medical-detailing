@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react'
-import { Boxes, CalendarRange, ChevronRight, CircleHelp, CloudOff, Ellipsis, GraduationCap, Library, Plug, RefreshCw, Sparkles, Stethoscope, Users } from 'lucide-react'
+import { Boxes, CalendarRange, ChevronRight, CircleHelp, CloudOff, Ellipsis, FileCheck, GraduationCap, Library, Plug, RefreshCw, ShieldAlert, Sparkles, Stethoscope, UserCog, Users } from 'lucide-react'
 import { cronometro } from '../lib/formato'
 import type { Ruta } from '../lib/ruta'
 import { useAhora } from '../lib/tiempo'
@@ -32,9 +32,18 @@ const gestion: ItemNav[] = [
   { href: '#/actividad', etiqueta: 'Actividad', detalle: 'Sincronización sin conexión', Icono: RefreshCw, activa: (r) => r.nombre === 'actividad' },
 ]
 
-/** En celular entran 4 destinos de campo; el resto va en "Más" */
-const barraInferior = campo.slice(0, 4)
-const enMas = [campo[4], ...gestion]
+/** Portal del laboratorio: mismo marco, otros destinos */
+const portal: ItemNav[] = [
+  { href: '#/lab', etiqueta: 'Material', detalle: 'Piezas, versiones y aprobaciones', Icono: FileCheck, activa: (r) => r.nombre === 'lab' },
+  { href: '#/lab/catalogo', etiqueta: 'Catálogo', detalle: 'Productos, lotes y cupos de muestras', Icono: Boxes, activa: (r) => r.nombre === 'labCatalogo' },
+  { href: '#/lab/equipo', etiqueta: 'Equipo', detalle: 'Visitadores, territorios y capacitación', Icono: UserCog, activa: (r) => r.nombre === 'labEquipo' },
+  { href: '#/lab/farmacovigilancia', etiqueta: 'Seguridad', detalle: 'Bandeja de eventos adversos', Icono: ShieldAlert, activa: (r) => r.nombre === 'labFarmaco' },
+]
+
+const gestionLab: ItemNav[] = [
+  { href: '#/asistente', etiqueta: 'Asistente', detalle: 'Preguntale a los datos con IA', Icono: Sparkles, activa: (r) => r.nombre === 'asistente' },
+  { href: '#/integraciones', etiqueta: 'API', detalle: 'SAP, Salesforce y webhooks', Icono: Plug, activa: (r) => r.nombre === 'integraciones' },
+]
 
 function Logo() {
   return (
@@ -127,6 +136,11 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
     return () => window.removeEventListener('keydown', onKey)
   }, [])
   const nombre = sesion?.nombre ?? apm.nombre
+  const esLab = sesion?.rol === 'lab'
+  const principales = esLab ? portal : campo
+  const secundarios = esLab ? gestionLab : gestion
+  const barraInferior = principales.slice(0, 4)
+  const enMas = esLab ? secundarios : [campo[4], ...gestion]
   const masActivo = enMas.some((i) => i.activa(ruta))
   const avisoCursos = cursosPendientes > 0 ? <span className="sr-only">, {cursosPendientes} cursos pendientes</span> : null
 
@@ -148,12 +162,12 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
           <Logo />
         </a>
         <div className="flex min-h-0 flex-1 flex-col items-center overflow-y-auto">
-          {[campo, gestion].map((grupo, g) => (
+          {[principales, secundarios].map((grupo, g) => (
             <ul key={g} className="flex flex-col gap-1" aria-label={g === 0 ? 'Trabajo de campo' : 'Gestión'}>
               {g === 1 && (
                 <li aria-hidden="true" className="mx-auto my-2 flex w-[60px] flex-col items-center gap-1">
                   <span className="h-px w-full bg-line" />
-                  <span className="font-mono text-[9px] tracking-[0.1em] text-ink-3 uppercase">Gestión</span>
+                  <span className="font-mono text-[9px] tracking-[0.1em] text-ink-3 uppercase">{esLab ? 'Datos' : 'Gestión'}</span>
                 </li>
               )}
               {grupo.map(({ href, etiqueta, Icono, activa }) => {
@@ -206,11 +220,11 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
             <div className="hidden min-w-0 items-center gap-2 text-[13px] text-ink-3 md:flex">
               <Stethoscope size={16} aria-hidden="true" />
               <span className="truncate">
-                {apm.laboratorio} · {apm.zona}
+                {apm.laboratorio} · {esLab ? 'Portal del laboratorio' : apm.zona}
               </span>
             </div>
             <div className="ml-auto flex min-w-0 items-center gap-2">
-              <VisitaEnCurso />
+              {!esLab && <VisitaEnCurso />}
               <EstadoConexion />
               <button
                 type="button"

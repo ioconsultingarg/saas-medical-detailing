@@ -4,7 +4,7 @@ import { cursos } from '../data/academia'
 import { useAcademia } from '../state/academia'
 import { ChipProducto, EncabezadoPantalla, MonogramaProducto, Segmentado } from '../components/ui'
 import { visitasDelDia } from '../data/agenda'
-import { minutosEstimados, presentacionesOficiales, productosDe } from '../data/presentaciones'
+import { minutosEstimados, presentacionesOficiales, presentacionPublicable, productosDe } from '../data/presentaciones'
 import { productos } from '../data/productos'
 import { hace } from '../lib/formato'
 import { componentesDiapositiva } from '../slides'
@@ -129,7 +129,9 @@ export function Biblioteca() {
   const para = visitaActiva ?? visitasDelDia.find((v) => !estado.registros[v.id] || estado.registros[v.id].estado === 'pendiente') ?? null
   const sugeridaId = para ? presentacionSugerida(para) : null
 
-  const todas = [...estado.personales, ...presentacionesOficiales]
+  // lo que el laboratorio publica desde su portal aparece acá en la siguiente sincronización
+  const publicadas = estado.piezas['pz-evidencia'] === 'publicada' ? [presentacionPublicable] : []
+  const todas = [...estado.personales, ...publicadas, ...presentacionesOficiales]
   const visibles = todas.filter((p) => {
     if (filtro === 'mias') return p.tipo === 'personal'
     if (filtro === 'cardio' || filtro === 'respira') return productosDe(p).includes(filtro)

@@ -48,6 +48,15 @@ export const presentacionesOficiales: Presentacion[] = [
   },
 ]
 
+/** Se publica desde el portal del laboratorio: aparece en la Biblioteca recién cuando se aprueba */
+export const presentacionPublicable: Presentacion = {
+  id: 'p-cardio-evidencia',
+  titulo: 'Lipvera · Nueva evidencia a 104 semanas',
+  descripcion: 'Seguimiento a dos años del estudio pivotal, con el perfil de seguridad extendido.',
+  diapositivas: ['c1', 'c4', 'c5', 'c6'],
+  tipo: 'oficial',
+}
+
 /** Estimación para mostrar al armar la visita: ~1 minuto por pantalla */
 export function minutosEstimados(p: Presentacion) {
   return Math.max(1, Math.round(p.diapositivas.length * 1.1))

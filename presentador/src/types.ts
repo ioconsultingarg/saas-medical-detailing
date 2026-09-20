@@ -84,7 +84,7 @@ export interface Presentacion {
   creada?: number
 }
 
-export type TipoOutbox = 'checkin' | 'checkout' | 'pedido' | 'envio' | 'firma' | 'voz' | 'farmacovigilancia' | 'plan'
+export type TipoOutbox = 'checkin' | 'checkout' | 'pedido' | 'envio' | 'firma' | 'voz' | 'farmacovigilancia' | 'plan' | 'pieza'
 
 export interface ItemOutbox {
   id: string

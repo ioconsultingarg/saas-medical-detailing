@@ -200,6 +200,39 @@ export const articulos: Articulo[] = [
     pasos: ['Entrá en Actividad.', 'Tocá "Reiniciar demo" y confirmá.'],
     enlace: { texto: 'Ir a Actividad', href: '#/actividad' },
   },
+
+  {
+    id: 'portal-publicar',
+    titulo: 'Publicar material para las tablets',
+    resumen: 'Ninguna pieza llega al campo sin pasar por Asuntos Médicos. Al publicarla, las tablets la descargan en la próxima sincronización.',
+    pantallas: ['lab'],
+    claves: ['publicar', 'aprobar', 'material', 'pieza', 'version', 'vigencia', 'revision', 'retirar'],
+    pasos: [
+      'Subí la pieza y completá producto, vigencia y si se puede compartir con el médico.',
+      'Enviala a revisión: le llega el aviso a Asuntos Médicos.',
+      'Con la aprobación, tocá "Publicar en las tablets".',
+      'Para sacar algo de circulación, abrilo y usá "Retirar del campo": desaparece de todas las tablets.',
+    ],
+    enlace: { texto: 'Ir a Material y aprobaciones', href: '#/lab' },
+  },
+  {
+    id: 'portal-cupos',
+    titulo: 'Definir el cupo de muestras',
+    resumen: 'El cupo limita cuántas muestras puede entregar cada visitador a un mismo médico por mes.',
+    pantallas: ['labCatalogo'],
+    claves: ['cupo', 'muestras', 'catalogo', 'lote', 'stock', 'sap'],
+    pasos: ['Entrá en Catálogo y muestras.', 'Ajustá el cupo de cada producto con los botones + y −.', 'El cambio rige para todo el equipo desde la próxima sincronización.'],
+    enlace: { texto: 'Ir al catálogo', href: '#/lab/catalogo' },
+  },
+  {
+    id: 'portal-eventos',
+    titulo: 'Atender un evento adverso',
+    resumen: 'La bandeja reúne lo que reportan los visitadores, con el plazo regulatorio de 24 horas a la vista.',
+    pantallas: ['labFarmaco'],
+    claves: ['farmacovigilancia', 'evento adverso', 'bandeja', 'plazo', 'notificar', 'anmat'],
+    pasos: ['Abrí Seguridad y revisá los casos sin asignar.', 'Tocá "Tomar el caso" para abrirlo.', 'Al reportarlo a la autoridad, marcalo como notificado: queda la constancia.'],
+    enlace: { texto: 'Ir a Farmacovigilancia', href: '#/lab/farmacovigilancia' },
+  },
 ]
 
 export const preguntasFrecuentes = [

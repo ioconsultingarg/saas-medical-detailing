@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { flushSync } from 'react-dom'
 
 export type Ruta =
   | { nombre: 'hoy' }
@@ -15,6 +16,10 @@ export type Ruta =
   | { nombre: 'medico'; medicoId: string }
   | { nombre: 'asistente' }
   | { nombre: 'integraciones' }
+  | { nombre: 'lab' }
+  | { nombre: 'labCatalogo' }
+  | { nombre: 'labEquipo' }
+  | { nombre: 'labFarmaco' }
 
 export function leerRuta(hash = window.location.hash): Ruta {
   const [camino, consulta = ''] = hash.replace(/^#\/?/, '').split('?')
@@ -40,6 +45,11 @@ export function leerRuta(hash = window.location.hash): Ruta {
         : { nombre: 'academia' }
     case 'medicos':
       return partes[1] ? { nombre: 'medico', medicoId: decodeURIComponent(partes[1]) } : { nombre: 'medicos' }
+    case 'lab':
+      if (partes[1] === 'catalogo') return { nombre: 'labCatalogo' }
+      if (partes[1] === 'equipo') return { nombre: 'labEquipo' }
+      if (partes[1] === 'farmacovigilancia') return { nombre: 'labFarmaco' }
+      return { nombre: 'lab' }
     case 'asistente':
       return { nombre: 'asistente' }
     case 'integraciones':
@@ -61,7 +71,7 @@ export function useRuta() {
       // fundido entre pantallas donde el navegador lo soporta; si no, cambia directo
       const doc = document as Document & { startViewTransition?: (cb: () => void) => void }
       const reducido = matchMedia('(prefers-reduced-motion: reduce)').matches
-      if (doc.startViewTransition && !reducido) doc.startViewTransition(() => setRuta(leerRuta()))
+      if (doc.startViewTransition && !reducido && !document.hidden) doc.startViewTransition(() => flushSync(() => setRuta(leerRuta())))
       else setRuta(leerRuta())
     }
     window.addEventListener('hashchange', onCambio)

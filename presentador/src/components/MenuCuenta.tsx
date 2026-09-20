@@ -34,7 +34,7 @@ export function MenuCuenta({ abierto, onCerrar }: { abierto: boolean; onCerrar: 
         </span>
         <div className="min-w-0">
           <div className="truncate text-[18px] font-semibold text-ink">{sesion.nombre}</div>
-          <div className="text-[14px] text-ink-3">Visitadora médica · {apm.laboratorio}</div>
+          <div className="text-[14px] text-ink-3">{sesion.cargo} · {apm.laboratorio}</div>
         </div>
       </div>
 

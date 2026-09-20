@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AudioLines, CalendarPlus, CheckCircle2, CloudOff, Database, FileText, LogIn, LogOut, Package, PenLine, RefreshCw, RotateCcw, Send, ShieldAlert, Wifi } from 'lucide-react'
+import { AudioLines, CalendarPlus, CheckCircle2, CloudOff, Database, FileCheck, FileText, LogIn, LogOut, Package, PenLine, RefreshCw, RotateCcw, Send, ShieldAlert, Wifi } from 'lucide-react'
 import { operacionOutbox } from '../lib/api'
 import { EncabezadoPantalla } from '../components/ui'
 import { presentacionesOficiales } from '../data/presentaciones'
@@ -18,6 +18,7 @@ const iconos: Record<TipoOutbox, typeof LogIn> = {
   voz: AudioLines,
   farmacovigilancia: ShieldAlert,
   plan: CalendarPlus,
+  pieza: FileCheck,
 }
 
 export function Actividad() {

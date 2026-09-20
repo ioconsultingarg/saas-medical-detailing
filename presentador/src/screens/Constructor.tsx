@@ -18,7 +18,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { ArrowLeft, Check, GripVertical, Play, Plus, Save, X } from 'lucide-react'
 import { ChipProducto, MonogramaProducto, Segmentado } from '../components/ui'
 import { visitasDelDia } from '../data/agenda'
-import { diapositivaPorId, diapositivas, presentacionesOficiales } from '../data/presentaciones'
+import { diapositivaPorId, diapositivas, presentacionesOficiales, presentacionPublicable } from '../data/presentaciones'
 import { productos } from '../data/productos'
 import { ir } from '../lib/ruta'
 import { componentesDiapositiva } from '../slides'
@@ -130,7 +130,7 @@ export function Constructor({ baseId }: { baseId?: string }) {
   const idTitulo = useId()
   const idPara = useId()
 
-  const base = useMemo(() => [...estado.personales, ...presentacionesOficiales].find((p) => p.id === baseId) ?? null, [baseId, estado.personales])
+  const base = useMemo(() => [...estado.personales, presentacionPublicable, ...presentacionesOficiales].find((p) => p.id === baseId) ?? null, [baseId, estado.personales])
   const [titulo, setTitulo] = useState(() => (base ? (base.tipo === 'oficial' ? `${base.titulo} (a medida)` : base.titulo) : ''))
   const [secuencia, setSecuencia] = useState<string[]>(() => base?.diapositivas ?? [])
   const [paraId, setParaId] = useState(() => visitaActiva?.id ?? '')

@@ -1,15 +1,22 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react'
 import { apm } from '../data/agenda'
 
-/** Cuenta ficticia de la demo: se muestra en la pantalla de ingreso, no es un secreto */
-export const CUENTA_DEMO = {
-  email: 'lucia.romero@laboratoriodemo.com',
-  clave: 'demo1234',
+export type Rol = 'apm' | 'lab'
+
+/** Cuentas ficticias de la demo: se muestran en la pantalla de ingreso, no son un secreto */
+export const CUENTAS: Record<Rol, { email: string; clave: string; nombre: string; cargo: string }> = {
+  apm: { email: 'lucia.romero@laboratoriodemo.com', clave: 'demo1234', nombre: apm.nombre, cargo: 'Visitadora médica' },
+  lab: { email: 'martin.sosa@laboratoriodemo.com', clave: 'demo1234', nombre: 'Martín Sosa', cargo: 'Gerente de producto' },
 }
+
+/** Compatibilidad con el acceso anterior */
+export const CUENTA_DEMO = CUENTAS.apm
 
 export interface Sesion {
   email: string
   nombre: string
+  rol: Rol
+  cargo: string
   desde: number
 }
 
@@ -19,7 +26,11 @@ function leer(): Sesion | null {
   for (const almacen of [localStorage, sessionStorage]) {
     try {
       const crudo = almacen.getItem(CLAVE)
-      if (crudo) return JSON.parse(crudo) as Sesion
+      if (crudo) {
+        const guardada = JSON.parse(crudo) as Sesion
+        // sesiones guardadas antes de los roles entran como visitador
+        return { ...guardada, rol: guardada.rol ?? 'apm', cargo: guardada.cargo ?? CUENTAS.apm.cargo }
+      }
     } catch {
       // almacenamiento bloqueado: se pide ingresar de nuevo
     }
@@ -54,14 +65,16 @@ export function SesionProvider({ children }: { children: ReactNode }) {
     // latencia breve para que el estado "Ingresando…" se perciba como una verificación real
     await new Promise((r) => setTimeout(r, 650))
     const normalizado = email.trim().toLowerCase()
-    if (normalizado !== CUENTA_DEMO.email) {
-      return { ok: false, campo: 'email', mensaje: 'No encontramos una cuenta con ese correo. Usá la cuenta de demostración.' }
+    const entrada = Object.entries(CUENTAS).find(([, c]) => c.email === normalizado)
+    if (!entrada) {
+      return { ok: false, campo: 'email', mensaje: 'No encontramos una cuenta con ese correo. Usá una de las cuentas de demostración.' }
     }
-    if (clave !== CUENTA_DEMO.clave) {
+    const [rol, cuenta] = entrada as [Rol, (typeof CUENTAS)[Rol]]
+    if (clave !== cuenta.clave) {
       return { ok: false, campo: 'clave', mensaje: 'La contraseña no coincide. Revisá mayúsculas o usá “Completar datos”.' }
     }
-    // la contraseña nunca se guarda: solo quién ingresó y desde cuándo
-    const nueva: Sesion = { email: normalizado, nombre: apm.nombre, desde: Date.now() }
+    // la contraseña nunca se guarda: solo quién ingresó, con qué rol y desde cuándo
+    const nueva: Sesion = { email: normalizado, nombre: cuenta.nombre, rol, cargo: cuenta.cargo, desde: Date.now() }
     borrar()
     try {
       ;(recordar ? localStorage : sessionStorage).setItem(CLAVE, JSON.stringify(nueva))
