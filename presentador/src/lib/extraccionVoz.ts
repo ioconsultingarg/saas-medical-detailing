@@ -53,7 +53,7 @@ const numeroRe = `(\\d+|${Object.keys(numeros).join('|')})`
 
 const aliasProducto: [ProductoId, RegExp][] = [
   ['cardio', /demo[\s-]?molecula|estatina|colesterol|\bldl\b/g],
-  ['respira', /respira[\s-]?mol|inhalador|broncodilatador|\bepoc\b|\basma\b|tecnica inhalatoria/g],
+  ['respira', /respirel|inhalador|broncodilatador|\bepoc\b|\basma\b|tecnica inhalatoria/g],
 ]
 
 const reglasEtiqueta: [string, RegExp][] = [
@@ -231,10 +231,10 @@ export function guionEjemplo(visita: Visita) {
   const cardio = visita.productosInteres.includes('cardio')
   const respira = visita.productosInteres.includes('respira')
   if (cardio && respira) {
-    return `Salgo de ver ${trato} ${ap}. Le mostré Demo-molécula con los datos de LDL a la semana 52 y le interesó mucho. Le dejé cuatro muestras. También repasamos la técnica inhalatoria de Respira-mol y le dejé una aerocámara. Tiene dudas con la cobertura de la obra social. Quedamos en volver en dos semanas con el estudio completo.`
+    return `Salgo de ver ${trato} ${ap}. Le mostré Lipvera con los datos de LDL a la semana 52 y le interesó mucho. Le dejé cuatro muestras. También repasamos la técnica inhalatoria de Respirel y le dejé una aerocámara. Tiene dudas con la cobertura de la obra social. Quedamos en volver en dos semanas con el estudio completo.`
   }
   if (respira) {
-    return `Recién termino con ${trato.replace(/^al /, 'el ').replace(/^a la /, 'la ')} ${ap}. Repasamos la técnica inhalatoria de Respira-mol y quedó muy conforme, va a empezar a indicarlo en pacientes con EPOC. Le dejé una aerocámara y seis muestras. Pidió folletos para adultos mayores. Quedamos en volver en quince días.`
+    return `Recién termino con ${trato.replace(/^al /, 'el ').replace(/^a la /, 'la ')} ${ap}. Repasamos la técnica inhalatoria de Respirel y quedó muy conforme, va a empezar a indicarlo en pacientes con EPOC. Le dejé una aerocámara y seis muestras. Pidió folletos para adultos mayores. Quedamos en volver en quince días.`
   }
-  return `Salgo de ver ${trato} ${ap}. Le presenté Demo-molécula y le interesaron los datos de reducción de LDL a la semana 52. Le dejé seis muestras. Tiene una objeción con la cobertura de las prepagas y pidió el estudio completo. Comentó que un paciente tuvo dolor muscular leve en el primer mes. Quedamos en volver en dos semanas con la información de cobertura.`
+  return `Salgo de ver ${trato} ${ap}. Le presenté Lipvera y le interesaron los datos de reducción de LDL a la semana 52. Le dejé seis muestras. Tiene una objeción con la cobertura de las prepagas y pidió el estudio completo. Comentó que un paciente tuvo dolor muscular leve en el primer mes. Quedamos en volver en dos semanas con la información de cobertura.`
 }

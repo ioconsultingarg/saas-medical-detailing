@@ -94,7 +94,7 @@ export const insignias: Insignia[] = [
 export const cursos: Curso[] = [
   {
     id: 'curso-cardio',
-    titulo: 'Lanzamiento Demo-molécula 20 mg',
+    titulo: 'Lanzamiento Lipvera 20 mg',
     descripcion: 'Mecanismo, evidencia del ensayo DEMO-201, seguridad y respuesta a las objeciones más frecuentes.',
     categoria: 'Lanzamiento',
     productoId: 'cardio',
@@ -160,7 +160,7 @@ export const cursos: Curso[] = [
       },
       {
         id: 'ce3',
-        enunciado: '¿Cómo actúa Demo-molécula?',
+        enunciado: '¿Cómo actúa Lipvera?',
         opciones: [
           'Inhibe la síntesis hepática de colesterol',
           'Bloquea la absorción intestinal de colesterol',
@@ -172,7 +172,7 @@ export const cursos: Curso[] = [
       },
       {
         id: 'ce4',
-        enunciado: '¿Qué porcentaje discontinuó por eventos adversos con Demo-molécula?',
+        enunciado: '¿Qué porcentaje discontinuó por eventos adversos con Lipvera?',
         opciones: ['0,8%', '2,1%', '3,1%', '5,4%'],
         correcta: 1,
         explicacion: 'Fue 2,1%, comparable al 1,8% del placebo. 3,1% es la frecuencia de mialgias.',
@@ -188,7 +188,7 @@ export const cursos: Curso[] = [
   },
   {
     id: 'curso-respira',
-    titulo: 'Técnica inhalatoria con Respira-mol',
+    titulo: 'Técnica inhalatoria con Respirel',
     descripcion: 'Cómo enseñar la técnica correcta, qué errores son más comunes y qué muestra el estudio de adherencia.',
     categoria: 'Producto',
     productoId: 'respira',
@@ -208,7 +208,7 @@ export const cursos: Curso[] = [
         intro: 'La técnica es el mensaje: un inhalador bien usado es el que funciona.',
         puntos: [
           { titulo: '2 de cada 3 cometen errores', texto: 'El más frecuente es no exhalar antes de inhalar (52%), seguido de no sostener la respiración (44%).' },
-          { titulo: '82% de adherencia a 24 semanas', texto: 'Con Respira-mol y educación en la técnica, frente a 49% con el inhalador habitual.' },
+          { titulo: '82% de adherencia a 24 semanas', texto: 'Con Respirel y educación en la técnica, frente a 49% con el inhalador habitual.' },
           { titulo: 'Posología', texto: '2 inhalaciones cada 12 horas. Dosis máxima de 8 inhalaciones por día.' },
           { titulo: 'Aerocámara', texto: 'Recomendala en adultos mayores o pacientes con poca fuerza o coordinación.' },
         ],
@@ -217,7 +217,7 @@ export const cursos: Curso[] = [
     evaluacion: [
       {
         id: 're1',
-        enunciado: '¿Cuál es la posología habitual de Respira-mol?',
+        enunciado: '¿Cuál es la posología habitual de Respirel?',
         opciones: ['1 inhalación por día', '2 inhalaciones cada 12 horas', '4 inhalaciones cada 6 horas', 'A demanda, sin límite'],
         correcta: 1,
         explicacion: '2 inhalaciones cada 12 horas, con un máximo de 8 por día.',
@@ -238,7 +238,7 @@ export const cursos: Curso[] = [
       },
       {
         id: 're4',
-        enunciado: '¿Qué porcentaje mantenía la técnica correcta a las 24 semanas con Respira-mol?',
+        enunciado: '¿Qué porcentaje mantenía la técnica correcta a las 24 semanas con Respirel?',
         opciones: ['49%', '64%', '82%', '95%'],
         correcta: 2,
         explicacion: '82%, frente a 49% con el inhalador habitual.',
@@ -355,14 +355,14 @@ export const equipo = [
 export const desafioSemanal: Pregunta[] = [
   {
     id: 'ds1',
-    enunciado: 'Verdadero o falso: la reducción de LDL con Demo-molécula se mantiene hasta la semana 52.',
+    enunciado: 'Verdadero o falso: la reducción de LDL con Lipvera se mantiene hasta la semana 52.',
     opciones: ['Verdadero', 'Falso'],
     correcta: 0,
     explicacion: 'Verdadero: a la semana 52 la reducción media es de −52%.',
   },
   {
     id: 'ds2',
-    enunciado: '¿Cuál es la dosis máxima diaria de Respira-mol?',
+    enunciado: '¿Cuál es la dosis máxima diaria de Respirel?',
     opciones: ['4 inhalaciones', '6 inhalaciones', '8 inhalaciones', '12 inhalaciones'],
     correcta: 2,
     explicacion: 'La dosis máxima es de 8 inhalaciones por día.',

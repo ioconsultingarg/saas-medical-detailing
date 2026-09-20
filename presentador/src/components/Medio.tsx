@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useRef, useState, type ReactNode } from 'react'
 import { Pause, Play } from 'lucide-react'
 import { prefiereMenosMovimiento } from '../lib/tiempo'
 
@@ -68,27 +68,4 @@ export function VideoPortada({ nombre, modo, className, children }: Props) {
       )}
     </div>
   )
-}
-
-/** true cuando el archivo existe y se puede reproducir; null mientras se averigua */
-export function useMedioDisponible(nombre?: string) {
-  const [disponible, setDisponible] = useState<boolean | null>(null)
-
-  useEffect(() => {
-    if (!nombre) return setDisponible(false)
-    const v = document.createElement('video')
-    v.preload = 'metadata'
-    const bien = () => setDisponible(true)
-    const mal = () => setDisponible(false)
-    v.addEventListener('loadedmetadata', bien)
-    v.addEventListener('error', mal)
-    v.src = urlMedio(nombre)
-    return () => {
-      v.removeEventListener('loadedmetadata', bien)
-      v.removeEventListener('error', mal)
-      v.removeAttribute('src')
-    }
-  }, [nombre])
-
-  return disponible
 }

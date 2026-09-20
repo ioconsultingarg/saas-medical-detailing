@@ -20,34 +20,30 @@ export const diapositivaPorId = Object.fromEntries(diapositivas.map((d) => [d.id
 export const presentacionesOficiales: Presentacion[] = [
   {
     id: 'p-cardio',
-    titulo: 'Demo-molécula · Visita completa',
+    titulo: 'Lipvera · Visita completa',
     descripcion: 'Del problema clínico a la posología, con estudios y modelo 3D.',
     diapositivas: ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'],
-    medio: 'portada-cardio',
     tipo: 'oficial',
   },
   {
     id: 'p-cardio-breve',
-    titulo: 'Demo-molécula · Mensaje clave',
+    titulo: 'Lipvera · Mensaje clave',
     descripcion: 'Versión de 3 minutos para agendas cortas.',
     diapositivas: ['c1', 'c4', 'c6'],
-    medio: 'portada-cardio',
     tipo: 'oficial',
   },
   {
     id: 'p-respira',
-    titulo: 'Respira-mol · Visita completa',
+    titulo: 'Respirel · Visita completa',
     descripcion: 'Control de síntomas, mecanismo, técnica y adherencia.',
     diapositivas: ['r1', 'r2', 'r3', 'r4', 'r5', 'r6'],
-    medio: 'portada-respira',
     tipo: 'oficial',
   },
   {
     id: 'p-respira-breve',
-    titulo: 'Respira-mol · Técnica y adherencia',
+    titulo: 'Respirel · Técnica y adherencia',
     descripcion: 'Foco en el uso correcto del inhalador.',
     diapositivas: ['r1', 'r4', 'r5'],
-    medio: 'portada-respira',
     tipo: 'oficial',
   },
 ]

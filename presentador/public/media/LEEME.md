@@ -5,10 +5,8 @@ no está, sigue mostrando lo actual, sin huecos ni cuadros negros.
 
 | Archivo | Dónde aparece | Duración |
 | --- | --- | --- |
-| `presentacion-cardio.mp4` | Biblioteca · pieza en video para mostrarle al médico | 30 s |
-| `presentacion-respira.mp4` | Biblioteca · pieza en video | 30 s |
-| `portada-cardio.mp4` | Biblioteca · tarjetas de Demo-molécula (se reproduce al pasar el puntero) | 6–8 s, en bucle |
-| `portada-respira.mp4` | Biblioteca · tarjetas de Respira-mol | 6–8 s, en bucle |
+| `presentacion-cardio.mp4` | Recurso "La historia en 30 segundos", en la portada de la presentación | 30 s |
+| `presentacion-respira.mp4` | Ídem, en la portada de la presentación respiratoria | 30 s |
 | `curso-cardio.mp4` | Academia · portada del curso | 8 s |
 | `curso-respira.mp4` | Academia · portada del curso | 8 s |
 | `curso-etica.mp4` | Academia · portada del curso | 8 s |

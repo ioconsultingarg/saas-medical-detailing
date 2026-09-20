@@ -91,7 +91,7 @@ export const recursos: Record<string, Recurso> = {
     unidad: '% de reducción de LDL',
     semanas: [0, 2, 4, 8, 12, 24, 52],
     series: [
-      { nombre: 'Demo-molécula 20 mg', color: '#0a6b5d', valores: [0, 28, 39, 46, 49, 51, 52] },
+      { nombre: 'Lipvera 20 mg', color: '#0a6b5d', valores: [0, 28, 39, 46, 49, 51, 52] },
       { nombre: 'Comparador', color: '#8795a1', valores: [0, 19, 27, 33, 35, 36, 36] },
       { nombre: 'Placebo', color: '#c7d0d8', valores: [0, 2, 3, 3, 4, 3, 3] },
     ],
@@ -119,6 +119,21 @@ export const recursos: Record<string, Recurso> = {
     },
     referencia: 'Análisis agrupado de demostración. Datos ilustrativos.',
   },
+  'c-pieza': {
+    id: 'c-pieza',
+    tipo: 'video',
+    productoId: 'cardio',
+    titulo: 'La historia en 30 segundos',
+    escena: 'cardio-mecanismo',
+    medio: 'presentacion-cardio',
+    duracion: 30,
+    capitulos: [
+      { desde: 0, texto: 'La placa reduce el paso de la sangre en la arteria.' },
+      { desde: 8, texto: 'Menos síntesis hepática y más receptores de LDL.' },
+      { desde: 15, texto: 'Con menos LDL circulante, la placa se reduce.' },
+      { desde: 23, texto: 'Lipvera 20 mg · una vez por día.' },
+    ],
+  },
   'c-video': {
     id: 'c-video',
     tipo: 'video',
@@ -129,7 +144,7 @@ export const recursos: Record<string, Recurso> = {
     duracion: 15,
     capitulos: [
       { desde: 0, texto: 'El hígado produce colesterol y lo libera a la sangre como LDL.' },
-      { desde: 4, texto: 'Demo-molécula inhibe la síntesis y el hepatocito expone más receptores.' },
+      { desde: 4, texto: 'Lipvera inhibe la síntesis y el hepatocito expone más receptores.' },
       { desde: 8, texto: 'Con menos LDL circulante, la placa deja de crecer.' },
       { desde: 12, texto: 'Resultado: la luz de la arteria vuelve a ampliarse.' },
     ],
@@ -169,7 +184,7 @@ export const recursos: Record<string, Recurso> = {
     id: 'c-ficha',
     tipo: 'documento',
     productoId: 'cardio',
-    titulo: 'Ficha técnica · Demo-molécula',
+    titulo: 'Ficha técnica · Lipvera',
     url: `${base}content/ficha-tecnica.pdf`,
   },
   'r-impacto': {
@@ -204,7 +219,7 @@ export const recursos: Record<string, Recurso> = {
     duracion: 12,
     capitulos: [
       { desde: 0, texto: 'En la broncoconstricción el músculo liso estrecha la vía aérea.' },
-      { desde: 4, texto: 'Las partículas de Respira-mol se depositan en los bronquios.' },
+      { desde: 4, texto: 'Las partículas de Respirel se depositan en los bronquios.' },
       { desde: 8, texto: 'El músculo se relaja y la luz bronquial se amplía.' },
     ],
   },
@@ -241,7 +256,7 @@ export const recursos: Record<string, Recurso> = {
     unidad: '% de pacientes',
     semanas: [0, 4, 8, 12, 16, 20, 24],
     series: [
-      { nombre: 'Respira-mol + educación', color: '#144f85', valores: [64, 78, 81, 83, 82, 82, 82] },
+      { nombre: 'Respirel + educación', color: '#144f85', valores: [64, 78, 81, 83, 82, 82, 82] },
       { nombre: 'Inhalador habitual', color: '#8795a1', valores: [61, 63, 58, 55, 52, 50, 49] },
     ],
     referencia: 'Estudio de demostración DEMO-ADH, 24 semanas. Datos ilustrativos.',
@@ -250,7 +265,7 @@ export const recursos: Record<string, Recurso> = {
     id: 'r-ficha',
     tipo: 'documento',
     productoId: 'respira',
-    titulo: 'Ficha técnica · Respira-mol',
+    titulo: 'Ficha técnica · Respirel',
     url: `${base}content/linea-b-ficha.pdf`,
   },
 }

@@ -5,7 +5,7 @@ import type { Producto, ProductoId } from '../types'
 export const productos: Record<ProductoId, Producto> = {
   cardio: {
     id: 'cardio',
-    marca: 'Demo-molécula',
+    marca: 'Lipvera',
     detalle: '20 mg · comprimidos recubiertos',
     linea: 'Cardiometabólica',
     color: '#0a6b5d',
@@ -16,7 +16,7 @@ export const productos: Record<ProductoId, Producto> = {
   },
   respira: {
     id: 'respira',
-    marca: 'Respira-mol',
+    marca: 'Respirel',
     detalle: '200 mcg · inhalador presurizado',
     linea: 'Respiratoria',
     color: '#144f85',

@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
-import { BadgeCheck, Clock, Copy, Film, GraduationCap, Layers, Pencil, Play, Plus, Sparkles, Trash2 } from 'lucide-react'
-import { useMedioDisponible, VideoPortada } from '../components/Medio'
+import { BadgeCheck, Clock, Copy, GraduationCap, Layers, Pencil, Play, Plus, Sparkles, Trash2 } from 'lucide-react'
 import { cursos } from '../data/academia'
-import { piezasVideo, type PiezaVideo } from '../data/piezasVideo'
 import { useAcademia } from '../state/academia'
 import { ChipProducto, EncabezadoPantalla, MonogramaProducto, Segmentado } from '../components/ui'
 import { visitasDelDia } from '../data/agenda'
@@ -17,17 +15,16 @@ import { presentacionSugerida } from './Hoy'
 
 type Filtro = 'todas' | ProductoId | 'mias'
 
-function Portada({ id, medio }: { id: string; medio?: string }) {
+/** La tapa de cada presentación es su primera hoja, tal como la verá el médico */
+function Portada({ id }: { id: string }) {
   const Componente = componentesDiapositiva[id]
   if (!Componente) return <div className="lienzo bg-sunken" />
   return (
-    <VideoPortada nombre={medio} modo="hover">
-      <div inert className="pointer-events-none">
-        <Lienzo>
-          <Componente />
-        </Lienzo>
-      </div>
-    </VideoPortada>
+    <div inert className="pointer-events-none">
+      <Lienzo>
+        <Componente />
+      </Lienzo>
+    </div>
   )
 }
 
@@ -55,49 +52,6 @@ function EstadoCapacitacion({ productosIds }: { productosIds: ProductoId[] }) {
   )
 }
 
-/** Pieza en video: solo aparece cuando el archivo está en public/media */
-function TarjetaVideo({ pieza }: { pieza: PiezaVideo }) {
-  const disponible = useMedioDisponible(pieza.medio)
-  if (!disponible) return null
-  const producto = productos[pieza.productoId]
-
-  return (
-    <article className="card group flex flex-col overflow-hidden transition-shadow duration-200 hover:shadow-(--shadow-float)">
-      <a href={`#/video/${pieza.id}`} className="relative block overflow-hidden border-b border-line" aria-label={`Reproducir ${pieza.titulo}`}>
-        <VideoPortada nombre={pieza.medio} modo="hover" className="lienzo relative block">
-          <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${producto.colorOscuro}, ${producto.color})` }} />
-        </VideoPortada>
-        <span aria-hidden="true" className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <span className="flex size-14 items-center justify-center rounded-full bg-white/90 text-ink transition-transform duration-200 group-hover:scale-105">
-            <Play size={22} className="ml-0.5 fill-ink" />
-          </span>
-        </span>
-        <span className="material absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[12px] font-medium text-ink">
-          <Film size={12} aria-hidden="true" />
-          Pieza en video
-        </span>
-      </a>
-      <div className="flex flex-1 flex-col p-4">
-        <h3 className="text-[17px] leading-snug font-semibold text-ink">{pieza.titulo}</h3>
-        <p className="mt-1 line-clamp-2 text-[14px] leading-relaxed text-ink-3">{pieza.descripcion}</p>
-        <div className="mt-3 flex flex-wrap items-center gap-1.5">
-          <ChipProducto id={pieza.productoId} />
-          <span className="chip">
-            <Clock size={12} aria-hidden="true" />
-            <span className="num">{pieza.duracion}</span> s
-          </span>
-        </div>
-        <div className="mt-auto pt-4">
-          <a href={`#/video/${pieza.id}`} className="btn-primary w-full">
-            <Play size={16} aria-hidden="true" />
-            Reproducir para el médico
-          </a>
-        </div>
-      </div>
-    </article>
-  )
-}
-
 function TarjetaPresentacion({ p, destacada }: { p: Presentacion; destacada?: boolean }) {
   const { despachar, avisar } = useDemo()
   const [confirmando, setConfirmando] = useState(false)
@@ -114,7 +68,7 @@ function TarjetaPresentacion({ p, destacada }: { p: Presentacion; destacada?: bo
     <article className={`card group flex flex-col overflow-hidden transition-shadow duration-200 hover:shadow-(--shadow-float) ${destacada ? 'ring-2 ring-ink' : ''}`}>
       <a href={`#/presentar/${p.id}`} className="relative block overflow-hidden border-b border-line" aria-label={`Presentar ${p.titulo}`} tabIndex={-1}>
         <div className="transition-transform duration-300 ease-(--ease-fluid) group-hover:scale-[1.015]">
-          <Portada id={p.diapositivas[0]} medio={p.medio} />
+          <Portada id={p.diapositivas[0]} />
         </div>
         <span className="material absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[12px] font-medium text-ink">
           {p.tipo === 'oficial' ? 'Oficial · aprobada' : 'Mi presentación'}
@@ -175,7 +129,6 @@ export function Biblioteca() {
   const para = visitaActiva ?? visitasDelDia.find((v) => !estado.registros[v.id] || estado.registros[v.id].estado === 'pendiente') ?? null
   const sugeridaId = para ? presentacionSugerida(para) : null
 
-  const piezas = piezasVideo.filter((pv) => (filtro === 'cardio' || filtro === 'respira' ? pv.productoId === filtro : filtro === 'todas'))
   const todas = [...estado.personales, ...presentacionesOficiales]
   const visibles = todas.filter((p) => {
     if (filtro === 'mias') return p.tipo === 'personal'
@@ -250,9 +203,6 @@ export function Biblioteca() {
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {piezas.map((pieza) => (
-            <TarjetaVideo key={pieza.id} pieza={pieza} />
-          ))}
           {visibles.map((p) => (
             <TarjetaPresentacion key={p.id} p={p} destacada={p.id === sugeridaId} />
           ))}

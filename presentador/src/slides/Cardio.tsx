@@ -35,7 +35,10 @@ export function C1Portada() {
             </p>
           </Aparece>
           <Aparece retraso={360} className="flex flex-wrap" style={{ gap: cq(1), marginTop: cq(3) }}>
-            <BotonRecurso recurso="c-3d" producto="cardio">
+            <BotonRecurso recurso="c-pieza" producto="cardio">
+              Ver la historia en 30 s
+            </BotonRecurso>
+            <BotonRecurso recurso="c-3d" producto="cardio" tono="contorno">
               Ver la arteria en 3D
             </BotonRecurso>
             <BotonRecurso recurso="c-ficha" producto="cardio" tono="contorno">
@@ -286,7 +289,7 @@ export function C5Seguridad() {
           </Aparece>
           <div className="grid" style={{ gridTemplateColumns: '1fr 1fr', gap: cq(1.6), marginTop: cq(3) }}>
             {[
-              { v: 2.1, t: 'Demo-molécula', d: true },
+              { v: 2.1, t: 'Lipvera', d: true },
               { v: 1.8, t: 'Placebo', d: false },
             ].map((x, i) => (
               <Aparece key={x.t} retraso={180 + i * 120} className="rounded-[1.6cqw] border border-line" style={{ padding: cq(2) }}>

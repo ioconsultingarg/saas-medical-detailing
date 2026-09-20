@@ -57,10 +57,10 @@ interface Contexto {
 
 export const preguntasEjemplo = [
   '¿Qué médicos bajaron su prescripción y no fueron visitados?',
-  '¿Cuáles son los mayores prescriptores de Demo-molécula?',
+  '¿Cuáles son los mayores prescriptores de Lipvera?',
   '¿Qué médicos recibieron muestras pero no aumentaron sus recetas?',
   '¿Cómo viene la cobertura de visitas de cada APM?',
-  '¿Cuáles son las objeciones más frecuentes de Respira-mol?',
+  '¿Cuáles son las objeciones más frecuentes de Respirel?',
   '¿Qué cardiólogos categoría A no se visitan hace más de 30 días?',
 ]
 
@@ -77,8 +77,8 @@ interface Filtros {
 
 function leerFiltros(n: string): Filtros {
   const f: Filtros = {}
-  if (/demo.?molecula|cardio(?!log)|estatina|colesterol/.test(n)) f.producto = 'cardio'
-  else if (/respira|inhalador|epoc|asma/.test(n)) f.producto = 'respira'
+  if (/lipvera|cardio(?!log)|estatina|colesterol/.test(n)) f.producto = 'cardio'
+  else if (/respirel|inhalador|epoc|asma|respirator/.test(n)) f.producto = 'respira'
 
   const especialidades: [RegExp, string][] = [
     [/cardiolog/, 'Cardiología'],
@@ -289,7 +289,7 @@ WHERE s.units_90d >= 8
   AND rx.last_q <= rx.prev_q
 ORDER BY s.units_90d DESC;`,
       fuentes: ['Trazabilidad de muestras · por lote', ...fuentesRx],
-      sugerencias: ['¿Qué objeciones registraron estos médicos?', '¿Cuáles son los mayores prescriptores de Demo-molécula?'],
+      sugerencias: ['¿Qué objeciones registraron estos médicos?', '¿Cuáles son los mayores prescriptores de Lipvera?'],
     }
   }
 
@@ -418,7 +418,7 @@ WHERE v.visited_at > now() - interval '90 days'${f.producto ? `\n  AND '${f.prod
 GROUP BY t.tag
 ORDER BY visits DESC;`,
       fuentes: ['Visitas del CRM · etiquetas', 'Reportes por voz · entidades extraídas'],
-      sugerencias: ['¿Qué médicos bajaron su prescripción y no fueron visitados?', '¿Cuáles son los mayores prescriptores de Respira-mol?'],
+      sugerencias: ['¿Qué médicos bajaron su prescripción y no fueron visitados?', '¿Cuáles son los mayores prescriptores de Respirel?'],
     }
   }
 
@@ -485,7 +485,7 @@ ORDER BY ${modo === 'top' ? 'rx.last_q DESC\nLIMIT 10' : modo === 'crecimiento' 
       accion: modo === 'caida' && filas.length ? { texto: `Crear plan de visitas para ${filas.length} médicos`, medicos: filas.map((r) => r.medicoId!) } : undefined,
       sugerencias:
         modo === 'top'
-          ? ['¿Qué médicos bajaron su prescripción y no fueron visitados?', `¿Cuáles son las objeciones más frecuentes de ${f.producto ? productos[f.producto].marca : 'Demo-molécula'}?`]
+          ? ['¿Qué médicos bajaron su prescripción y no fueron visitados?', `¿Cuáles son las objeciones más frecuentes de ${f.producto ? productos[f.producto].marca : 'Lipvera'}?`]
           : ['¿Qué médicos recibieron muestras pero no aumentaron sus recetas?', '¿Cómo viene la cobertura de visitas de cada APM?'],
     }
   }
