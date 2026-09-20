@@ -58,7 +58,11 @@ export function useRuta() {
 
   useEffect(() => {
     function onCambio() {
-      setRuta(leerRuta())
+      // fundido entre pantallas donde el navegador lo soporta; si no, cambia directo
+      const doc = document as Document & { startViewTransition?: (cb: () => void) => void }
+      const reducido = matchMedia('(prefers-reduced-motion: reduce)').matches
+      if (doc.startViewTransition && !reducido) doc.startViewTransition(() => setRuta(leerRuta()))
+      else setRuta(leerRuta())
     }
     window.addEventListener('hashchange', onCambio)
     return () => window.removeEventListener('hashchange', onCambio)

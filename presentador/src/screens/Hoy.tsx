@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react'
 import { ArrowRight, CheckCircle2, Clock, MapPin, Navigation, Package, Play, Star } from 'lucide-react'
 import { MapaRuta } from '../components/MapaRuta'
-import { Anillo, ChipProducto, Segmentado } from '../components/ui'
+import { productos } from '../data/productos'
+import { Anillo, ChipProducto, Kpi, NumeroAnimado, Segmentado } from '../components/ui'
 import { visitasDelDia } from '../data/agenda'
 import { cronometro, distanciaMetros, fechaLarga, hora, minutos } from '../lib/formato'
 import { useAhora } from '../lib/tiempo'
@@ -66,47 +67,45 @@ export function Hoy() {
 
   return (
     <div className="pt-6 md:pt-8">
-      <header className="flex flex-wrap items-end justify-between gap-x-8 gap-y-5 pb-6">
-        <div>
-          <div className="eyebrow mb-2 first-letter:uppercase">{fechaLarga()}</div>
-          <h1 className="text-[30px] leading-[1.05] font-semibold text-ink md:text-[38px]">
-            Buen día, {primerNombre}
-          </h1>
-          <p className="mt-2 text-[15px] text-ink-3">
+      <header className="flex flex-wrap items-end justify-between gap-x-8 gap-y-6 pb-7">
+        <div className="min-w-0">
+          <div className="eyebrow mb-2.5 first-letter:uppercase">{fechaLarga()}</div>
+          <h1 className="display text-ink">Buen día, {primerNombre}</h1>
+          <p className="mt-2.5 text-[16px] text-ink-3">
             {visitasDelDia.length} visitas en {apm.zona}. {completadas.length === visitasDelDia.length ? 'Día completo.' : `Te quedan ${visitasDelDia.length - completadas.length}.`}
           </p>
         </div>
 
-        {/* KPIs rápidos del día */}
-        <dl className="grid w-full grid-cols-2 gap-2 sm:grid-cols-4 lg:w-auto">
-          <div className="card flex items-center gap-3 px-4 py-3">
-            <div className="relative">
-              <Anillo valor={completadas.length} total={visitasDelDia.length} size={48} grosor={5} />
-              <CheckCircle2 size={16} aria-hidden="true" className="absolute inset-0 m-auto text-ink" />
+        {/* KPIs del día */}
+        <dl className="grid w-full grid-cols-2 gap-3 sm:grid-cols-4 lg:w-auto lg:min-w-[520px]">
+          <div className="card-elevada entra-fila flex items-center gap-3 p-4" style={{ ['--orden' as string]: 0 }}>
+            <div className="relative shrink-0">
+              <Anillo valor={completadas.length} total={visitasDelDia.length} size={52} grosor={5} />
+              <CheckCircle2 size={17} aria-hidden="true" className="absolute inset-0 m-auto text-ink" />
             </div>
-            <div>
-              <dt className="text-[12px] text-ink-3">Visitas</dt>
-              <dd className="num text-[20px] font-medium text-ink">
+            <div className="min-w-0">
+              <dt className="kpi-label">Visitas</dt>
+              <dd className="kpi-num mt-1.5">
                 {completadas.length}
                 <span className="text-ink-3">/{visitasDelDia.length}</span>
               </dd>
             </div>
           </div>
-          {[
-            { etiqueta: 'Tiempo medio', valor: kpis.medio ? `${kpis.medio} min` : '—', Icono: Clock },
-            { etiqueta: 'Muestras', valor: `${kpis.muestras} u.`, Icono: Package },
-            { etiqueta: 'Receptividad', valor: kpis.receptividad ? `${kpis.receptividad.toFixed(1).replace('.', ',')} / 5` : '—', Icono: Star },
-          ].map(({ etiqueta, valor, Icono }) => (
-            <div key={etiqueta} className="card flex items-center gap-3 px-4 py-3">
-              <span className="flex size-12 items-center justify-center rounded-full bg-sunken text-ink-2">
-                <Icono size={18} aria-hidden="true" />
-              </span>
-              <div>
-                <dt className="text-[12px] text-ink-3">{etiqueta}</dt>
-                <dd className="num text-[20px] font-medium whitespace-nowrap text-ink">{valor}</dd>
-              </div>
-            </div>
-          ))}
+          <Kpi
+            orden={1}
+            etiqueta="Tiempo medio"
+            Icono={Clock}
+            valor={kpis.medio ? <NumeroAnimado valor={kpis.medio} /> : '—'}
+            unidad={kpis.medio ? 'min' : undefined}
+          />
+          <Kpi orden={2} etiqueta="Muestras" Icono={Package} valor={<NumeroAnimado valor={kpis.muestras} />} unidad="u." />
+          <Kpi
+            orden={3}
+            etiqueta="Receptividad"
+            Icono={Star}
+            valor={kpis.receptividad ? <NumeroAnimado valor={kpis.receptividad} decimales={1} /> : '—'}
+            unidad={kpis.receptividad ? '/ 5' : undefined}
+          />
         </dl>
       </header>
 
@@ -116,9 +115,16 @@ export function Hoy() {
           {destacada && (
             <section
               aria-label={visitaActiva ? 'Visita en curso' : 'Próxima visita'}
-              className={`animate-entrar overflow-hidden rounded-2xl ${visitaActiva ? 'bg-ink text-white' : 'card'}`}
+              className={`animate-entrar relative overflow-hidden rounded-2xl ${visitaActiva ? 'bg-ink text-white shadow-(--shadow-float)' : 'card-elevada'}`}
             >
-              <div className="p-5 md:p-6">
+              {!visitaActiva && (
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-x-0 top-0 h-28 opacity-70"
+                  style={{ background: `linear-gradient(180deg, ${productos[destacada.productosInteres[0]].tinte}, transparent)` }}
+                />
+              )}
+              <div className="relative p-5 md:p-6">
                 <div className="flex items-center justify-between gap-3">
                   <span className={`eyebrow ${visitaActiva ? 'text-white/60' : ''}`}>
                     {visitaActiva ? 'En el consultorio' : `Próxima visita · ${destacada.hora}`}
@@ -129,7 +135,7 @@ export function Hoy() {
                     </span>
                   )}
                 </div>
-                <h2 className="mt-3 text-[24px] leading-tight font-semibold">{destacada.medico.nombre}</h2>
+                <h2 className="mt-3 text-[26px] leading-[1.15] font-semibold tracking-[-0.02em] md:text-[30px]">{destacada.medico.nombre}</h2>
                 <p className={`mt-1 text-[15px] ${visitaActiva ? 'text-white/70' : 'text-ink-3'}`}>
                   {destacada.medico.especialidad} · {destacada.consultorio} ·{' '}
                   <a href={`#/medicos/${destacada.medicoId}`} className={`font-medium underline underline-offset-2 ${visitaActiva ? 'text-white' : 'text-ink'}`}>
@@ -140,7 +146,7 @@ export function Hoy() {
                   {destacada.nota}
                 </p>
               </div>
-              <div className={`flex flex-wrap gap-2 px-5 pb-5 md:px-6 md:pb-6`}>
+              <div className="relative flex flex-wrap gap-2 px-5 pb-5 md:px-6 md:pb-6">
                 {visitaActiva ? (
                   <>
                     <a href={`#/presentar/${presentacionSugerida(destacada)}`} className="btn bg-white text-ink hover:bg-white/90">
@@ -190,7 +196,7 @@ export function Hoy() {
             </div>
 
             <ol className="flex flex-col gap-2">
-              {visibles.map((v) => {
+              {visibles.map((v, i) => {
                 const registro = estado.registros[v.id]
                 const e = registro?.estado ?? 'pendiente'
                 const seleccionada = seleccionId === v.id
@@ -198,7 +204,8 @@ export function Hoy() {
                 return (
                   <li
                     key={v.id}
-                    className={`card flex gap-4 p-4 transition-[border-color,box-shadow] duration-200 ${seleccionada ? 'border-ink shadow-(--shadow-float)' : ''}`}
+                    style={{ ['--orden' as string]: i }}
+                    className={`card entra-fila flex gap-4 p-4 transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-px hover:shadow-(--shadow-raised) ${seleccionada ? 'border-ink shadow-(--shadow-float)' : ''}`}
                   >
                     <div className="flex w-12 shrink-0 flex-col items-center gap-1.5">
                       <span className="num text-[15px] font-medium text-ink">{v.hora}</span>

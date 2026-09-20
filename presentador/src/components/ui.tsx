@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { AlertTriangle, CheckCircle2, XCircle } from 'lucide-react'
 import { productos } from '../data/productos'
 import { etiquetaNivel } from '../data/stock'
@@ -66,8 +66,8 @@ export function EncabezadoPantalla({
     <header className="flex flex-wrap items-end justify-between gap-x-6 gap-y-4 pt-6 pb-5 md:pt-8">
       <div className="min-w-0">
         {eyebrow && <div className="eyebrow mb-2">{eyebrow}</div>}
-        <h1 className="text-[28px] leading-[1.1] font-semibold text-ink md:text-[34px]">{titulo}</h1>
-        {descripcion && <p className="mt-2 max-w-[60ch] text-[15px] leading-relaxed text-ink-3">{descripcion}</p>}
+        <h1 className="display text-ink">{titulo}</h1>
+        {descripcion && <p className="mt-2.5 max-w-[62ch] text-[16px] leading-relaxed text-ink-3">{descripcion}</p>}
       </div>
       {acciones && <div className="flex flex-wrap items-center gap-2">{acciones}</div>}
     </header>
@@ -129,5 +129,55 @@ export function Anillo({ valor, total, size = 64, color = 'var(--color-ink)', gr
         style={{ transition: 'stroke-dashoffset 600ms var(--ease-fluid)' }}
       />
     </svg>
+  )
+}
+
+/**
+ * Cifra que sube hasta su valor al aparecer la pantalla.
+ * Con "reducir movimiento" se muestra el número final, sin animar.
+ */
+export function NumeroAnimado({ valor, decimales = 0, duracion = 900 }: { valor: number; decimales?: number; duracion?: number }) {
+  const reducido = typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches
+  const [actual, setActual] = useState(reducido ? valor : 0)
+  const raf = useRef(0)
+
+  useEffect(() => {
+    if (reducido) return setActual(valor)
+    const desde = performance.now()
+    const paso = (t: number) => {
+      const p = Math.min(1, (t - desde) / duracion)
+      setActual(valor * (1 - (1 - p) ** 3))
+      if (p < 1) raf.current = requestAnimationFrame(paso)
+    }
+    raf.current = requestAnimationFrame(paso)
+    return () => cancelAnimationFrame(raf.current)
+  }, [valor, duracion, reducido])
+
+  return <>{actual.toFixed(decimales).replace('.', ',')}</>
+}
+
+interface PropsKpi {
+  etiqueta: string
+  valor: ReactNode
+  unidad?: string
+  detalle?: ReactNode
+  Icono?: typeof CheckCircle2
+  orden?: number
+}
+
+/** Tarjeta de indicador: número grande en mono, etiqueta chica en mayúscula */
+export function Kpi({ etiqueta, valor, unidad, detalle, Icono, orden = 0 }: PropsKpi) {
+  return (
+    <div className="card-elevada entra-fila p-4" style={{ ['--orden' as string]: orden }}>
+      <div className="flex items-center gap-2">
+        {Icono && <Icono size={15} aria-hidden="true" className="text-ink-3" />}
+        <dt className="kpi-label">{etiqueta}</dt>
+      </div>
+      <dd className="mt-2 flex items-baseline gap-1">
+        <span className="kpi-num">{valor}</span>
+        {unidad && <span className="text-[14px] font-medium text-ink-3">{unidad}</span>}
+      </dd>
+      {detalle && <dd className="mt-1.5 text-[12px] leading-snug text-ink-3">{detalle}</dd>}
+    </div>
   )
 }

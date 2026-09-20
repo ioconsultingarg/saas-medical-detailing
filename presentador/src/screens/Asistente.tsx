@@ -145,7 +145,7 @@ function Respuesta({ turno, onPreguntar, reciente }: { turno: Turno; onPreguntar
 
       <div className="card p-5 md:p-6">
         <div className="mb-3 flex items-center gap-2 text-[13px] font-medium text-ink-3">
-          <span className="flex size-6 items-center justify-center rounded-full bg-accent-soft text-accent">
+          <span className="flex size-6 items-center justify-center rounded-full bg-ia-soft text-ia">
             <Sparkles size={13} aria-hidden="true" />
           </span>
           Asistente
@@ -380,7 +380,7 @@ export function Asistente() {
                       onClick={() => preguntar(p)}
                       className={`press card flex min-h-20 cursor-pointer items-start gap-3 p-4 text-left hover:border-line-2 hover:shadow-(--shadow-float) ${i === 0 ? 'sm:col-span-2 border-ink bg-ink text-white hover:border-ink' : ''}`}
                     >
-                      <Sparkles size={17} aria-hidden="true" className={`mt-0.5 shrink-0 ${i === 0 ? 'text-[#7cc4ee]' : 'text-accent'}`} />
+                      <Sparkles size={17} aria-hidden="true" className={`mt-0.5 shrink-0 ${i === 0 ? 'text-[#a99bf0]' : 'text-ia'}`} />
                       <span className={`text-[15px] leading-snug ${i === 0 ? 'font-semibold' : 'text-ink'}`}>{p}</span>
                     </button>
                   ))}

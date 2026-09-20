@@ -22,7 +22,7 @@ const textosCalificacion = [
 /** Marca de los campos que completó la IA: el APM igual revisa antes de guardar */
 function MarcaIA() {
   return (
-    <span className="chip ml-2 border-transparent bg-accent-soft align-middle text-accent">
+    <span className="chip ml-2 border-transparent bg-ia-soft align-middle text-ia">
       <Sparkles size={12} aria-hidden="true" />
       Completado por IA
     </span>

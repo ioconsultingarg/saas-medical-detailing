@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { AlertTriangle, CalendarCheck, ChevronRight, Package, Search, Users } from 'lucide-react'
 import { Avatar, BadgeCategoria, ChipPrioridad, Sparkline, textoDias, Variacion } from '../components/crm'
-import { EncabezadoPantalla, MonogramaProducto, Segmentado } from '../components/ui'
+import { EncabezadoPantalla, Kpi, MonogramaProducto, NumeroAnimado, Segmentado } from '../components/ui'
 import { visitasDelDia } from '../data/agenda'
 import { APM_ACTUAL, diasSinVisita, medicos, muestras90, objetivo90, prioridad, umbralDias, variacion, visitas90, type Categoria } from '../data/crm'
 import { miles } from '../lib/formato'
@@ -65,22 +65,30 @@ export function Medicos() {
         descripcion="Tu cartera con historial de visitas, tendencia de prescripción y trazabilidad de muestras. Ordenada según a quién conviene ver primero."
       />
 
-      <dl className="mb-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
-        {[
-          { Icono: Users, t: 'Médicos en cartera', v: String(kpis.total), d: `${cartera.filter((c) => c.m.categoria === 'A').length} de categoría A` },
-          { Icono: CalendarCheck, t: 'Cobertura últimos 30 días', v: `${Math.round(kpis.cobertura * 100)} %`, d: 'Médicos visitados al menos una vez' },
-          { Icono: AlertTriangle, t: 'Categoría A atrasados', v: String(kpis.atrasadasA), d: 'Más de 30 días sin visita', alerta: kpis.atrasadasA > 0 },
-          { Icono: Package, t: 'Muestras en 90 días', v: miles(kpis.muestras), d: 'Unidades con firma de recepción' },
-        ].map(({ Icono, t, v, d, alerta }) => (
-          <div key={t} className="card p-4">
-            <dt className="flex items-center gap-2 text-[13px] text-ink-3">
-              <Icono size={15} aria-hidden="true" className={alerta ? 'text-bad' : ''} />
-              {t}
-            </dt>
-            <dd className="num mt-1.5 text-[28px] leading-none font-medium text-ink">{v}</dd>
-            <dd className="mt-1.5 text-[12px] text-ink-3">{d}</dd>
-          </div>
-        ))}
+      <dl className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <Kpi
+          orden={0}
+          etiqueta="Médicos en cartera"
+          Icono={Users}
+          valor={<NumeroAnimado valor={kpis.total} />}
+          detalle={`${cartera.filter((c) => c.m.categoria === 'A').length} de categoría A`}
+        />
+        <Kpi
+          orden={1}
+          etiqueta="Cobertura 30 días"
+          Icono={CalendarCheck}
+          valor={<NumeroAnimado valor={Math.round(kpis.cobertura * 100)} />}
+          unidad="%"
+          detalle="Médicos visitados al menos una vez"
+        />
+        <Kpi
+          orden={2}
+          etiqueta="Categoría A atrasados"
+          Icono={AlertTriangle}
+          valor={<NumeroAnimado valor={kpis.atrasadasA} />}
+          detalle="Más de 30 días sin visita"
+        />
+        <Kpi orden={3} etiqueta="Muestras en 90 días" Icono={Package} valor={miles(kpis.muestras)} unidad="u." detalle="Unidades con firma de recepción" />
       </dl>
 
       <div className="mb-4 flex flex-wrap items-center gap-3">
@@ -134,8 +142,8 @@ export function Medicos() {
           <p className="px-5 py-12 text-center text-[14px] text-ink-3">No hay médicos que coincidan con la búsqueda.</p>
         ) : (
           <ul className="divide-y divide-line">
-            {visibles.map(({ m, dias, prio, v, visitas, muestras, agenda, serie }) => (
-              <li key={m.id}>
+            {visibles.map(({ m, dias, prio, v, visitas, muestras, agenda, serie }, i) => (
+              <li key={m.id} className="entra-fila" style={{ ['--orden' as string]: Math.min(i, 10) }}>
                 <a
                   href={`#/medicos/${m.id}`}
                   className="press grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 px-4 py-3.5 hover:bg-sunken/60 sm:px-5 lg:grid-cols-[minmax(0,2.2fr)_minmax(0,1fr)_minmax(0,0.9fr)_minmax(0,1.2fr)_minmax(0,0.7fr)_24px]"
