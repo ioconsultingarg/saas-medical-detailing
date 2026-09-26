@@ -1,5 +1,6 @@
 import { useId, useRef, useState, type FormEvent } from 'react'
 import { ArrowRight, CalendarRange, CloudOff, Eye, EyeOff, KeyRound, Lock, MapPin, ShieldCheck } from 'lucide-react'
+import { AvisoInstalar } from '../components/Instalar'
 import { MonogramaProducto, Segmentado } from '../components/ui'
 import { apm, visitasDelDia } from '../data/agenda'
 import { productos } from '../data/productos'
@@ -11,8 +12,10 @@ function Logo({ size = 40 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden="true">
       <rect width="32" height="32" rx="9" fill="#0b1220" />
-      <path d="M10 22V10h6.5a4 4 0 0 1 0 8H10" stroke="#fff" strokeWidth="2.6" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx="22.5" cy="22.5" r="2.6" fill="#7cc4ee" />
+      <text x="14.2" y="21.6" textAnchor="middle" fontFamily="var(--font-sans)" fontSize="13.5" fontWeight="700" fill="#fff" letterSpacing="-0.4">
+        IO
+      </text>
+      <circle cx="24.5" cy="20.4" r="2.5" fill="#7cc4ee" />
     </svg>
   )
 }
@@ -139,7 +142,11 @@ export function Login() {
             {apm.laboratorio} · {apm.zona}
           </p>
 
-          <form className="mt-8 flex flex-col gap-5" onSubmit={onSubmit} noValidate>
+          <div className="mt-8">
+            <AvisoInstalar />
+          </div>
+
+          <form className="flex flex-col gap-5" onSubmit={onSubmit} noValidate>
             <div>
               <label htmlFor={idEmail} className="mb-1.5 block text-[14px] font-medium text-ink">
                 Correo corporativo

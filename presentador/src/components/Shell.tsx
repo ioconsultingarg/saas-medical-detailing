@@ -49,12 +49,14 @@ const gestionLab: ItemNav[] = [
   { href: '#/integraciones', etiqueta: 'API', detalle: 'SAP, Salesforce y webhooks', Icono: Plug, activa: (r) => r.nombre === 'integraciones' },
 ]
 
-function Logo() {
+function Logo({ size = 30 }: { size?: number }) {
   return (
-    <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true">
-      <rect width="32" height="32" rx="9" fill="#0b1220" />
-      <path d="M10 22V10h6.5a4 4 0 0 1 0 8H10" stroke="#fff" strokeWidth="2.6" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx="22.5" cy="22.5" r="2.6" fill="#7cc4ee" />
+    <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden="true">
+      <rect width="32" height="32" rx="7" fill="#0b1220" />
+      <text x="14.2" y="21.6" textAnchor="middle" fontFamily="var(--font-sans)" fontSize="13.5" fontWeight="700" fill="#fff" letterSpacing="-0.4">
+        IO
+      </text>
+      <circle cx="24.5" cy="20.4" r="2.5" fill="#7cc4ee" />
     </svg>
   )
 }

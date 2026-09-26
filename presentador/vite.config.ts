@@ -11,7 +11,12 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
+      includeAssets: ['icon.svg', 'icon-192.png', 'icon-512.png', 'icon-maskable-512.png', 'apple-touch-icon.png'],
       manifest: {
+        id: '/saas-medical-detailing/',
+        lang: 'es-AR',
+        dir: 'ltr',
+        categories: ['business', 'medical', 'productivity'],
         name: 'IO-Pharma · e-detailing y CRM para laboratorios',
         short_name: 'IO-Pharma',
         description: 'Ruta del día, presentaciones interactivas, stock, academia y cierre de visita para visitadores médicos',
@@ -22,12 +27,19 @@ export default defineConfig({
         start_url: '/saas-medical-detailing/',
         scope: '/saas-medical-detailing/',
         icons: [
-          {
-            src: '/saas-medical-detailing/icon.svg',
-            sizes: 'any',
-            type: 'image/svg+xml',
-            purpose: 'any maskable',
-          },
+          { src: '/saas-medical-detailing/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: '/saas-medical-detailing/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+          { src: '/saas-medical-detailing/icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+          { src: '/saas-medical-detailing/icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
+        ],
+        // el navegador las muestra en el diálogo de instalación
+        screenshots: [
+          { src: '/saas-medical-detailing/captura-escritorio.png', sizes: '1280x800', type: 'image/png', form_factor: 'wide', label: 'La ruta del día en escritorio' },
+          { src: '/saas-medical-detailing/captura-movil.png', sizes: '750x1624', type: 'image/png', form_factor: 'narrow', label: 'La ruta del día en el celular' },
+        ],
+        shortcuts: [
+          { name: 'Agenda de hoy', url: '/saas-medical-detailing/#/', description: 'Ruta y visitas del día' },
+          { name: 'Biblioteca', url: '/saas-medical-detailing/#/biblioteca', description: 'Presentaciones aprobadas' },
         ],
       },
       workbox: {

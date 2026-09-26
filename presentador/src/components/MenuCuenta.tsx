@@ -3,6 +3,7 @@ import { hace } from '../lib/formato'
 import { ir } from '../lib/ruta'
 import { nombreCorto, useDemo } from '../state/demo'
 import { useSesion } from '../state/sesion'
+import { BotonInstalar } from './Instalar'
 import { Sheet } from './Sheet'
 
 export function iniciales(nombre: string) {
@@ -93,7 +94,10 @@ export function MenuCuenta({ abierto, onCerrar }: { abierto: boolean; onCerrar: 
               </span>
             </p>
           )}
-          <button type="button" className="btn-secondary mt-6 w-full text-bad hover:border-bad/40 hover:bg-bad-soft" onClick={cerrarSesion}>
+          <div className="mt-6">
+            <BotonInstalar className="btn-secondary w-full" />
+          </div>
+          <button type="button" className="btn-secondary mt-3 w-full text-bad hover:border-bad/40 hover:bg-bad-soft" onClick={cerrarSesion}>
             <LogOut size={17} aria-hidden="true" />
             Cerrar sesión
           </button>
