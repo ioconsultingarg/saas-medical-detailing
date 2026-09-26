@@ -1,6 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useState, type ReactNode } from 'react'
 import { apm, registrosIniciales, visitasDelDia } from '../data/agenda'
 import { diapositivaPorId } from '../data/presentaciones'
+import { cuentas, type Movimiento } from '../data/cuentas'
+import { licitaciones, type EstadoLicitacion } from '../data/licitaciones'
 import { cupoInicial, eventosAdversos, piezas, type EstadoEvento, type EstadoPieza } from '../data/portal'
 import { stockInicial } from '../data/stock'
 import { minutos } from '../lib/formato'
@@ -35,6 +37,12 @@ export interface EstadoDemo {
   cupos: Record<string, number>
   /** seguimiento de los posibles eventos adversos */
   eventos: Record<string, EstadoEvento>
+  /** etapa de cada licitación en el pipeline */
+  licitaciones: Record<string, EstadoLicitacion>
+  /** requisitos de licitación ya resueltos */
+  requisitos: Record<string, boolean>
+  /** contactos registrados sobre una cuenta durante la sesión */
+  interacciones: Record<string, Movimiento[]>
 }
 
 type Accion =
@@ -47,6 +55,9 @@ type Accion =
   | { tipo: 'pieza'; id: string; estado: EstadoPieza }
   | { tipo: 'cupo'; productoId: string; valor: number }
   | { tipo: 'evento'; id: string; estado: EstadoEvento }
+  | { tipo: 'licitacion'; id: string; estado: EstadoLicitacion }
+  | { tipo: 'requisito'; id: string; listo: boolean }
+  | { tipo: 'interaccion'; cuentaId: string; movimiento: Movimiento }
   | { tipo: 'carrito'; sku: string; delta: number }
   | { tipo: 'vaciarCarrito' }
   | { tipo: 'pedido' }
@@ -81,6 +92,9 @@ function estadoInicial(): EstadoDemo {
     piezas: Object.fromEntries(piezas.map((p) => [p.id, p.estadoInicial])),
     cupos: { ...cupoInicial },
     eventos: Object.fromEntries(eventosAdversos.map((e) => [e.id, e.estadoInicial])),
+    licitaciones: Object.fromEntries(licitaciones.map((l) => [l.id, l.estadoInicial])),
+    requisitos: Object.fromEntries(licitaciones.flatMap((l) => l.requisitos.map((r) => [r.id, r.listoInicial]))),
+    interacciones: {},
   }
 }
 
@@ -99,6 +113,9 @@ function cargar(): EstadoDemo {
           piezas: { ...base.piezas, ...guardado.piezas },
           cupos: { ...base.cupos, ...guardado.cupos },
           eventos: { ...base.eventos, ...guardado.eventos },
+          licitaciones: { ...base.licitaciones, ...guardado.licitaciones },
+          requisitos: { ...base.requisitos, ...guardado.requisitos },
+          interacciones: { ...base.interacciones, ...guardado.interacciones },
           stock: guardado.stock.map((s) => {
             const actual = stockInicial.find((x) => x.sku === s.sku)
             return actual ? { ...actual, unidades: s.unidades } : s
@@ -280,6 +297,24 @@ function reducir(estado: EstadoDemo, accion: Accion): EstadoDemo {
       return { ...estado, cupos: { ...estado.cupos, [accion.productoId]: accion.valor } }
     case 'evento':
       return { ...estado, eventos: { ...estado.eventos, [accion.id]: accion.estado } }
+    case 'licitacion': {
+      const l = licitaciones.find((x) => x.id === accion.id)
+      return {
+        ...estado,
+        licitaciones: { ...estado.licitaciones, [accion.id]: accion.estado },
+        outbox: [entradaOutbox('licitacion', `${l?.organismo ?? 'Licitación'} · ${accion.estado}`), ...estado.outbox],
+      }
+    }
+    case 'requisito':
+      return { ...estado, requisitos: { ...estado.requisitos, [accion.id]: accion.listo } }
+    case 'interaccion': {
+      const cuenta = cuentas.find((c) => c.id === accion.cuentaId)
+      return {
+        ...estado,
+        interacciones: { ...estado.interacciones, [accion.cuentaId]: [accion.movimiento, ...(estado.interacciones[accion.cuentaId] ?? [])] },
+        outbox: [entradaOutbox('cuenta', `${accion.movimiento.titulo} · ${cuenta?.nombre ?? 'cuenta'}`), ...estado.outbox],
+      }
+    }
     case 'plan':
       return {
         ...estado,

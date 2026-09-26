@@ -52,7 +52,7 @@ const numeros: Record<string, number> = {
 const numeroRe = `(\\d+|${Object.keys(numeros).join('|')})`
 
 const aliasProducto: [ProductoId, RegExp][] = [
-  ['cardio', /demo[\s-]?molecula|estatina|colesterol|\bldl\b/g],
+  ['cardio', /lipvera|estatina|colesterol|\bldl\b/g],
   ['respira', /respirel|inhalador|broncodilatador|\bepoc\b|\basma\b|tecnica inhalatoria/g],
 ]
 

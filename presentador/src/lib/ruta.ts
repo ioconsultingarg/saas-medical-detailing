@@ -20,6 +20,9 @@ export type Ruta =
   | { nombre: 'labCatalogo' }
   | { nombre: 'labEquipo' }
   | { nombre: 'labFarmaco' }
+  | { nombre: 'labCuentas' }
+  | { nombre: 'labCuenta'; cuentaId: string }
+  | { nombre: 'labLicitaciones' }
 
 export function leerRuta(hash = window.location.hash): Ruta {
   const [camino, consulta = ''] = hash.replace(/^#\/?/, '').split('?')
@@ -49,6 +52,8 @@ export function leerRuta(hash = window.location.hash): Ruta {
       if (partes[1] === 'catalogo') return { nombre: 'labCatalogo' }
       if (partes[1] === 'equipo') return { nombre: 'labEquipo' }
       if (partes[1] === 'farmacovigilancia') return { nombre: 'labFarmaco' }
+      if (partes[1] === 'cuentas') return partes[2] ? { nombre: 'labCuenta', cuentaId: decodeURIComponent(partes[2]) } : { nombre: 'labCuentas' }
+      if (partes[1] === 'licitaciones') return { nombre: 'labLicitaciones' }
       return { nombre: 'lab' }
     case 'asistente':
       return { nombre: 'asistente' }

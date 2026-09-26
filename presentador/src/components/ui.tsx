@@ -150,7 +150,12 @@ export function NumeroAnimado({ valor, decimales = 0, duracion = 900 }: { valor:
       if (p < 1) raf.current = requestAnimationFrame(paso)
     }
     raf.current = requestAnimationFrame(paso)
-    return () => cancelAnimationFrame(raf.current)
+    // en una pestaña en segundo plano no corre el cuadro a cuadro: se muestra el valor final igual
+    const red = window.setTimeout(() => setActual(valor), duracion + 500)
+    return () => {
+      cancelAnimationFrame(raf.current)
+      window.clearTimeout(red)
+    }
   }, [valor, duracion, reducido])
 
   return <>{actual.toFixed(decimales).replace('.', ',')}</>

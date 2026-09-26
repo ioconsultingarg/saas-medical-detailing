@@ -18,6 +18,8 @@ export const operacionOutbox: Record<TipoOutbox, { metodo: 'POST' | 'PATCH'; rut
   farmacovigilancia: { metodo: 'POST', ruta: '/v1/adverse-events', evento: 'adverse_event.reported' },
   plan: { metodo: 'POST', ruta: '/v1/visit-plans', evento: 'visit_plan.created' },
   pieza: { metodo: 'PATCH', ruta: '/v1/content/{id}', evento: 'content.published' },
+  licitacion: { metodo: 'PATCH', ruta: '/v1/tenders/{id}', evento: 'tender.updated' },
+  cuenta: { metodo: 'POST', ruta: '/v1/accounts/{id}/interactions', evento: 'account.interaction' },
 }
 
 export interface Endpoint {

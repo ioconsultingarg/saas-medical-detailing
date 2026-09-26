@@ -11,6 +11,9 @@ import { Biblioteca } from './screens/Biblioteca'
 import { Catalogo } from './screens/lab/Catalogo'
 import { Equipo } from './screens/lab/Equipo'
 import { Farmacovigilancia } from './screens/lab/Farmacovigilancia'
+import { Cuenta } from './screens/lab/Cuenta'
+import { Cuentas } from './screens/lab/Cuentas'
+import { Licitaciones } from './screens/lab/Licitaciones'
 import { Material } from './screens/lab/Material'
 import { Compartir } from './screens/Compartir'
 import { Constructor } from './screens/Constructor'
@@ -27,9 +30,9 @@ import { SesionProvider, useSesion } from './state/sesion'
 function Rutas() {
   const ruta = useRuta()
   const { sesion } = useSesion()
-  const pantalla = ruta.nombre === 'curso' ? `curso:${ruta.cursoId}:${ruta.leccionId ?? ''}` : ruta.nombre === 'medico' ? `medico:${ruta.medicoId}` : ruta.nombre
+  const pantalla = ruta.nombre === 'curso' ? `curso:${ruta.cursoId}:${ruta.leccionId ?? ''}` : ruta.nombre === 'medico' ? `medico:${ruta.medicoId}` : ruta.nombre === 'labCuenta' ? `cuenta:${ruta.cuentaId}` : ruta.nombre
 
-  const rutasLab = ['lab', 'labCatalogo', 'labEquipo', 'labFarmaco']
+  const rutasLab = ['lab', 'labCatalogo', 'labEquipo', 'labFarmaco', 'labCuentas', 'labCuenta', 'labLicitaciones']
   const compartidas = ['asistente', 'integraciones', 'actividad']
   const esLab = sesion?.rol === 'lab'
   const enSeccionAjena = esLab
@@ -69,6 +72,9 @@ function Rutas() {
       {ruta.nombre === 'labCatalogo' && <Catalogo />}
       {ruta.nombre === 'labEquipo' && <Equipo />}
       {ruta.nombre === 'labFarmaco' && <Farmacovigilancia />}
+      {ruta.nombre === 'labCuentas' && <Cuentas />}
+      {ruta.nombre === 'labCuenta' && <Cuenta key={ruta.cuentaId} cuentaId={ruta.cuentaId} />}
+      {ruta.nombre === 'labLicitaciones' && <Licitaciones />}
     </Shell>
   )
 }

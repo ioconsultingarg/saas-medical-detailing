@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react'
-import { Boxes, CalendarRange, ChevronRight, CircleHelp, CloudOff, Ellipsis, FileCheck, GraduationCap, Library, Plug, RefreshCw, ShieldAlert, Sparkles, Stethoscope, UserCog, Users } from 'lucide-react'
+import { Boxes, Building2, CalendarRange, ChevronRight, CircleHelp, CloudOff, Ellipsis, FileCheck, Gavel, GraduationCap, Library, Plug, RefreshCw, ShieldAlert, Sparkles, Stethoscope, UserCog, Users } from 'lucide-react'
 import { cronometro } from '../lib/formato'
 import type { Ruta } from '../lib/ruta'
 import { useAhora } from '../lib/tiempo'
@@ -36,6 +36,8 @@ const gestion: ItemNav[] = [
 const portal: ItemNav[] = [
   { href: '#/lab', etiqueta: 'Material', detalle: 'Piezas, versiones y aprobaciones', Icono: FileCheck, activa: (r) => r.nombre === 'lab' },
   { href: '#/lab/catalogo', etiqueta: 'Catálogo', detalle: 'Productos, lotes y cupos de muestras', Icono: Boxes, activa: (r) => r.nombre === 'labCatalogo' },
+  { href: '#/lab/cuentas', etiqueta: 'Cuentas', detalle: 'Droguerías, cadenas e instituciones', Icono: Building2, activa: (r) => r.nombre === 'labCuentas' || r.nombre === 'labCuenta' },
+  { href: '#/lab/licitaciones', etiqueta: 'Licitaciones', detalle: 'Procesos institucionales y sus fechas', Icono: Gavel, activa: (r) => r.nombre === 'labLicitaciones' },
   { href: '#/lab/equipo', etiqueta: 'Equipo', detalle: 'Visitadores, territorios y capacitación', Icono: UserCog, activa: (r) => r.nombre === 'labEquipo' },
   { href: '#/lab/farmacovigilancia', etiqueta: 'Seguridad', detalle: 'Bandeja de eventos adversos', Icono: ShieldAlert, activa: (r) => r.nombre === 'labFarmaco' },
 ]
@@ -140,7 +142,7 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
   const principales = esLab ? portal : campo
   const secundarios = esLab ? gestionLab : gestion
   const barraInferior = principales.slice(0, 4)
-  const enMas = esLab ? secundarios : [campo[4], ...gestion]
+  const enMas = esLab ? [...portal.slice(4), ...secundarios] : [campo[4], ...gestion]
   const masActivo = enMas.some((i) => i.activa(ruta))
   const avisoCursos = cursosPendientes > 0 ? <span className="sr-only">, {cursosPendientes} cursos pendientes</span> : null
 
