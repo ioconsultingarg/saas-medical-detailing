@@ -1,0 +1,9 @@
+# licencia no verificada: se usa localmente, no se publica
+.agents/skills/frontend-design/
+__pycache__/
+# 33 MB con audio y assets: se usa localmente, no se publica
+.claude/skills/huashu-design/
+
+# capturas regenerables del manual
+manual/capturas/
+manual/__pycache__/
