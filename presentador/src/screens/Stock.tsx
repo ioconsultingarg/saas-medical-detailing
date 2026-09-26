@@ -104,8 +104,8 @@ export function Stock() {
     <>
       <EncabezadoPantalla
         eyebrow="Inventario"
-        titulo="Stock en tiempo real"
-        descripcion="Consultá disponibilidad durante la visita y pedí muestras o material para el consultorio sin salir de la presentación."
+        titulo="Disponibilidad de material"
+        descripcion="Consultá la disponibilidad de muestras médicas y material científico durante la visita. Las presentaciones de farmacia se dispensan por droguería: no se venden desde la app."
         acciones={
           <span className={`chip min-h-9 px-3 text-[13px] ${online ? '' : 'border-warn/30 bg-warn-soft text-warn'}`}>
             {online ? <RefreshCw size={14} aria-hidden="true" /> : <CloudOff size={14} aria-hidden="true" />}

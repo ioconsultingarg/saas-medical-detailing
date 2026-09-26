@@ -220,7 +220,7 @@ function reducir(estado: EstadoDemo, accion: Accion): EstadoDemo {
             ...previo,
             estado: 'completada',
             checkOut,
-            calificacion: accion.calificacion,
+            calificacion: accion.calificacion || undefined,
             etiquetas: accion.etiquetas,
             nota: accion.nota,
             firma: accion.firma ?? undefined,
@@ -260,7 +260,7 @@ function reducir(estado: EstadoDemo, accion: Accion): EstadoDemo {
         registros: r.registros,
         entregas: r.entregas,
         carrito: [],
-        outbox: [entradaOutbox('pedido', `Pedido de ${r.unidades} u. en ${estado.carrito.length} ítems${destino}`), ...estado.outbox],
+        outbox: [entradaOutbox('pedido', `Solicitud de ${r.unidades} u. de material en ${estado.carrito.length} ítems${destino}`), ...estado.outbox],
       }
     }
     case 'entregar': {

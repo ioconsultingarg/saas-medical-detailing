@@ -360,7 +360,7 @@ export function Asistente() {
       <EncabezadoPantalla
         eyebrow="Gerencia · IA generativa"
         titulo="Asistente estratégico"
-        descripcion="Preguntale a los datos de la fuerza de ventas en tus palabras, en lugar de armar un tablero para cada duda."
+        descripcion="Preguntale a los datos de promoción en tus palabras, en lugar de armar un tablero para cada duda. Trabaja sobre datos agregados del equipo, no sobre el seguimiento de personas."
       />
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">

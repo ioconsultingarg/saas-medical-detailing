@@ -267,7 +267,7 @@ export function Academia() {
 
           <p className="flex items-start gap-2 px-1 text-[12px] leading-relaxed text-ink-3">
             <ShieldCheck size={15} aria-hidden="true" className="mt-0.5 shrink-0" />
-            Los puntos premian la formación. No se vinculan con ventas, prescripciones ni incentivos económicos.
+            Los puntos premian la formación. La participación es voluntaria y no se usa para evaluar desempeño: no se vinculan con prescripciones ni con incentivos económicos.
           </p>
         </aside>
       </div>

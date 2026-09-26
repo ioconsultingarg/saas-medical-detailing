@@ -202,6 +202,21 @@ export const articulos: Articulo[] = [
   },
 
   {
+    id: 'privacidad',
+    titulo: 'Qué registra la app sobre tu trabajo',
+    resumen: 'La ubicación se toma solo al hacer el check-in y el check-out. No hay seguimiento de tu recorrido ni control de los tiempos entre visitas.',
+    pantallas: ['actividad', 'hoy', 'registro'],
+    claves: ['privacidad', 'gps', 'ubicacion', 'seguimiento', 'control', 'datos', 'rastreo', 'vigilancia', 'horario', 'desconexion'],
+    pasos: [
+      'La ubicación se registra únicamente en el instante del check-in y del check-out, para dejar constancia de la visita.',
+      'No se traza tu recorrido, ni se guarda dónde estuviste entre una visita y otra.',
+      'La receptividad, las etiquetas y la nota son opcionales: son tu ayuda memoria.',
+      'Lo único obligatorio es la firma del profesional cuando entregás muestras, porque lo exige la normativa.',
+      'Fuera de tu horario de trabajo, los avisos quedan en espera y aparecen al comenzar el día siguiente.',
+    ],
+    enlace: { texto: 'Ver qué hay guardado en esta tablet', href: '#/actividad' },
+  },
+  {
     id: 'portal-publicar',
     titulo: 'Publicar material para las tablets',
     resumen: 'Ninguna pieza llega al campo sin pasar por Asuntos Médicos. Al publicarla, las tablets la descargan en la próxima sincronización.',
@@ -237,6 +252,7 @@ export const articulos: Articulo[] = [
 
 export const preguntasFrecuentes = [
   '¿Cómo cierro una visita?',
+  '¿La app registra dónde estoy?',
   '¿Cómo funciona el reporte por voz?',
   '¿Qué pasa si me quedo sin señal?',
   '¿Cómo pido muestras y quién firma?',

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AudioLines, Building2, CalendarPlus, CheckCircle2, CloudOff, Database, FileCheck, FileText, Gavel, LogIn, LogOut, Package, PenLine, RefreshCw, RotateCcw, Send, ShieldAlert, Wifi } from 'lucide-react'
+import { AudioLines, Building2, CalendarPlus, CheckCircle2, CloudOff, Database, FileCheck, FileText, Gavel, ShieldCheck, LogIn, LogOut, Package, PenLine, RefreshCw, RotateCcw, Send, ShieldAlert, Wifi } from 'lucide-react'
 import { operacionOutbox } from '../lib/api'
 import { EncabezadoPantalla } from '../components/ui'
 import { presentacionesOficiales } from '../data/presentaciones'
@@ -147,6 +147,31 @@ export function Actividad() {
             </dl>
             <p className="mt-3 text-[12px] leading-relaxed text-ink-3">
               Cada movimiento se guarda primero en la base local y se envía en segundo plano con una clave de idempotencia: si la señal se corta a mitad de camino, nunca se duplica.
+            </p>
+          </section>
+
+          <section aria-labelledby="titulo-privacidad" className="card p-5">
+            <h2 id="titulo-privacidad" className="flex items-center gap-2 text-[16px] font-semibold text-ink">
+              <ShieldCheck size={17} aria-hidden="true" className="text-ink-3" />
+              Qué registra la app y qué no
+            </h2>
+            <ul className="mt-3 flex flex-col gap-2 text-[13px] leading-relaxed">
+              {[
+                ['si', 'La ubicación, solo en el instante del check-in y del check-out.'],
+                ['si', 'Lo que vos registrás de cada visita.'],
+                ['no', 'No hay seguimiento de tu recorrido ni ubicación en segundo plano.'],
+                ['no', 'No se miden los tiempos entre una visita y otra.'],
+                ['no', 'No se pide justificar demoras ni desvíos del plan.'],
+                ['no', 'Fuera de tu horario, los avisos quedan en espera hasta el día siguiente.'],
+              ].map(([tipo, texto]) => (
+                <li key={texto} className="flex gap-2.5">
+                  <span aria-hidden="true" className={`mt-1.5 size-2 shrink-0 rounded-full ${tipo === 'si' ? 'bg-ok' : 'bg-line-2'}`} />
+                  <span className={tipo === 'si' ? 'text-ink-2' : 'text-ink-3'}>{texto}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-3 text-[12px] leading-relaxed text-ink-3">
+              El feedback de la visita es opcional y es tu ayuda memoria. Lo único obligatorio es la firma cuando entregás muestras, porque lo exige la normativa.
             </p>
           </section>
 

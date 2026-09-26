@@ -141,7 +141,12 @@ export function Equipo() {
         </ul>
       </section>
 
-      <p className="mt-4 text-[12px] leading-relaxed text-ink-3">
+      <p className="mt-4 rounded-xl bg-sunken p-4 text-[12px] leading-relaxed text-ink-2">
+        <strong className="font-semibold text-ink">Se mide el cumplimiento del plan, no a las personas.</strong> La plataforma no registra recorridos, ni ubicación en
+        segundo plano, ni tiempos entre visitas. La ubicación se toma únicamente en el check-in, y el feedback de cada visita lo carga el promotor de forma
+        voluntaria. Es lo que exige el marco laboral argentino y lo que hace que el equipo use la herramienta.
+      </p>
+      <p className="mt-3 text-[12px] leading-relaxed text-ink-3">
         En producción los usuarios se crean desde el directorio corporativo del laboratorio: el alta y la baja son automáticas, y al dar de baja a alguien la tablet
         deja de sincronizar en el acto.
       </p>

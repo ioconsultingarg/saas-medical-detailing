@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Minus, PackageCheck, Plus, Search, ShoppingBag, Truck } from 'lucide-react'
+import { ClipboardList, Minus, PackageCheck, Plus, Search, Truck } from 'lucide-react'
 import { productos } from '../data/productos'
 import { esSolicitable, nivelDe } from '../data/stock'
 import { miles } from '../lib/formato'
@@ -10,7 +10,7 @@ import { ChipProducto, MonogramaProducto, Segmentado, Semaforo } from './ui'
 type Filtro = 'todos' | ProductoId | 'material'
 
 const etiquetaTipo: Record<TipoItemStock, string> = {
-  comercial: 'Presentación comercial',
+  comercial: 'Presentación de farmacia',
   muestra: 'Muestra médica',
   material: 'Material promocional',
 }
@@ -47,8 +47,8 @@ export function StockPanel({ productosEnFoco }: Props) {
     despachar({ tipo: 'pedido' })
     avisar(
       online
-        ? `Pedido de ${unidadesCarrito} u. enviado${visitaActiva ? ` para ${nombreCorto(visitaActiva)}` : ''}`
-        : `Pedido guardado sin conexión · se envía al recuperar señal`,
+        ? `Solicitud de ${unidadesCarrito} u. registrada${visitaActiva ? ` para ${nombreCorto(visitaActiva)}` : ''}`
+        : `Solicitud guardada sin conexión · se envía al recuperar señal`,
       online ? 'ok' : 'warn',
     )
   }
@@ -138,7 +138,7 @@ export function StockPanel({ productosEnFoco }: Props) {
                   </div>
                 ) : (
                   <span className="w-[132px] text-right text-[12px] leading-snug text-ink-3">
-                    {s.tipo === 'comercial' ? 'Se pide por droguería' : 'Sin unidades para entregar'}
+                    {s.tipo === 'comercial' ? 'Se dispensa en farmacia' : 'Sin unidades para entregar'}
                   </span>
                 )}
               </div>
@@ -157,11 +157,11 @@ export function StockPanel({ productosEnFoco }: Props) {
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <span className="flex size-11 items-center justify-center rounded-full bg-white/10">
-                <ShoppingBag size={19} aria-hidden="true" />
+                <ClipboardList size={19} aria-hidden="true" />
               </span>
               <div>
                 <div className="text-[15px] font-semibold">
-                  {unidadesCarrito} u. · {estado.carrito.length} {estado.carrito.length === 1 ? 'ítem' : 'ítems'}
+                  Solicitud de material médico · <span className="num">{unidadesCarrito}</span> u.
                 </div>
                 <div className="text-[12px] text-white/65">
                   Muestras <span className="num">{muestrasEnCarrito}/{CUPO_MUESTRAS}</span>
@@ -171,7 +171,7 @@ export function StockPanel({ productosEnFoco }: Props) {
             </div>
             <div className="flex gap-2">
               <button type="button" className="btn text-white/80 hover:bg-white/10" onClick={() => despachar({ tipo: 'vaciarCarrito' })}>
-                Vaciar
+                Vaciar la solicitud
               </button>
               <button type="button" className="btn bg-white text-ink hover:bg-white/90" onClick={solicitar}>
                 <Truck size={17} aria-hidden="true" />

@@ -180,9 +180,9 @@ export function Registro() {
   const masVista = tiempos[0] ? diapositivaPorId[tiempos[0][0]] : null
 
   function guardar() {
-    const nuevos = { calificacion: calificacion === 0, firma: muestras > 0 && !firma && !enPapel }
+    // el feedback es opcional: lo unico que se exige es la firma cuando hubo muestras
+    const nuevos = { firma: muestras > 0 && !firma && !enPapel }
     setErrores(nuevos)
-    if (nuevos.calificacion) return refEstrellas.current?.querySelector('button')?.focus()
     if (nuevos.firma) return refFirma.current?.scrollIntoView({ block: 'center', behavior: 'smooth' })
     const nombre = nombreCorto(visitaActiva!)
     despachar({ tipo: 'cerrar', calificacion, etiquetas: marcadas, nota: nota.trim(), firma: firma ?? (enPapel ? 'papel' : null), origen: porVoz ? 'voz' : 'manual' })
@@ -233,6 +233,7 @@ export function Registro() {
           <section aria-labelledby="titulo-receptividad" className="card p-5">
             <h2 id="titulo-receptividad" className="text-[16px] font-semibold text-ink">
               Receptividad del médico
+              <span className="ml-2 align-middle text-[12px] font-normal text-ink-3">Opcional</span>
               {porVoz && <MarcaIA />}
             </h2>
             <div ref={refEstrellas} role="group" aria-labelledby="titulo-receptividad" aria-describedby="texto-calificacion" className="mt-4 flex gap-2">
@@ -253,7 +254,7 @@ export function Registro() {
               ))}
             </div>
             <p id="texto-calificacion" aria-live="polite" className={`mt-3 min-h-5 text-[14px] ${errores.calificacion ? 'text-bad' : 'text-ink-2'}`}>
-              {errores.calificacion ? 'Elegí una calificación para cerrar la visita.' : textosCalificacion[calificacion] || 'Tocá una estrella.'}
+              {textosCalificacion[calificacion] || 'Tocá una estrella si querés registrarlo. No hace falta para cerrar la visita.'}
             </p>
 
             <div className="mt-5 flex flex-wrap gap-2" role="group" aria-label="Etiquetas de la visita">
@@ -278,6 +279,7 @@ export function Registro() {
           <section className="card p-5">
             <label htmlFor={idNota} className="text-[16px] font-semibold text-ink">
               Nota para la próxima visita
+              <span className="ml-2 text-[12px] font-normal text-ink-3">Opcional · es tu ayuda memoria</span>
             </label>
             {porVoz && <MarcaIA />}
             <textarea
