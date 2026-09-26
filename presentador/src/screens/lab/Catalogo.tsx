@@ -43,7 +43,7 @@ export function Catalogo() {
           const cupo = estado.cupos[p.id] ?? 0
           return (
             <section key={p.id} aria-label={p.marca} className="card-elevada overflow-hidden">
-              <header className="flex flex-wrap items-center justify-between gap-3 border-b border-line p-5" style={{ background: p.tinte }}>
+              <header className="flex flex-wrap items-center justify-between gap-3 border-b border-line p-5 oscuro:bg-sunken" style={{ background: p.tinte }}>
                 <div>
                   <h2 className="text-[20px] leading-tight font-semibold text-ink">{p.marca}</h2>
                   <p className="text-[13px] text-ink-2">

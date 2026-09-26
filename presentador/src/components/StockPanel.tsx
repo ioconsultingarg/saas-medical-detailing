@@ -57,16 +57,16 @@ export function StockPanel({ productosEnFoco }: Props) {
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-3">
         <label className="relative block">
-          <span className="sr-only">Buscar en el stock</span>
+          <span className="sr-only">Buscar material</span>
           <Search size={17} aria-hidden="true" className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-ink-3" />
           <input
             type="search"
-            name="buscar-stock"
+            name="buscar-material"
             autoComplete="off"
             spellCheck={false}
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
-            placeholder="Buscar producto o SKU…"
+            placeholder="Buscar material o código…"
             className="field pl-10"
           />
         </label>
@@ -153,7 +153,7 @@ export function StockPanel({ productosEnFoco }: Props) {
       </p>
 
       {estado.carrito.length > 0 && (
-        <div className="sticky bottom-0 -mx-1 rounded-2xl bg-ink p-4 text-white shadow-(--shadow-float)">
+        <div className="sticky bottom-0 -mx-1 rounded-2xl bg-contraste p-4 text-white shadow-(--shadow-float)">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <span className="flex size-11 items-center justify-center rounded-full bg-white/10">

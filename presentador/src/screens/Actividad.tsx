@@ -124,7 +124,7 @@ export function Actividad() {
                 }}
                 className="peer sr-only"
               />
-              <span aria-hidden="true" className="relative h-7 w-12 shrink-0 rounded-full bg-line-2 transition-colors duration-200 peer-checked:bg-ink peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent after:absolute after:top-1 after:left-1 after:size-5 after:rounded-full after:bg-white after:shadow after:transition-transform after:duration-200 peer-checked:after:translate-x-5" />
+              <span aria-hidden="true" className="relative h-7 w-12 shrink-0 rounded-full bg-line-2 transition-colors duration-200 peer-checked:bg-contraste peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent after:absolute after:top-1 after:left-1 after:size-5 after:rounded-full after:bg-white after:shadow after:transition-transform after:duration-200 peer-checked:after:translate-x-5" />
             </label>
           </section>
 

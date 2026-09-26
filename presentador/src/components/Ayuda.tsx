@@ -21,7 +21,7 @@ const nombrePantalla: Partial<Record<Ruta['nombre'], string>> = {
   presentar: 'Presentación',
   compartir: 'Compartir material',
   registro: 'Cierre de visita',
-  stock: 'Stock',
+  stock: 'Material',
   academia: 'Academia',
   curso: 'Curso',
   asistente: 'Asistente',
@@ -132,7 +132,7 @@ export function Ayuda({ abierto, onCerrar, ruta }: { abierto: boolean; onCerrar:
             autoComplete="off"
             className="field flex-1"
           />
-          <button type="submit" className="btn-icon bg-ink text-white hover:bg-[#1c2536] hover:text-white" aria-label="Preguntar" disabled={!texto.trim()}>
+          <button type="submit" className="btn-icon bg-contraste text-white hover:bg-contraste-alto hover:text-white" aria-label="Preguntar" disabled={!texto.trim()}>
             <ArrowUp size={18} aria-hidden="true" />
           </button>
         </form>
@@ -178,7 +178,7 @@ export function Ayuda({ abierto, onCerrar, ruta }: { abierto: boolean; onCerrar:
 
         {turnos.map((t) => (
           <div key={t.id} className="flex flex-col gap-3">
-            <p className="ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-ink px-4 py-2.5 text-[14px] text-white">{t.pregunta}</p>
+            <p className="ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-contraste px-4 py-2.5 text-[14px] text-white">{t.pregunta}</p>
             {t.resultados.length === 0 ? (
               <div className="card p-4">
                 <p className="text-[14px] leading-relaxed text-ink-2">

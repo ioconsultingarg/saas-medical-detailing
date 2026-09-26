@@ -91,7 +91,7 @@ export function Compartir() {
                     type="button"
                     aria-pressed={activo}
                     onClick={() => setCanal(id)}
-                    className={`press flex min-h-[104px] cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 bg-surface px-2 text-[15px] font-semibold ${activo ? 'border-ink text-ink' : 'border-line text-ink-2 hover:border-line-2'}`}
+                    className={`press flex min-h-[104px] cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 bg-surface px-2 text-[15px] font-semibold ${activo ? 'border-contraste text-ink' : 'border-line text-ink-2 hover:border-line-2'}`}
                   >
                     <span className="flex size-12 items-center justify-center rounded-full text-white" style={{ background: color }}>
                       <Icono size={22} aria-hidden="true" />
@@ -152,7 +152,7 @@ export function Compartir() {
               <div className="ml-auto max-w-[92%] rounded-2xl rounded-tr-md bg-surface p-4 shadow-(--shadow-card)">
                 <p className="text-[14px] leading-relaxed whitespace-pre-line text-ink">{cuerpo.split(`Enlace seguro`)[0].trimEnd()}</p>
                 <div className="mt-3 flex items-center gap-3 rounded-xl border border-line p-3">
-                  <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-ink text-white">
+                  <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-contraste text-white">
                     <Lock size={17} aria-hidden="true" />
                   </span>
                   <div className="min-w-0">

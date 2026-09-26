@@ -22,7 +22,7 @@ const campo: ItemNav[] = [
   { href: '#/', etiqueta: 'Hoy', detalle: 'Agenda y ruta del día', Icono: CalendarRange, activa: (r) => r.nombre === 'hoy' },
   { href: '#/medicos', etiqueta: 'Médicos', detalle: 'Fichero y trazabilidad', Icono: Users, activa: (r) => r.nombre === 'medicos' || r.nombre === 'medico' },
   { href: '#/biblioteca', etiqueta: 'Biblioteca', detalle: 'Presentaciones', Icono: Library, activa: (r) => r.nombre === 'biblioteca' || r.nombre === 'constructor' },
-  { href: '#/stock', etiqueta: 'Stock', detalle: 'Inventario y muestras', Icono: Boxes, activa: (r) => r.nombre === 'stock' },
+  { href: '#/stock', etiqueta: 'Material', detalle: 'Muestras y material científico', Icono: Boxes, activa: (r) => r.nombre === 'stock' },
   { href: '#/academia', etiqueta: 'Academia', detalle: 'Capacitación y certificaciones', Icono: GraduationCap, activa: (r) => r.nombre === 'academia' || r.nombre === 'curso' },
 ]
 
@@ -83,7 +83,7 @@ function EstadoConexion() {
         {!online ? 'Sin conexión' : sincronizando ? 'Sincronizando…' : 'Sincronizado'}
       </span>
       {pendientes > 0 && (
-        <span className="num rounded-full bg-ink px-1.5 text-[11px] leading-5 text-white" aria-label={`${pendientes} pendientes`}>
+        <span className="num rounded-full bg-contraste px-1.5 text-[11px] leading-5 text-white" aria-label={`${pendientes} pendientes`}>
           {pendientes}
         </span>
       )}
@@ -98,7 +98,7 @@ function VisitaEnCurso() {
   const inicio = estado.registros[visitaActiva.id]?.checkIn ?? ahora
 
   return (
-    <div className="flex min-w-0 items-center gap-2 rounded-full bg-ink py-1 pr-1 pl-3 text-white shadow-(--shadow-float)">
+    <div className="flex min-w-0 items-center gap-2 rounded-full bg-contraste py-1 pr-1 pl-3 text-white shadow-(--shadow-float)">
       <span aria-hidden="true" className="anillo-pulso relative size-2 shrink-0 rounded-full bg-[#34d399] text-[#34d399]" />
       <span className="hidden min-w-0 truncate text-[13px] font-medium lg:inline">{nombreCorto(visitaActiva)}</span>
       <span className="num text-[13px] text-white/80" aria-label="Tiempo de visita">
@@ -154,7 +154,7 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
     <div className="min-h-dvh">
       <a
         href="#contenido"
-        className="sr-only z-[90] rounded-lg bg-ink px-4 py-3 text-white focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+        className="sr-only z-[90] rounded-lg bg-contraste px-4 py-3 text-white focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
       >
         Saltar al contenido
       </a>
@@ -184,7 +184,7 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
                       href={href}
                       aria-current={actual ? 'page' : undefined}
                       className={`press relative flex w-[72px] flex-col items-center gap-1 rounded-xl py-2 text-[12px] font-medium ${
-                        actual ? 'bg-ink text-white' : 'text-ink-3 hover:bg-sunken hover:text-ink'
+                        actual ? 'bg-contraste text-white' : 'text-ink-3 hover:bg-sunken hover:text-ink'
                       }`}
                     >
                       <Icono size={20} strokeWidth={actual ? 2.2 : 1.8} aria-hidden="true" />
@@ -251,7 +251,7 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
                 aria-label={`Cuenta de ${nombre}`}
                 className="press flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full md:hidden"
               >
-                <span aria-hidden="true" className="flex size-9 items-center justify-center rounded-full bg-ink text-[13px] font-semibold text-white">
+                <span aria-hidden="true" className="flex size-9 items-center justify-center rounded-full bg-contraste text-[13px] font-semibold text-white">
                   {iniciales(nombre)}
                 </span>
               </button>
@@ -279,7 +279,7 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
                   aria-current={actual ? 'page' : undefined}
                   className={`press flex min-h-16 flex-col items-center justify-center gap-1 text-[11px] font-medium ${actual ? 'text-ink' : 'text-ink-3'}`}
                 >
-                  <span className={`relative flex h-7 w-12 items-center justify-center rounded-full ${actual ? 'bg-ink text-white' : ''}`}>
+                  <span className={`relative flex h-7 w-12 items-center justify-center rounded-full ${actual ? 'bg-contraste text-white' : ''}`}>
                     <Icono size={19} strokeWidth={actual ? 2.2 : 1.8} aria-hidden="true" />
                   </span>
                   {etiqueta}
@@ -296,7 +296,7 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
               aria-current={masActivo ? 'page' : undefined}
               className={`press flex min-h-16 w-full cursor-pointer flex-col items-center justify-center gap-1 text-[11px] font-medium ${masActivo ? 'text-ink' : 'text-ink-3'}`}
             >
-              <span className={`relative flex h-7 w-12 items-center justify-center rounded-full ${masActivo ? 'bg-ink text-white' : ''}`}>
+              <span className={`relative flex h-7 w-12 items-center justify-center rounded-full ${masActivo ? 'bg-contraste text-white' : ''}`}>
                 <Ellipsis size={19} strokeWidth={masActivo ? 2.2 : 1.8} aria-hidden="true" />
                 <Insignia cantidad={cursosPendientes} className="-top-0.5 right-1" />
               </span>

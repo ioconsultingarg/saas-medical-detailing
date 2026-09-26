@@ -158,10 +158,10 @@ function Documento({ r }: { r: Extract<Recurso, { tipo: 'documento' }> }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <header className="rounded-xl p-4" style={{ background: p.tinte }}>
+      <header className="rounded-xl p-4 text-[color:var(--color-cardio-deep)] oscuro:bg-sunken oscuro:text-ink" style={{ background: p.tinte }}>
         <div className="flex flex-wrap items-center gap-2">
           <FileText size={16} aria-hidden="true" style={{ color: p.color }} />
-          <span className="num text-[12px] font-medium" style={{ color: p.colorOscuro }}>
+          <span className="num text-[12px] font-medium oscuro:!text-ink-2" style={{ color: p.colorOscuro }}>
             {r.version} · {r.vigencia}
           </span>
         </div>
@@ -176,7 +176,7 @@ function Documento({ r }: { r: Extract<Recurso, { tipo: 'documento' }> }) {
             aria-pressed={s.titulo === seccion}
             onClick={() => irA(s.titulo)}
             className={`press min-h-9 shrink-0 cursor-pointer rounded-full border px-3 text-[13px] font-medium whitespace-nowrap ${
-              s.titulo === seccion ? 'border-transparent bg-ink text-white' : 'border-line bg-surface text-ink-2 hover:border-line-2'
+              s.titulo === seccion ? 'border-transparent bg-contraste text-white' : 'border-line bg-surface text-ink-2 hover:border-line-2'
             }`}
           >
             {s.titulo}

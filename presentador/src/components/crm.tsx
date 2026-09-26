@@ -21,7 +21,7 @@ export function Avatar({ nombre, size = 40 }: { nombre: string; size?: number })
 }
 
 const estiloCategoria: Record<Categoria, string> = {
-  A: 'bg-ink text-white',
+  A: 'bg-contraste text-white',
   B: 'bg-line-2/70 text-ink',
   C: 'bg-sunken text-ink-3',
 }

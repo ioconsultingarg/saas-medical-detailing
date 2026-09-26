@@ -56,7 +56,7 @@ export function Lanzamientos() {
         <div className="flex flex-wrap items-start justify-between gap-4 border-b border-line p-5 md:p-6">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="chip border-transparent bg-ink text-white">
+              <span className="chip border-transparent bg-contraste text-white">
                 <Rocket size={12} aria-hidden="true" />
                 {etiquetaFase[l.fase]}
               </span>

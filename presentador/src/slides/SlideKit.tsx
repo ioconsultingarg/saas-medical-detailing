@@ -359,7 +359,7 @@ export function LineasPieza({
             />
           ))}
           {sel === null && (
-            <span aria-hidden="true" className="pointer-events-none absolute top-0 left-[11%] rounded-full bg-ink/80 text-white" style={{ fontSize: cq(1), padding: `${cq(0.35)} ${cq(0.9)}` }}>
+            <span aria-hidden="true" className="pointer-events-none absolute top-0 left-[11%] rounded-full bg-contraste/80 text-white" style={{ fontSize: cq(1), padding: `${cq(0.35)} ${cq(0.9)}` }}>
               Tocá o deslizá sobre el gráfico
             </span>
           )}

@@ -9,10 +9,22 @@
     <meta name="apple-mobile-web-app-title" content="IO-Pharma" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#f7f8fa" />
+    <meta name="theme-color" content="#f7f8fa" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0f16" media="(prefers-color-scheme: dark)" />
     <meta name="description" content="IO-Pharma: e-detailing y CRM para laboratorios. Ruta del día, presentaciones interactivas, muestras con trazabilidad y cierre de visita, con o sin conexión." />
     <title>IO-Pharma · e-detailing y CRM para laboratorios</title>
   </head>
+  <script>
+      // resuelve el tema antes del primer pintado, para que no haya un destello claro
+      (function () {
+        try {
+          var p = localStorage.getItem('io-pharma-tema')
+          var oscuro = p === 'oscuro' || (p !== 'claro' && matchMedia('(prefers-color-scheme: dark)').matches)
+          document.documentElement.dataset.tema = oscuro ? 'oscuro' : 'claro'
+          document.documentElement.style.colorScheme = oscuro ? 'dark' : 'light'
+        } catch (e) {}
+      })()
+    </script>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>

@@ -24,7 +24,7 @@ function TarjetaObjecion({ objecion, respuesta, referencia }: { objecion: string
       type="button"
       onClick={() => setAbierta((v) => !v)}
       aria-expanded={abierta}
-      className={`press flex min-h-44 w-full cursor-pointer flex-col items-start rounded-2xl border-2 p-5 text-left ${abierta ? 'border-ink bg-surface' : 'border-line bg-sunken hover:border-line-2'}`}
+      className={`press flex min-h-44 w-full cursor-pointer flex-col items-start rounded-2xl border-2 p-5 text-left ${abierta ? 'border-contraste bg-surface' : 'border-line bg-sunken hover:border-line-2'}`}
     >
       <span className="eyebrow">{abierta ? 'Respuesta con evidencia' : 'Objeción del médico'}</span>
       {abierta ? (
@@ -152,7 +152,7 @@ export function Curso({ cursoId, leccionId }: { cursoId: string; leccionId?: str
                     type="button"
                     onClick={() => irA(l.id)}
                     aria-current={actual ? 'step' : undefined}
-                    className={`press flex min-h-14 w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2 text-left ${actual ? 'bg-ink text-white' : 'hover:bg-sunken'}`}
+                    className={`press flex min-h-14 w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2 text-left ${actual ? 'bg-contraste text-white' : 'hover:bg-sunken'}`}
                   >
                     <span
                       className={`num flex size-8 shrink-0 items-center justify-center rounded-full text-[12px] ${
@@ -178,7 +178,7 @@ export function Curso({ cursoId, leccionId }: { cursoId: string; leccionId?: str
                 type="button"
                 onClick={() => irA('evaluacion')}
                 aria-current={actualId === 'evaluacion' ? 'step' : undefined}
-                className={`press flex min-h-14 w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2 text-left ${actualId === 'evaluacion' ? 'bg-ink text-white' : 'hover:bg-sunken'}`}
+                className={`press flex min-h-14 w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2 text-left ${actualId === 'evaluacion' ? 'bg-contraste text-white' : 'hover:bg-sunken'}`}
               >
                 <span
                   className={`flex size-8 shrink-0 items-center justify-center rounded-full ${

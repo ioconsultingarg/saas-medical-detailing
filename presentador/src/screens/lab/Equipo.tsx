@@ -118,7 +118,7 @@ export function Equipo() {
               <span className="pl-[52px] lg:pl-0">
                 <span className="num text-[14px] font-medium text-ink">{Math.round(cobertura * 100)} %</span>
                 <span aria-hidden="true" className="mt-1 block h-1.5 w-full max-w-28 overflow-hidden rounded-full bg-sunken">
-                  <span className="block h-full rounded-full bg-ink" style={{ width: `${cobertura * 100}%` }} />
+                  <span className="block h-full rounded-full bg-contraste" style={{ width: `${cobertura * 100}%` }} />
                 </span>
               </span>
               <span className="flex flex-wrap items-center gap-1.5 pl-[52px] lg:pl-0">

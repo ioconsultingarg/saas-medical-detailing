@@ -141,7 +141,7 @@ function Respuesta({ turno, onPreguntar, reciente }: { turno: Turno; onPreguntar
 
   return (
     <article className="flex flex-col gap-3">
-      <div className="ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-ink px-4 py-3 text-[15px] text-white">{turno.pregunta}</div>
+      <div className="ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-contraste px-4 py-3 text-[15px] text-white">{turno.pregunta}</div>
 
       <div className="card p-5 md:p-6">
         <div className="mb-3 flex items-center gap-2 text-[13px] font-medium text-ink-3">
@@ -349,7 +349,7 @@ export function Asistente() {
           {dictado.escuchando ? <Square size={15} aria-hidden="true" className="fill-current" /> : <Mic size={18} aria-hidden="true" />}
         </button>
       )}
-      <button type="submit" className="btn-icon bg-ink text-white hover:bg-[#1c2536] hover:text-white" aria-label="Preguntar" disabled={!texto.trim()}>
+      <button type="submit" className="btn-icon bg-contraste text-white hover:bg-contraste-alto hover:text-white" aria-label="Preguntar" disabled={!texto.trim()}>
         <ArrowUp size={18} aria-hidden="true" />
       </button>
     </form>
@@ -378,7 +378,7 @@ export function Asistente() {
                       key={p}
                       type="button"
                       onClick={() => preguntar(p)}
-                      className={`press card flex min-h-20 cursor-pointer items-start gap-3 p-4 text-left hover:border-line-2 hover:shadow-(--shadow-float) ${i === 0 ? 'sm:col-span-2 border-ink bg-ink text-white hover:border-ink' : ''}`}
+                      className={`press card flex min-h-20 cursor-pointer items-start gap-3 p-4 text-left hover:border-line-2 hover:shadow-(--shadow-float) ${i === 0 ? 'sm:col-span-2 border-contraste bg-contraste text-white hover:border-contraste' : ''}`}
                     >
                       <Sparkles size={17} aria-hidden="true" className={`mt-0.5 shrink-0 ${i === 0 ? 'text-[#a99bf0]' : 'text-ia'}`} />
                       <span className={`text-[15px] leading-snug ${i === 0 ? 'font-semibold' : 'text-ink'}`}>{p}</span>

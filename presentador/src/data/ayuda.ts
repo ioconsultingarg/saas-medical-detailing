@@ -103,14 +103,14 @@ export const articulos: Articulo[] = [
     titulo: 'Entregar muestras y dejar la firma',
     resumen: 'Cada entrega descuenta stock y queda trazada con su lote, su vencimiento y la firma de quien la recibió.',
     pantallas: ['stock', 'registro'],
-    claves: ['muestras', 'stock', 'pedido', 'entregar', 'lote', 'vencimiento', 'cupo', 'remito', 'material'],
+    claves: ['muestras', 'stock', 'material', 'pedido', 'entregar', 'lote', 'vencimiento', 'cupo', 'remito', 'material'],
     pasos: [
-      'En Stock elegí las cantidades y tocá "Solicitar".',
+      'En Material elegí las cantidades y tocá "Solicitar".',
       'Si hay una visita abierta, la entrega queda asociada a ese médico.',
       'Al cerrar la visita, pedile la firma de recepción al profesional.',
-      'En Stock → Trazabilidad ves el libro de entregas de los últimos 90 días.',
+      'En Material → Trazabilidad ves el libro de entregas de los últimos 90 días.',
     ],
-    enlace: { texto: 'Ir a Stock', href: '#/stock' },
+    enlace: { texto: 'Ir a Material', href: '#/stock' },
   },
   {
     id: 'sin-conexion',

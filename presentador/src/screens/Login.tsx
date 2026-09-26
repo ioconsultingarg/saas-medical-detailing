@@ -27,7 +27,7 @@ function VistaPreviaDia() {
   const proxima = visitasDelDia.find((v) => !estado.registros[v.id] || estado.registros[v.id].estado === 'pendiente')
 
   return (
-    <aside aria-label="Resumen de tu jornada" className="relative hidden overflow-hidden bg-ink text-white lg:flex lg:flex-col">
+    <aside aria-label="Resumen de tu jornada" className="relative hidden overflow-hidden bg-contraste text-white lg:flex lg:flex-col">
       {/* trama de ruta: la metáfora del día del visitador */}
       <svg aria-hidden="true" className="absolute inset-0 h-full w-full opacity-[0.16]" preserveAspectRatio="xMidYMid slice" viewBox="0 0 600 800">
         <path d="M60 690 C 160 600, 120 520, 240 470 S 420 420, 380 300 S 500 160, 560 90" stroke="#7cc4ee" strokeWidth="2" strokeDasharray="3 10" fill="none" strokeLinecap="round" />

@@ -226,7 +226,7 @@ export function Medico({ medicoId }: { medicoId: string }) {
             {visitas.slice(0, 7).map((x, i) => (
               <li key={x.id} className="relative flex gap-4 pb-5 last:pb-0">
                 {i < Math.min(visitas.length, 7) - 1 && <span aria-hidden="true" className="absolute top-7 bottom-0 left-[11px] w-px bg-line" />}
-                <span className={`relative mt-1 flex size-6 shrink-0 items-center justify-center rounded-full ${x.hoy ? 'bg-ink text-white' : 'bg-sunken text-ink-3'}`}>
+                <span className={`relative mt-1 flex size-6 shrink-0 items-center justify-center rounded-full ${x.hoy ? 'bg-contraste text-white' : 'bg-sunken text-ink-3'}`}>
                   {x.origen === 'voz' ? <AudioLines size={12} aria-hidden="true" /> : <CheckCircle2 size={12} aria-hidden="true" />}
                 </span>
                 <div className="min-w-0 flex-1">

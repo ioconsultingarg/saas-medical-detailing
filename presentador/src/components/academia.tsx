@@ -44,7 +44,7 @@ export function BarraProgreso({ valor, etiqueta, oscuro = false, className = '' 
       aria-valuenow={pct}
       className={`h-2 overflow-hidden rounded-full ${oscuro ? 'bg-white/15' : 'bg-sunken'} ${className}`}
     >
-      <div className={`h-full rounded-full ${oscuro ? 'bg-white' : 'bg-ink'}`} style={{ width: `${pct}%`, transition: 'width 500ms var(--ease-fluid)' }} />
+      <div className={`h-full rounded-full ${oscuro ? 'bg-white' : 'bg-contraste'}`} style={{ width: `${pct}%`, transition: 'width 500ms var(--ease-fluid)' }} />
     </div>
   )
 }
@@ -77,7 +77,7 @@ export function siguientePaso(curso: Curso, progreso: ProgresoCurso): Paso {
 
 export function Credencial({ curso, codigo, fecha, nombre }: { curso: Curso; codigo: string; fecha: number; nombre: string }) {
   return (
-    <div className="animate-entrar relative overflow-hidden rounded-3xl bg-ink p-6 text-white sm:p-7">
+    <div className="animate-entrar relative overflow-hidden rounded-3xl bg-contraste p-6 text-white sm:p-7">
       <div aria-hidden="true" className="absolute -top-16 -right-16 size-48 rounded-full border border-white/10" />
       <div aria-hidden="true" className="absolute -top-6 -right-6 size-28 rounded-full border border-white/10" />
       <div className="relative flex items-center justify-between gap-3">
@@ -186,7 +186,7 @@ export function Quiz({ preguntas, umbral, onFinalizar, pieResultado }: PropsQuiz
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               {resultado.xpGanado > 0 && (
-                <span className="chip border-transparent bg-ink text-white">
+                <span className="chip border-transparent bg-contraste text-white">
                   <Zap size={13} aria-hidden="true" />
                   <span className="num">+{resultado.xpGanado}</span> XP
                 </span>
@@ -249,7 +249,7 @@ export function Quiz({ preguntas, umbral, onFinalizar, pieResultado }: PropsQuiz
             <li
               key={p.id}
               className={`h-1.5 flex-1 rounded-full transition-colors duration-200 ${
-                i < respuestas.length ? (respuestas[i] === preguntas[i].correcta ? 'bg-ok' : 'bg-bad') : i === indice ? 'bg-ink' : 'bg-sunken'
+                i < respuestas.length ? (respuestas[i] === preguntas[i].correcta ? 'bg-ok' : 'bg-bad') : i === indice ? 'bg-contraste' : 'bg-sunken'
               }`}
             />
           ))}
@@ -264,7 +264,7 @@ export function Quiz({ preguntas, umbral, onFinalizar, pieResultado }: PropsQuiz
         {pregunta.opciones.map((opcion, i) => {
           const seleccionada = elegida === i
           const esCorrecta = i === pregunta.correcta
-          let estilo = seleccionada ? 'border-ink bg-sunken' : 'border-line bg-surface hover:border-line-2'
+          let estilo = seleccionada ? 'border-contraste bg-sunken' : 'border-line bg-surface hover:border-line-2'
           if (comprobada) {
             if (esCorrecta) estilo = 'border-ok bg-ok-soft'
             else if (seleccionada) estilo = 'border-bad bg-bad-soft'
@@ -282,7 +282,7 @@ export function Quiz({ preguntas, umbral, onFinalizar, pieResultado }: PropsQuiz
             >
               <span
                 aria-hidden="true"
-                className={`num flex size-8 shrink-0 items-center justify-center rounded-lg text-[13px] font-medium ${seleccionada && !comprobada ? 'bg-ink text-white' : 'bg-sunken text-ink-2'}`}
+                className={`num flex size-8 shrink-0 items-center justify-center rounded-lg text-[13px] font-medium ${seleccionada && !comprobada ? 'bg-contraste text-white' : 'bg-sunken text-ink-2'}`}
               >
                 {comprobada && esCorrecta ? <CheckCircle2 size={17} className="text-ok" /> : comprobada && seleccionada ? <XCircle size={17} className="text-bad" /> : letras[i]}
               </span>

@@ -55,7 +55,7 @@ export function Pasos({ actual }: { actual: 1 | 2 }) {
         return (
           <li key={p} className="flex items-center gap-2" aria-current={activo ? 'step' : undefined}>
             {i > 0 && <span aria-hidden="true" className="h-px w-6 bg-line-2" />}
-            <span className={`num flex size-6 items-center justify-center rounded-full text-[12px] ${activo ? 'bg-ink text-white' : hecho ? 'bg-ok text-white' : 'bg-sunken text-ink-3'}`}>
+            <span className={`num flex size-6 items-center justify-center rounded-full text-[12px] ${activo ? 'bg-contraste text-white' : hecho ? 'bg-ok text-white' : 'bg-sunken text-ink-3'}`}>
               {hecho ? <Check size={13} aria-hidden="true" /> : n}
             </span>
             <span className={activo ? 'font-semibold text-ink' : 'text-ink-3'}>
@@ -247,7 +247,7 @@ export function Registro() {
                     setCalificacion(n)
                     setErrores((e) => ({ ...e, calificacion: false }))
                   }}
-                  className={`press flex size-14 cursor-pointer items-center justify-center rounded-2xl border-2 ${n <= calificacion ? 'border-ink bg-ink text-white' : 'border-line bg-surface text-ink-3 hover:border-line-2'}`}
+                  className={`press flex size-14 cursor-pointer items-center justify-center rounded-2xl border-2 ${n <= calificacion ? 'border-contraste bg-contraste text-white' : 'border-line bg-surface text-ink-3 hover:border-line-2'}`}
                 >
                   <Star size={24} aria-hidden="true" className={n <= calificacion ? 'fill-white' : ''} />
                 </button>
@@ -266,7 +266,7 @@ export function Registro() {
                     type="button"
                     aria-pressed={activa}
                     onClick={() => setMarcadas((m) => (activa ? m.filter((x) => x !== e) : [...m, e]))}
-                    className={`press inline-flex min-h-10 cursor-pointer items-center gap-1.5 rounded-full border px-3.5 text-[14px] font-medium ${activa ? 'border-ink bg-ink text-white' : 'border-line bg-surface text-ink-2 hover:border-line-2'}`}
+                    className={`press inline-flex min-h-10 cursor-pointer items-center gap-1.5 rounded-full border px-3.5 text-[14px] font-medium ${activa ? 'border-contraste bg-contraste text-white' : 'border-line bg-surface text-ink-2 hover:border-line-2'}`}
                   >
                     {activa && <Check size={14} aria-hidden="true" />}
                     {e}

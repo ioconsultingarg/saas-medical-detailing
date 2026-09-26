@@ -494,7 +494,7 @@ export function Presentar({ presentacionId }: { presentacionId: string }) {
                     pasar(i)
                   }}
                   aria-current={i === indice ? 'step' : undefined}
-                  className={`press group block w-full cursor-pointer overflow-hidden rounded-xl border-2 text-left ${i === indice ? 'border-ink' : 'border-transparent hover:border-line-2'}`}
+                  className={`press group block w-full cursor-pointer overflow-hidden rounded-xl border-2 text-left ${i === indice ? 'border-contraste' : 'border-transparent hover:border-line-2'}`}
                 >
                   <div inert className="pointer-events-none">
                     <Lienzo>

@@ -115,12 +115,12 @@ export function Hoy() {
           {destacada && (
             <section
               aria-label={visitaActiva ? 'Visita en curso' : 'Próxima visita'}
-              className={`animate-entrar relative overflow-hidden rounded-2xl ${visitaActiva ? 'bg-ink text-white shadow-(--shadow-float)' : 'card-elevada'}`}
+              className={`animate-entrar relative overflow-hidden rounded-2xl ${visitaActiva ? 'bg-contraste text-white shadow-(--shadow-float)' : 'card-elevada'}`}
             >
               {!visitaActiva && (
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute inset-x-0 top-0 h-28 opacity-70"
+                  className="pointer-events-none absolute inset-x-0 top-0 h-28 opacity-70 oscuro:opacity-15"
                   style={{ background: `linear-gradient(180deg, ${productos[destacada.productosInteres[0]].tinte}, transparent)` }}
                 />
               )}
@@ -205,14 +205,14 @@ export function Hoy() {
                   <li
                     key={v.id}
                     style={{ ['--orden' as string]: i }}
-                    className={`card entra-fila flex gap-4 p-4 transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-px hover:shadow-(--shadow-raised) ${seleccionada ? 'border-ink shadow-(--shadow-float)' : ''}`}
+                    className={`card entra-fila flex gap-4 p-4 transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-px hover:shadow-(--shadow-raised) ${seleccionada ? 'border-contraste shadow-(--shadow-float)' : ''}`}
                   >
                     <div className="flex w-12 shrink-0 flex-col items-center gap-1.5">
                       <span className="num text-[15px] font-medium text-ink">{v.hora}</span>
                       <span
                         aria-hidden="true"
                         className={`num flex size-7 items-center justify-center rounded-full border-2 text-[12px] font-medium ${
-                          e === 'completada' ? 'border-ok text-ok' : e === 'en_curso' ? 'border-ink bg-ink text-white' : 'border-line-2 text-ink-3'
+                          e === 'completada' ? 'border-ok text-ok' : e === 'en_curso' ? 'border-contraste bg-contraste text-white' : 'border-line-2 text-ink-3'
                         }`}
                       >
                         {e === 'completada' ? '✓' : n}
@@ -246,7 +246,7 @@ export function Hoy() {
                             <span className="num">{registro.calificacion}</span>
                           </span>
                         )}
-                        {e === 'en_curso' && <span className="chip border-transparent bg-ink text-white">En curso</span>}
+                        {e === 'en_curso' && <span className="chip border-transparent bg-contraste text-white">En curso</span>}
                       </div>
                     </div>
 

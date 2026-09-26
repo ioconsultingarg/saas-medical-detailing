@@ -115,7 +115,7 @@ export function AvisoInstalar() {
 
   return (
     <div className="animate-entrar mb-6 flex flex-wrap items-center gap-3 rounded-2xl border border-line bg-sunken p-3.5">
-      <span aria-hidden="true" className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-ink text-white">
+      <span aria-hidden="true" className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-contraste text-white">
         <Download size={18} />
       </span>
       <div className="min-w-0 flex-1 basis-48">

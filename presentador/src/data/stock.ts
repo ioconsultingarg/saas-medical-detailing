@@ -21,9 +21,9 @@ export function nivelDe(item: ItemStock): NivelStock {
 }
 
 export const etiquetaNivel: Record<NivelStock, string> = {
-  alto: 'Stock alto',
-  bajo: 'Stock bajo',
-  sin: 'Sin stock',
+  alto: 'Disponible',
+  bajo: 'Poca cantidad',
+  sin: 'Sin unidades',
 }
 
 /** Solo muestras y material promocional se piden desde la visita; lo comercial va por droguería */

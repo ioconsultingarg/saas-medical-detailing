@@ -76,7 +76,7 @@ function FilaSecuencia({ id, posicion, onQuitar }: { id: string; posicion: numbe
     <li
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
-      className={`flex items-center gap-2 rounded-xl border bg-surface p-2 ${isDragging ? 'z-10 border-ink opacity-60 shadow-(--shadow-float)' : 'border-line'}`}
+      className={`flex items-center gap-2 rounded-xl border bg-surface p-2 ${isDragging ? 'z-10 border-contraste opacity-60 shadow-(--shadow-float)' : 'border-line'}`}
     >
       <button
         type="button"
@@ -111,7 +111,7 @@ function ZonaSecuencia({ vacia, children }: { vacia: boolean; children: ReactNod
   return (
     <div
       ref={setNodeRef}
-      className={`min-h-[220px] rounded-2xl border-2 border-dashed p-2 transition-colors duration-150 ${isOver ? 'border-ink bg-sunken' : vacia ? 'border-line-2' : 'border-transparent'}`}
+      className={`min-h-[220px] rounded-2xl border-2 border-dashed p-2 transition-colors duration-150 ${isOver ? 'border-contraste bg-sunken' : vacia ? 'border-line-2' : 'border-transparent'}`}
     >
       {vacia ? (
         <div className="flex h-[200px] flex-col items-center justify-center gap-2 px-6 text-center text-ink-3">

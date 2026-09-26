@@ -468,7 +468,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
         {avisos.map((a) => (
           <div
             key={a.id}
-            className="animate-entrar flex max-w-md items-center gap-2.5 rounded-xl bg-ink px-4 py-3 text-[14px] font-medium text-white shadow-(--shadow-float)"
+            className="animate-entrar flex max-w-md items-center gap-2.5 rounded-xl bg-contraste px-4 py-3 text-[14px] font-medium text-white shadow-(--shadow-float)"
           >
             <span
               aria-hidden="true"

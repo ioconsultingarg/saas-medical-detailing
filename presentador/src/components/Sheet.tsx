@@ -66,7 +66,7 @@ export function Sheet({ abierto, onCerrar, titulo, subtitulo, children, pie, anc
   return createPortal(
     <div className="fixed inset-0 z-[70]">
       <div
-        className={`sheet-scrim absolute inset-0 ${scrimSuave ? 'bg-ink/25' : 'bg-ink/45'}`}
+        className={`sheet-scrim absolute inset-0 ${scrimSuave ? 'bg-contraste/25' : 'bg-contraste/45'}`}
         data-abierto={visible}
         onClick={onCerrar}
         aria-hidden="true"

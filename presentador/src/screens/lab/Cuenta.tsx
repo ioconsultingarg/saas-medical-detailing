@@ -18,7 +18,7 @@ function GraficoCompras({ compras }: { compras: number[] }) {
         {mesesAuditoria.map((mes, i) => (
           <div key={mes + i} className="flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-1.5">
             <span className="num text-[11px] text-ink-3">{compras[i] ? miles(compras[i]) : '—'}</span>
-            <span className={`w-full max-w-12 rounded-t-md ${i >= 3 ? 'bg-ink' : 'bg-line-2'}`} style={{ height: `${(compras[i] / max) * 80}%`, minHeight: compras[i] ? 3 : 0 }} />
+            <span className={`w-full max-w-12 rounded-t-md ${i >= 3 ? 'bg-contraste' : 'bg-line-2'}`} style={{ height: `${(compras[i] / max) * 80}%`, minHeight: compras[i] ? 3 : 0 }} />
             <span className={`text-[12px] capitalize ${i >= 3 ? 'font-medium text-ink' : 'text-ink-3'}`}>{mes}</span>
           </div>
         ))}
@@ -109,7 +109,7 @@ export function Cuenta({ cuentaId }: { cuentaId: string }) {
                   aria-pressed={t === tipo}
                   onClick={() => setTipo(t)}
                   className={`press min-h-9 cursor-pointer rounded-full border px-3 text-[13px] font-medium ${
-                    t === tipo ? 'border-transparent bg-ink text-white' : 'border-line bg-surface text-ink-2 hover:border-line-2'
+                    t === tipo ? 'border-transparent bg-contraste text-white' : 'border-line bg-surface text-ink-2 hover:border-line-2'
                   }`}
                 >
                   {etiquetaMovimiento[t]}

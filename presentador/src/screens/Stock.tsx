@@ -116,11 +116,11 @@ export function Stock() {
 
       <div className="mb-4">
         <Segmentado
-          etiqueta="Vista de stock"
+          etiqueta="Vista del material"
           valor={vista}
           onCambio={setVista}
           opciones={[
-            { valor: 'inventario', texto: 'Inventario' },
+            { valor: 'inventario', texto: 'Disponibilidad' },
             { valor: 'trazabilidad', texto: 'Trazabilidad de muestras' },
           ]}
         />
@@ -132,11 +132,11 @@ export function Stock() {
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
         <StockPanel />
 
-        <aside aria-label="Resumen del semáforo" className="flex flex-col gap-2 lg:sticky lg:top-24 lg:self-start">
+        <aside aria-label="Resumen de disponibilidad" className="flex flex-col gap-2 lg:sticky lg:top-24 lg:self-start">
           {[
-            { clave: 'alto' as const, titulo: 'Stock alto', texto: 'Entrega inmediata', clase: 'bg-ok' },
-            { clave: 'bajo' as const, titulo: 'Stock bajo', texto: 'Cuota restringida por representante', clase: 'bg-warn' },
-            { clave: 'sin' as const, titulo: 'Sin stock', texto: 'Pendiente de reposición', clase: 'bg-bad' },
+            { clave: 'alto' as const, titulo: 'Disponible', texto: 'Entrega inmediata', clase: 'bg-ok' },
+            { clave: 'bajo' as const, titulo: 'Poca cantidad', texto: 'Cupo restringido por visitador', clase: 'bg-warn' },
+            { clave: 'sin' as const, titulo: 'Sin unidades', texto: 'Pendiente de reposición', clase: 'bg-bad' },
           ].map((n) => (
             <div key={n.clave} className="card flex items-center gap-3 px-4 py-3">
               <span aria-hidden="true" className={`size-3 rounded-full ${n.clase}`} />

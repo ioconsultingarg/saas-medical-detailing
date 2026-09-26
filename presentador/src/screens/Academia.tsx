@@ -46,7 +46,7 @@ export function Academia() {
               const total = enCurso.lecciones.length + 1
               const destino = paso.tipo === 'leccion' ? paso.leccion.id : 'evaluacion'
               return (
-                <section aria-label="Continuar capacitación" className="animate-entrar relative overflow-hidden rounded-2xl bg-ink text-white">
+                <section aria-label="Continuar capacitación" className="animate-entrar relative overflow-hidden rounded-2xl bg-contraste text-white">
                   <VideoPortada
                     nombre={enCurso.medio}
                     modo="unaVez"
@@ -172,7 +172,7 @@ export function Academia() {
                   {nivel.actual.nombre}
                 </h2>
               </div>
-              <span className="chip min-h-8 border-transparent bg-ink px-2.5 text-[13px] text-white">
+              <span className="chip min-h-8 border-transparent bg-contraste px-2.5 text-[13px] text-white">
                 <Zap size={14} aria-hidden="true" />
                 <span className="num">{estado.xp}</span> XP
               </span>
@@ -218,7 +218,7 @@ export function Academia() {
                 const ganada = estado.insignias.includes(i.id)
                 return (
                   <li key={i.id} className="flex flex-col items-center gap-1.5 rounded-xl p-2 text-center" title={i.descripcion}>
-                    <span className={`relative flex size-12 items-center justify-center rounded-full ${ganada ? 'bg-ink text-white' : 'bg-sunken text-ink-3'}`}>
+                    <span className={`relative flex size-12 items-center justify-center rounded-full ${ganada ? 'bg-contraste text-white' : 'bg-sunken text-ink-3'}`}>
                       <IconoDeInsignia icono={i.icono} size={20} />
                       {!ganada && (
                         <span className="absolute -right-0.5 -bottom-0.5 flex size-5 items-center justify-center rounded-full border-2 border-surface bg-line-2 text-ink-2">
@@ -244,7 +244,7 @@ export function Academia() {
               {ranking.map((r, i) => (
                 <li key={r.nombre + i} className={`flex items-center gap-3 rounded-xl px-2.5 py-2 ${r.vos ? 'bg-sunken' : ''}`}>
                   <span className="num w-5 text-center text-[13px] text-ink-3">{i + 1}</span>
-                  <span aria-hidden="true" className={`flex size-8 items-center justify-center rounded-full text-[12px] font-semibold ${r.vos ? 'bg-ink text-white' : 'bg-sunken text-ink-2'}`}>
+                  <span aria-hidden="true" className={`flex size-8 items-center justify-center rounded-full text-[12px] font-semibold ${r.vos ? 'bg-contraste text-white' : 'bg-sunken text-ink-2'}`}>
                     {r.vos && !estado.nombreEnRanking ? 'V' : iniciales(r.nombre)}
                   </span>
                   <span className={`min-w-0 flex-1 truncate text-[14px] ${r.vos ? 'font-semibold text-ink' : 'text-ink-2'}`}>
@@ -260,7 +260,7 @@ export function Academia() {
               <input type="checkbox" role="switch" name="nombre-ranking" checked={estado.nombreEnRanking} onChange={(e) => setNombreEnRanking(e.target.checked)} className="peer sr-only" />
               <span
                 aria-hidden="true"
-                className="relative h-7 w-12 shrink-0 rounded-full bg-line-2 transition-colors duration-200 peer-checked:bg-ink peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent after:absolute after:top-1 after:left-1 after:size-5 after:rounded-full after:bg-white after:shadow after:transition-transform after:duration-200 peer-checked:after:translate-x-5"
+                className="relative h-7 w-12 shrink-0 rounded-full bg-line-2 transition-colors duration-200 peer-checked:bg-contraste peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent after:absolute after:top-1 after:left-1 after:size-5 after:rounded-full after:bg-white after:shadow after:transition-transform after:duration-200 peer-checked:after:translate-x-5"
               />
             </label>
           </section>

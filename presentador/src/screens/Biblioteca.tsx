@@ -65,7 +65,7 @@ function TarjetaPresentacion({ p, destacada }: { p: Presentacion; destacada?: bo
   const productosP = productosDe(p)
 
   return (
-    <article className={`card group flex flex-col overflow-hidden transition-shadow duration-200 hover:shadow-(--shadow-float) ${destacada ? 'ring-2 ring-ink' : ''}`}>
+    <article className={`card group flex flex-col overflow-hidden transition-shadow duration-200 hover:shadow-(--shadow-float) ${destacada ? 'ring-2 ring-contraste' : ''}`}>
       <a href={`#/presentar/${p.id}`} className="relative block overflow-hidden border-b border-line" aria-label={`Presentar ${p.titulo}`} tabIndex={-1}>
         <div className="transition-transform duration-300 ease-(--ease-fluid) group-hover:scale-[1.015]">
           <Portada id={p.diapositivas[0]} />
@@ -155,7 +155,7 @@ export function Biblioteca() {
       {para && sugeridaId && (
         <a
           href={`#/presentar/${sugeridaId}`}
-          className="press mb-6 flex flex-wrap items-center gap-4 rounded-2xl bg-ink p-4 text-white hover:bg-[#1c2536] sm:p-5"
+          className="press mb-6 flex flex-wrap items-center gap-4 rounded-2xl bg-contraste p-4 text-white hover:bg-contraste-alto sm:p-5"
         >
           <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-white/10">
             <Sparkles size={20} aria-hidden="true" />

@@ -223,7 +223,7 @@ export function Material() {
                   const enCurso = idx === actual
                   return (
                     <li key={paso} className={`flex items-center gap-3 text-[14px] ${hecho || enCurso ? 'text-ink' : 'text-ink-3'}`}>
-                      <span className={`flex size-6 shrink-0 items-center justify-center rounded-full ${hecho ? 'bg-ok text-white' : enCurso ? 'bg-ink text-white' : 'bg-sunken'}`}>
+                      <span className={`flex size-6 shrink-0 items-center justify-center rounded-full ${hecho ? 'bg-ok text-white' : enCurso ? 'bg-contraste text-white' : 'bg-sunken'}`}>
                         {hecho ? <CheckCircle2 size={13} aria-hidden="true" /> : null}
                       </span>
                       {etiquetaEstado[paso]}

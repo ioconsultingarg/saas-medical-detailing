@@ -198,7 +198,7 @@ export function ReporteVoz({ visita, onAplicar }: Props) {
 
   return (
     <section aria-labelledby="titulo-voz" className="card mt-6 overflow-hidden">
-      <div className="relative overflow-hidden bg-ink p-5 text-white md:p-6">
+      <div className="relative overflow-hidden bg-contraste p-5 text-white md:p-6">
         <div aria-hidden="true" className="pointer-events-none absolute -top-24 -right-16 size-72 rounded-full bg-[#7cc4ee]/15 blur-3xl" />
         <div className="relative flex flex-wrap items-center gap-x-6 gap-y-4">
           <div className="min-w-0 flex-1 basis-72">
@@ -358,7 +358,7 @@ export function ReporteVoz({ visita, onAplicar }: Props) {
                         <span className="num">{it.cantidad} ×</span> {it.nombre}
                         {it.disponible < it.cantidad && (
                           <span className="chip border-transparent bg-bad-soft text-bad">
-                            {it.disponible === 0 ? 'Sin stock · no se registra' : `Stock para ${it.disponible}`}
+                            {it.disponible === 0 ? 'Sin unidades · no se registra' : `Alcanza para ${it.disponible}`}
                           </span>
                         )}
                       </li>
