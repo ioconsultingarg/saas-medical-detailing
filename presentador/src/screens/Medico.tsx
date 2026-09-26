@@ -4,6 +4,7 @@ import { ChipProducto } from '../components/ui'
 import { visitasDelDia } from '../data/agenda'
 import {
   apmPorId,
+  categoriaDe,
   diasSinVisita,
   entregasDe,
   medicoPorId,
@@ -97,8 +98,9 @@ export function Medico({ medicoId }: { medicoId: string }) {
     )
   }
 
+  const categoria = categoriaDe(m, estado.categorias)
   const dias = diasSinVisita(m, estado.registros)
-  const prio = prioridad(m, dias)
+  const prio = prioridad({ ...m, categoria }, dias)
   const trimestre = recetasTrimestre(m)
   const visitas = visitasDe(m.id, estado.registros)
   const entregas = entregasDe(m.id, estado.entregas)
@@ -118,7 +120,7 @@ export function Medico({ medicoId }: { medicoId: string }) {
         <div className="min-w-0 flex-1 basis-64">
           <div className="flex flex-wrap items-center gap-2">
             <h1 className="text-[26px] leading-tight font-semibold text-ink md:text-[30px]">{m.nombre}</h1>
-            <BadgeCategoria categoria={m.categoria} />
+            <BadgeCategoria categoria={categoria} />
             <ChipPrioridad prioridad={prio} />
           </div>
           <p className="mt-1 text-[14px] text-ink-3">
@@ -194,7 +196,7 @@ export function Medico({ medicoId }: { medicoId: string }) {
           <dt className="text-[13px] text-ink-3">Visitas en 90 días</dt>
           <dd className="mt-1.5 flex items-baseline gap-2">
             <span className="num text-[28px] leading-none font-medium text-ink">{visitas90(m, estado.registros)}</span>
-            <span className="text-[13px] text-ink-3">de {objetivo90[m.categoria]} objetivo</span>
+            <span className="text-[13px] text-ink-3">de {objetivo90[categoria]} objetivo</span>
           </dd>
         </div>
         <div className="card p-4">

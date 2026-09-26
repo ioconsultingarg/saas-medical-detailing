@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react'
-import { Boxes, Building2, CalendarRange, ChevronRight, CircleHelp, CloudOff, Ellipsis, FileCheck, Gavel, GraduationCap, Library, Plug, RefreshCw, ShieldAlert, Sparkles, Stethoscope, UserCog, Users } from 'lucide-react'
+import { Boxes, Building2, CalendarRange, ChevronRight, CircleHelp, CloudOff, Ellipsis, FileCheck, Gavel, GraduationCap, Library, Plug, RefreshCw, Rocket, ShieldAlert, Sparkles, Stethoscope, Target, UserCog, Users } from 'lucide-react'
 import { cronometro } from '../lib/formato'
 import type { Ruta } from '../lib/ruta'
 import { useAhora } from '../lib/tiempo'
@@ -38,6 +38,8 @@ const portal: ItemNav[] = [
   { href: '#/lab/catalogo', etiqueta: 'Catálogo', detalle: 'Productos, lotes y cupos de muestras', Icono: Boxes, activa: (r) => r.nombre === 'labCatalogo' },
   { href: '#/lab/cuentas', etiqueta: 'Cuentas', detalle: 'Droguerías, cadenas e instituciones', Icono: Building2, activa: (r) => r.nombre === 'labCuentas' || r.nombre === 'labCuenta' },
   { href: '#/lab/licitaciones', etiqueta: 'Licitaciones', detalle: 'Procesos institucionales y sus fechas', Icono: Gavel, activa: (r) => r.nombre === 'labLicitaciones' },
+  { href: '#/lab/lanzamientos', etiqueta: 'Lanzamientos', detalle: 'Médicos objetivo, cronograma y adopción', Icono: Rocket, activa: (r) => r.nombre === 'labLanzamientos' },
+  { href: '#/lab/segmentacion', etiqueta: 'Segmentos', detalle: 'Potencial de cada médico y recategorización', Icono: Target, activa: (r) => r.nombre === 'labSegmentacion' },
   { href: '#/lab/equipo', etiqueta: 'Equipo', detalle: 'Visitadores, territorios y capacitación', Icono: UserCog, activa: (r) => r.nombre === 'labEquipo' },
   { href: '#/lab/farmacovigilancia', etiqueta: 'Seguridad', detalle: 'Bandeja de eventos adversos', Icono: ShieldAlert, activa: (r) => r.nombre === 'labFarmaco' },
 ]

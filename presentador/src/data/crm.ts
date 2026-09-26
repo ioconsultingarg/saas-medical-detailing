@@ -334,6 +334,11 @@ export function muestras90(medicoId: string, sesion: EntregaMuestra[]) {
 
 export const umbralDias: Record<Categoria, number> = { A: 30, B: 45, C: 60 }
 
+/** Categoría vigente: la del padrón, salvo que la gerencia haya aprobado un cambio */
+export function categoriaDe(m: MedicoCRM, categorias: Record<string, Categoria> = {}) {
+  return categorias[m.id] ?? m.categoria
+}
+
 export interface Prioridad {
   nivel: 'alta' | 'media' | 'normal'
   motivo: string

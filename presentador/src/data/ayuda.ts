@@ -231,6 +231,33 @@ export const articulos: Articulo[] = [
     enlace: { texto: 'Ir a Material y aprobaciones', href: '#/lab' },
   },
   {
+    id: 'portal-lanzamiento',
+    titulo: 'Seguir un lanzamiento',
+    resumen: 'El módulo junta el listado de médicos objetivo, el cronograma de hitos y la adopción de los primeros 90 días.',
+    pantallas: ['labLanzamientos'],
+    claves: ['lanzamiento', 'nuevo producto', 'objetivo', 'cronograma', 'adopcion', 'hitos', 'kit'],
+    pasos: [
+      'Elegí el lanzamiento arriba a la derecha.',
+      'Tildá los hitos del cronograma a medida que se cumplen; los atrasados quedan en rojo.',
+      'Revisá el listado objetivo: cada médico figura como alcanzado o pendiente.',
+      'Con un toque podés crear el plan de visitas para los que faltan.',
+    ],
+    enlace: { texto: 'Ir a Lanzamientos', href: '#/lab/lanzamientos' },
+  },
+  {
+    id: 'portal-segmentos',
+    titulo: 'Recategorizar médicos con el análisis RFM',
+    resumen: 'El sistema analiza recencia de visita, frecuencia y volumen de recetas, y propone subir o bajar de categoría. La decisión siempre la toma una persona.',
+    pantallas: ['labSegmentacion'],
+    claves: ['segmento', 'rfm', 'categoria', 'recategorizar', 'potencial', 'campeon', 'riesgo', 'dormido'],
+    pasos: [
+      'Entrá en Segmentos y mirá los cambios propuestos.',
+      'Cada fila explica por qué se propone el cambio.',
+      'Aprobá o descartá: al aprobar, la categoría cambia en el fichero y en la frecuencia esperada.',
+    ],
+    enlace: { texto: 'Ir a Segmentos', href: '#/lab/segmentacion' },
+  },
+  {
     id: 'portal-cupos',
     titulo: 'Definir el cupo de muestras',
     resumen: 'El cupo limita cuántas muestras puede entregar cada visitador a un mismo médico por mes.',

@@ -20,6 +20,7 @@ export const operacionOutbox: Record<TipoOutbox, { metodo: 'POST' | 'PATCH'; rut
   pieza: { metodo: 'PATCH', ruta: '/v1/content/{id}', evento: 'content.published' },
   licitacion: { metodo: 'PATCH', ruta: '/v1/tenders/{id}', evento: 'tender.updated' },
   cuenta: { metodo: 'POST', ruta: '/v1/accounts/{id}/interactions', evento: 'account.interaction' },
+  categoria: { metodo: 'PATCH', ruta: '/v1/hcps/{id}', evento: 'hcp.segment_changed' },
 }
 
 export interface Endpoint {

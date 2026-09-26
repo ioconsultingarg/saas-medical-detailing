@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AudioLines, Building2, CalendarPlus, CheckCircle2, CloudOff, Database, FileCheck, FileText, Gavel, ShieldCheck, LogIn, LogOut, Package, PenLine, RefreshCw, RotateCcw, Send, ShieldAlert, Wifi } from 'lucide-react'
+import { AudioLines, Building2, CalendarPlus, CheckCircle2, CloudOff, Database, FileCheck, FileText, Gavel, ShieldCheck, Target, LogIn, LogOut, Package, PenLine, RefreshCw, RotateCcw, Send, ShieldAlert, Wifi } from 'lucide-react'
 import { operacionOutbox } from '../lib/api'
 import { EncabezadoPantalla } from '../components/ui'
 import { presentacionesOficiales } from '../data/presentaciones'
@@ -21,6 +21,7 @@ const iconos: Record<TipoOutbox, typeof LogIn> = {
   pieza: FileCheck,
   licitacion: Gavel,
   cuenta: Building2,
+  categoria: Target,
 }
 
 export function Actividad() {

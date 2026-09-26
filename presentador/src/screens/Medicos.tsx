@@ -3,7 +3,7 @@ import { AlertTriangle, CalendarCheck, ChevronRight, Package, Search, Users } fr
 import { Avatar, BadgeCategoria, ChipPrioridad, Sparkline, textoDias, Variacion } from '../components/crm'
 import { EncabezadoPantalla, Kpi, MonogramaProducto, NumeroAnimado, Segmentado } from '../components/ui'
 import { visitasDelDia } from '../data/agenda'
-import { APM_ACTUAL, diasSinVisita, medicos, muestras90, objetivo90, prioridad, umbralDias, variacion, visitas90, type Categoria } from '../data/crm'
+import { APM_ACTUAL, categoriaDe, diasSinVisita, medicos, muestras90, objetivo90, prioridad, umbralDias, variacion, visitas90, type Categoria } from '../data/crm'
 import { miles } from '../lib/formato'
 import { useDemo } from '../state/demo'
 
@@ -24,8 +24,9 @@ export function Medicos() {
         .filter((m) => m.apmId === APM_ACTUAL)
         .map((m) => {
           const dias = diasSinVisita(m, estado.registros)
+          const categoria = categoriaDe(m, estado.categorias)
           return {
-            m,
+            m: { ...m, categoria },
             dias,
             prio: prioridad(m, dias),
             v: variacion(m),
@@ -35,7 +36,7 @@ export function Medicos() {
             serie: Object.values(m.recetas).reduce<number[]>((acc, s) => s!.map((x, i) => x + (acc[i] ?? 0)), []),
           }
         }),
-    [estado.registros, estado.entregas],
+    [estado.registros, estado.entregas, estado.categorias],
   )
 
   const kpis = {

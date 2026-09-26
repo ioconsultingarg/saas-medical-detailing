@@ -1,7 +1,9 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useState, type ReactNode } from 'react'
 import { apm, registrosIniciales, visitasDelDia } from '../data/agenda'
 import { diapositivaPorId } from '../data/presentaciones'
+import type { Categoria } from '../data/crm'
 import { cuentas, type Movimiento } from '../data/cuentas'
+import { lanzamientos } from '../data/lanzamientos'
 import { licitaciones, type EstadoLicitacion } from '../data/licitaciones'
 import { cupoInicial, eventosAdversos, piezas, type EstadoEvento, type EstadoPieza } from '../data/portal'
 import { stockInicial } from '../data/stock'
@@ -43,6 +45,10 @@ export interface EstadoDemo {
   requisitos: Record<string, boolean>
   /** contactos registrados sobre una cuenta durante la sesión */
   interacciones: Record<string, Movimiento[]>
+  /** recategorizaciones aprobadas sobre la sugerencia del análisis */
+  categorias: Record<string, Categoria>
+  /** hitos de lanzamiento cumplidos */
+  hitos: Record<string, boolean>
 }
 
 type Accion =
@@ -58,6 +64,8 @@ type Accion =
   | { tipo: 'licitacion'; id: string; estado: EstadoLicitacion }
   | { tipo: 'requisito'; id: string; listo: boolean }
   | { tipo: 'interaccion'; cuentaId: string; movimiento: Movimiento }
+  | { tipo: 'categoria'; medicoId: string; categoria: Categoria; nombre: string }
+  | { tipo: 'hito'; id: string; listo: boolean }
   | { tipo: 'carrito'; sku: string; delta: number }
   | { tipo: 'vaciarCarrito' }
   | { tipo: 'pedido' }
@@ -95,6 +103,8 @@ function estadoInicial(): EstadoDemo {
     licitaciones: Object.fromEntries(licitaciones.map((l) => [l.id, l.estadoInicial])),
     requisitos: Object.fromEntries(licitaciones.flatMap((l) => l.requisitos.map((r) => [r.id, r.listoInicial]))),
     interacciones: {},
+    categorias: {},
+    hitos: Object.fromEntries(lanzamientos.flatMap((l) => l.hitos.map((h) => [h.id, h.listoInicial]))),
   }
 }
 
@@ -116,6 +126,8 @@ function cargar(): EstadoDemo {
           licitaciones: { ...base.licitaciones, ...guardado.licitaciones },
           requisitos: { ...base.requisitos, ...guardado.requisitos },
           interacciones: { ...base.interacciones, ...guardado.interacciones },
+          categorias: { ...base.categorias, ...guardado.categorias },
+          hitos: { ...base.hitos, ...guardado.hitos },
           stock: guardado.stock.map((s) => {
             const actual = stockInicial.find((x) => x.sku === s.sku)
             return actual ? { ...actual, unidades: s.unidades } : s
@@ -315,6 +327,14 @@ function reducir(estado: EstadoDemo, accion: Accion): EstadoDemo {
         outbox: [entradaOutbox('cuenta', `${accion.movimiento.titulo} · ${cuenta?.nombre ?? 'cuenta'}`), ...estado.outbox],
       }
     }
+    case 'categoria':
+      return {
+        ...estado,
+        categorias: { ...estado.categorias, [accion.medicoId]: accion.categoria },
+        outbox: [entradaOutbox('categoria', `${accion.nombre} pasa a categoría ${accion.categoria}`), ...estado.outbox],
+      }
+    case 'hito':
+      return { ...estado, hitos: { ...estado.hitos, [accion.id]: accion.listo } }
     case 'plan':
       return {
         ...estado,
