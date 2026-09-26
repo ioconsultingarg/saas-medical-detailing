@@ -139,11 +139,35 @@ def capturar(page, movil):
     ir(page, '#/lab/farmacovigilancia', 1400)
     guardar(page, 'lab-farmacovigilancia')
 
+    ir(page, '#/lab/cuentas', 1500)
+    guardar(page, 'lab-cuentas')
+
+    ir(page, '#/lab/cuentas/c1', 1600)
+    guardar(page, 'lab-cuenta')
+
+    ir(page, '#/lab/licitaciones', 1500)
+    guardar(page, 'lab-licitaciones')
+
+    ir(page, '#/lab/lanzamientos', 1600)
+    guardar(page, 'lab-lanzamientos')
+
+    ir(page, '#/lab/segmentacion', 1800)
+    guardar(page, 'lab-segmentacion')
+
     ir(page, '#/asistente', 1400)
     page.get_by_role('button', name='bajaron su prescripción').first.click()
     page.wait_for_selector('text=Cómo lo calculé', timeout=30000)
     esperar(page, 1500)
     guardar(page, 'lab-asistente')
+
+    # ---------------- la app en modo oscuro
+    sesion(page, SESION_APM)
+    page.evaluate("localStorage.setItem('io-pharma-tema', 'oscuro'); location.hash = '#/'")
+    page.reload(wait_until='networkidle')
+    esperar(page, 1800)
+    page.add_style_tag(content=SIN_MOVIMIENTO)
+    guardar(page, 'apm-hoy-oscuro')
+    page.evaluate("localStorage.setItem('io-pharma-tema', 'claro')")
 
     # ---------------- la misma app en celular
     movil.goto(BASE, wait_until='networkidle')

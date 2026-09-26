@@ -342,6 +342,27 @@ def construir():
         'Si cerrás sesión con trabajo sin sincronizar',
         'Lo que hiciste queda guardado en esa tablet y se envía la próxima vez que alguien ingrese con conexión. No se pierde nada.')]
 
+    f += [P('Instalarla en el dispositivo', 'h2')]
+    f += [P(
+        'IO-Pharma es una aplicación web: no se descarga de ninguna tienda. Se entra por su dirección y el propio navegador '
+        'ofrece instalarla, con lo que queda con su ícono, se abre a pantalla completa y funciona sin conexión.')]
+    f += [pasos([
+        'Abrí la dirección en Chrome, Edge o Safari.',
+        'En Android y en computadora, tocá "Instalar" cuando el navegador lo ofrezca, o el botón que aparece al ingresar.',
+        'En iPhone y iPad: Compartir y después "Agregar a inicio".',
+        'Desde tu cuenta podés instalarla en cualquier momento.',
+    ])]
+    f += [Spacer(1, 6), aviso(
+        'Por qué conviene instalarla',
+        'En iPhone, una aplicación web que no está instalada pierde sus datos guardados a los pocos días de no usarse. '
+        'Instalada, no: queda lista para trabajar sin señal.', TINTA3, FONDO)]
+
+    f += [P('Modo claro y oscuro', 'h2')]
+    f += [P(
+        'Desde tu cuenta se elige entre claro, oscuro o automático, que sigue la configuración del dispositivo. '
+        'Las presentaciones se ven siempre en claro, porque son el material que mira el médico.')]
+    f += [figura('apm-hoy-oscuro', 'La misma pantalla en modo oscuro, pensada para un consultorio con poca luz.', 160)]
+
     f += [P('La ayuda, siempre a mano', 'h2')]
     f += [P(
         'El botón con el signo de pregunta, arriba a la derecha, abre la ayuda. También se abre con la tecla <b>?</b> desde '
@@ -433,9 +454,11 @@ def construir():
         'La app anota cuánto tiempo estuvo abierta cada pantalla y qué recursos se abrieron. Esa información alimenta el '
         'informe del laboratorio sobre qué material funciona.', TINTA3, FONDO)]
 
-    f += [P('2.5 Stock y muestras', 'h2')]
+    f += [P('2.5 Material y muestras', 'h2')]
     f += [P(
-        'El inventario del visitador con semáforo: stock alto, bajo o sin stock. Cada ítem muestra su lote y su vencimiento.')]
+        'La disponibilidad del material que lleva el visitador, con semáforo: disponible, poca cantidad o sin unidades. Cada '
+        'ítem muestra su lote y su vencimiento. Las presentaciones de farmacia se dispensan por droguería: no se venden desde '
+        'la app.')]
     f += vinetas([
         'Buscar por nombre o código, y filtrar por producto o material.',
         'Cargar cantidades y solicitar la entrega; si hay una visita abierta, queda asociada a ese médico.',
@@ -456,12 +479,16 @@ def construir():
     f += [P('Paso 2 · Registrar la visita', 'h3')]
     f += [pasos([
         'Contar cómo fue: se puede escribir, o dictarlo y que la IA complete los campos.',
-        'Elegir la receptividad del médico con las estrellas.',
-        'Marcar las etiquetas del feedback: pidió estudios, objeción de costo, volver en 15 días, y demás.',
-        'Dejar la nota para la próxima visita.',
+        'Si querés, elegir la receptividad del médico con las estrellas.',
+        'Marcar las etiquetas del feedback que correspondan.',
+        'Dejar la nota para la próxima visita, que es tu ayuda memoria.',
         'Si se entregaron muestras, pedirle la firma al profesional en la pantalla, o marcar que firmó el remito en papel.',
         'Guardar y hacer check-out.',
     ])]
+    f += [Spacer(1, 6), aviso(
+        'El feedback es opcional',
+        'La visita se puede cerrar sin calificar, sin etiquetas y sin nota. Lo único obligatorio es la firma cuando se '
+        'entregan muestras, porque lo exige la normativa sanitaria.', TINTA3, FONDO)]
 
     f += [P('2.7 El reporte por voz', 'h2')]
     f += [P(
@@ -548,7 +575,71 @@ def construir():
     ])
 
     f += [figura('lab-catalogo', 'Catálogo: presentaciones, lotes con vencimiento y el cupo mensual de muestras por médico.', 160)]
-    f += [P('3.3 Equipo y territorios', 'h2')]
+    f += [P('3.3 Cuentas institucionales', 'h2')]
+    f += [P(
+        'Droguerías, cadenas de farmacias, instituciones y financiadores: donde el laboratorio factura de verdad, aunque la '
+        'receta la escriba el médico. Toda la relación queda en la cuenta y no en la cabeza del responsable.')]
+    f += vinetas([
+        'Compras de los últimos seis meses, con la variación del trimestre.',
+        'Acuerdos vigentes con su fecha de vencimiento y aviso anticipado.',
+        'Contactos con cargo, teléfono y correo.',
+        'Historial de reuniones, pedidos, acuerdos y reclamos, con quién los registró.',
+        'Registro de interacciones desde la misma ficha.',
+    ])
+    f += [figura('lab-cuentas', 'Las cuentas ordenadas por actividad, con las que vienen cayendo señaladas.', 165)]
+    f += [figura('lab-cuenta', 'La ficha de una cuenta: compras, acuerdos por vencer, contactos e historial.', 160)]
+    f += [Spacer(1, 4), aviso(
+        'Por qué importa',
+        'Si el responsable de la cuenta se toma licencia o deja la empresa, el que lo reemplaza abre la ficha y sabe en qué '
+        'quedó cada conversación. Es el conocimiento que hoy se pierde con la persona.', TINTA3, FONDO)]
+
+    f += [P('3.4 Licitaciones', 'h2')]
+    f += [P(
+        'Los procesos institucionales, con sus fechas críticas a la vista. Perder una licitación por no presentar a tiempo es '
+        'el error más caro y más evitable de este canal.')]
+    f += vinetas([
+        'Pipeline por etapa: detectada, en preparación, presentada y cerrada.',
+        'Aviso cuando una fecha cae dentro de la semana.',
+        'Checklist de requisitos de la presentación, que se va tildando.',
+        'Tasa de adjudicación sobre los procesos cerrados.',
+        'Cada proceso se puede asociar a la cuenta que corresponde.',
+    ])
+    f += [figura('lab-licitaciones', 'El pipeline de licitaciones, con la alerta de las fechas de esta semana.', 165)]
+
+    f += [P('3.5 Lanzamientos', 'h2')]
+    f += [P(
+        'Sacar un producto nuevo se juega en los primeros 90 días. El módulo junta el listado de médicos objetivo, el '
+        'cronograma y la adopción temprana.')]
+    f += vinetas([
+        'Médicos objetivo, marcados como alcanzados o pendientes.',
+        'Cronograma de hitos con responsable; los atrasados quedan señalados.',
+        'Kit de material del lanzamiento, con el estado de publicación de cada pieza.',
+        'Porcentaje del equipo con la capacitación aprobada.',
+        'Plan de visitas para los médicos que faltan, con un toque.',
+    ])
+    f += [figura('lab-lanzamientos', 'Un lanzamiento en curso: adopción, cronograma y listado objetivo.', 165)]
+
+    f += [P('3.6 Segmentos y potencial', 'h2')]
+    f += [P(
+        'Cada médico analizado por recencia de visita, frecuencia y volumen de prescripción. El sistema propone la categoría '
+        'que le correspondería; la decisión la toma una persona, porque define la carga de trabajo del equipo.')]
+    f += [Spacer(1, 2), tabla(
+        ['Letra', 'Qué mide'],
+        [
+            ['R · Recencia', 'Hace cuánto no se lo visita, contra la frecuencia que le corresponde'],
+            ['F · Frecuencia', 'Visitas de los últimos 90 días sobre el objetivo de su categoría'],
+            ['M · Valor', 'Recetas del último trimestre, comparadas con el resto de la cartera'],
+        ], anchos=[40 * mm, ANCHO_UTIL - 40 * mm])]
+    f += [Spacer(1, 8)]
+    f += vinetas([
+        'Cinco segmentos: campeón, en riesgo, en crecimiento, dormido y estable.',
+        'Cada propuesta de cambio viene explicada en texto.',
+        'Al aprobar, la categoría cambia en el fichero y con ella la frecuencia esperada.',
+        'A un médico que viene creciendo no se lo baja de categoría, aunque su volumen sea bajo.',
+    ])
+    f += [figura('lab-segmentacion', 'El análisis de la cartera, con los cambios de categoría propuestos.', 165)]
+
+    f += [P('3.7 Equipo y territorios', 'h2')]
     f += vinetas([
         'Alta y baja de visitadores; al darlos de baja, la tablet deja de sincronizar.',
         'Territorio asignado y cartera de cada uno.',
@@ -558,7 +649,7 @@ def construir():
     ])
 
     f += [figura('lab-equipo', 'Equipo y territorios, con la cobertura de cada visitador y el estado de sus capacitaciones.', 160)]
-    f += [P('3.4 Farmacovigilancia', 'h2')]
+    f += [P('3.8 Farmacovigilancia', 'h2')]
     f += [P(
         'La bandeja reúne todo lo que reportaron los visitadores, incluido lo que la app detectó sola en los reportes por voz. '
         'Cada caso muestra el tiempo que queda dentro del plazo de 24 horas.')]
@@ -570,7 +661,7 @@ def construir():
     ])]
 
     f += [figura('lab-farmacovigilancia', 'La bandeja de farmacovigilancia, con el plazo de 24 horas a la vista en cada caso.', 160)]
-    f += [P('3.5 Asistente estratégico', 'h2')]
+    f += [P('3.9 Asistente estratégico', 'h2')]
     f += [P(
         'Permite preguntarle a los datos en lenguaje natural, sin armar un tablero para cada duda. Responde con un resumen '
         'escrito, una tabla, un gráfico y, sobre todo, <b>la consulta que usó y sus fuentes</b>.')]
@@ -587,7 +678,7 @@ def construir():
         'visitador. El asistente es de solo lectura y respeta los permisos por zona de cada gerente.')]
 
     f += [figura('lab-asistente', 'Una respuesta del asistente: resumen, indicadores, tabla, gráfico y la consulta que usó.', 165)]
-    f += [P('3.6 Integraciones y API', 'h2')]
+    f += [P('3.10 Integraciones y API', 'h2')]
     f += vinetas([
         'Conectores a SAP, Salesforce, la auditoría de prescripciones, el directorio corporativo y el data warehouse.',
         'Mapeo de campos de cada conector, para ver exactamente qué se sincroniza.',
@@ -636,7 +727,23 @@ def construir():
         'Queda registro de quién hizo qué y cuándo, para una auditoría.',
     ])
 
-    f += [Spacer(1, 6), P('4.4 Accesibilidad', 'h2')]
+    f += [Spacer(1, 8), P('4.4 Qué registra la app sobre el visitador', 'h2')]
+    f += [P(
+        'La plataforma está diseñada para asistir al promotor, no para vigilarlo. Es una decisión de producto y también una '
+        'condición para que la herramienta se pueda implementar en la industria.')]
+    f += [Spacer(1, 2), tabla(
+        ['Sí registra', 'No registra'],
+        [
+            ['La ubicación, solo en el check-in y el check-out', 'El recorrido ni la ubicación en segundo plano'],
+            ['Lo que el promotor decide registrar de la visita', 'Los tiempos entre una visita y otra'],
+            ['Las entregas de muestras y sus firmas', 'Justificaciones por demoras o desvíos del plan'],
+            ['El material que se mostró, en agregado', 'Rankings individuales ligados a la remuneración'],
+        ], anchos=[ANCHO_UTIL / 2, ANCHO_UTIL / 2])]
+    f += [Spacer(1, 8), P(
+        'Fuera del horario de trabajo, los avisos quedan en espera hasta el día hábil siguiente. La app lo explica en la '
+        'pantalla de Actividad y en su ayuda, para que el equipo lo tenga claro desde el primer día.')]
+
+    f += [Spacer(1, 6), P('4.5 Accesibilidad', 'h2')]
     f += vinetas([
         'Todos los botones se pueden tocar con el dedo, en cualquier tamaño de pantalla.',
         'La app se maneja también con teclado, y los lectores de pantalla anuncian los cambios.',
