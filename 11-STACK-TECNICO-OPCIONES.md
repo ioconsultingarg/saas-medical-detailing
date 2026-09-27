@@ -188,6 +188,118 @@ Recomendado. Las vistas previas por rama, si se apagan solas, son casi gratis. E
 infraestructura con mejor relación costo-beneficio de toda la tabla: cuesta menos que una hora de
 desarrollo y evita el despliegue que rompe la sincronización de un cliente en plena jornada.
 
+---
+
+## Proveedor evaluado · DonWeb Cloud Server
+
+Datos tomados de la página el 27/09/2026. Precios en pesos, IVA incluido. La columna "promo" es un
+**55 % OFF de captación**: la que hay que usar para planificar es la de lista, que es a la que
+renueva. La conversión a dólares es al oficial de ese día (≈ $1.545).
+
+| vCPU | RAM | NVMe | Transferencia | Promo | Lista | Lista en USD |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | 1 GB | 10 GB | 1 TB | $5.164 | $11.477 | ≈ 7 |
+| 2 | 2 GB | 20 GB | 1 TB | $9.708 | $21.574 | ≈ 14 |
+| 2 | 8 GB | 20 GB | 1 TB | $12.698 | $28.218 | ≈ 18 |
+| **4** | **8 GB** | **30 GB** | **2 TB** | **$15.673** | **$34.830** | **≈ 23** |
+| 8 | 8 GB | 40 GB | 3 TB | $20.671 | $45.937 | ≈ 30 |
+| 8 | 16 GB | 60 GB | 4 TB | $26.039 | $57.865 | ≈ 37 |
+
+### La comparación que casi nadie hace bien
+
+Contra un proveedor del exterior no se compara al dólar oficial: se compara al **dólar tarjeta**
+(≈ $2.008 el mismo día), que es lo que termina costando pagar un servicio en dólares desde
+Argentina con percepciones incluidas.
+
+| | Costo real mensual |
+| --- | --- |
+| Supabase Pro · US$ 25 | ≈ $50.200 |
+| DigitalOcean 4 vCPU / 8 GB · US$ 48 | ≈ $96.400 |
+| **DonWeb 4 vCPU / 8 GB (lista)** | **$34.830** |
+| Hetzner CPX31 4 vCPU / 8 GB · ≈ US$ 16 | ≈ $32.100 |
+
+Queda al nivel de Hetzner, que es el piso del mercado, y encima **con los datos en Argentina**.
+Eso no es un detalle de costos: es un argumento de venta ante un laboratorio que pregunta dónde
+quedan los datos de sus médicos.
+
+### Lo que resuelve bien
+
+- **Datacenters propios en Argentina** y facturación en pesos. Residencia de datos sin asteriscos
+  y sin exposición al tipo de cambio.
+- **El marketplace tiene exactamente el stack de la columna Recomendado**: Docker, PostgreSQL,
+  Coolify, Supabase y n8n en un clic. La opción que este documento recomendaba —"un VPS con Docker
+  administrado con Coolify"— acá se despliega en minutos.
+- **300 Mb/s dedicados y simétricos**, y el tráfico entre servidores por la red interna no consume
+  la cuota. Importa cuando la API y la base se separan en dos máquinas.
+- **Escalado vertical prorrateado**: se amplía y se paga solo la diferencia por los días restantes;
+  si se reduce, se acredita. Un reinicio de 3 a 5 minutos.
+- **Firewall aguas arriba** del servidor (no consume sus recursos) y anti-DDoS a nivel de carrier.
+- **Volúmenes Cloud** de hasta 1 TB, hasta diez por servidor, conectables en caliente.
+- Soporte 24x7 con tiempo de respuesta declarado de 20 minutos.
+
+### Lo que hay que mirar de cerca
+
+1. **El backup automático es semanal.** En esta aplicación eso significa poder perder **hasta siete
+   días de visitas**, firmas y entregas de muestras. Los backups diarios con 30 retenciones son un
+   cargo aparte. Y sobre todo: **no hay recuperación a un punto en el tiempo (PITR) de Postgres**,
+   que este documento pone como condición de no negociable. Hay que armarlo uno: `pgBackRest` o
+   `WAL-G` archivando el WAL a un bucket externo. Es media jornada de trabajo y resuelve el punto.
+2. **"Administrado" quiere decir menos de lo que parece.** Monitorean la red y el estado del nodo,
+   y aplican parches solo si usás el panel Ferozo. Tu Postgres, tu Docker y las actualizaciones de
+   seguridad de Ubuntu corren por tu cuenta. No es una crítica: es la diferencia real contra
+   Supabase, y se paga en horas, que según este mismo documento es lo caro.
+3. **La IP puede quedar en Estados Unidos.** La respuesta oficial dice "nodos en Argentina […] con
+   IP localizada en Argentina o los EEUU". Si el argumento es residencia de datos, hay que pedir
+   por escrito nodo **e** IP en Argentina.
+4. **El almacenamiento se amplía pero no se reduce.** Conviene arrancar corto y crecer, nunca al
+   revés.
+5. **No hay almacenamiento de objetos tipo S3.** El material aprobado, las firmas y los audios no
+   deberían vivir en el disco del servidor: van a **Cloudflare R2**, que además no cobra egreso y
+   resuelve el problema de abanico que describe la sección de escalabilidad.
+6. **El 55 % es promocional.** Preguntar explícitamente a qué precio renueva y con qué frecuencia
+   se ajusta por inflación. Un precio en pesos protege del dólar pero no del índice.
+
+### Cómo lo armaría
+
+**Arranque, un cliente (hasta 25 visitadores):** un solo Cloud Server de **4 vCPU / 8 GB / 30 GB**
+($34.830 de lista) con Coolify del marketplace. Adentro: la API, Postgres con **PgBouncer en modo
+transacción** y el worker de colas. Afuera: el material y los archivos en **Cloudflare R2**, el WAL
+de Postgres archivado también a R2, y la app del visitador donde está hoy, en Pages. Sumar los
+**backups diarios** pagos: es la diferencia entre perder un día y perder una semana.
+
+**Segundo o tercer cliente:** separar la base a su propio servidor de **8 vCPU / 16 GB**
+($57.865) y dejar la API en el de 4. La red interna entre los dos no consume transferencia.
+
+**Entorno de prueba:** el plan de **2 vCPU / 2 GB** ($21.574). No se puede apagar para no pagar, así
+que si el presupuesto aprieta, la alternativa es levantarlo con un snapshot solo cuando hay una
+migración que ensayar y darlo de baja después, aprovechando que el cobro se prorratea por día.
+
+**Total realista del arranque:** unos **$40.000 a $45.000 por mes** con backups diarios, más R2
+(centavos de dólar al principio). Contra los $50.200 de Supabase Pro solo, con la base en otro país.
+
+### Qué preguntarles antes de firmar
+
+1. ¿Nodo **e** IP quedan en Argentina? ¿Lo pueden poner por escrito?
+2. ¿Cuánto cuesta el backup diario con retención de 30 copias?
+3. ¿Los snapshots consumen del almacenamiento contratado o van aparte?
+4. ¿Precio por GB de los Volúmenes Cloud y cómo se factura?
+5. ¿A qué precio renueva después del 55 % y con qué criterio se ajusta?
+6. ¿El 99,9 % de disponibilidad tiene crédito por incumplimiento o es declarativo?
+7. ¿Firman acuerdo de tratamiento de datos y detallan subprocesadores?
+8. ¿Puedo restaurar un backup a un servidor nuevo para probarlo, sin tocar el de producción?
+
+### Veredicto
+
+**Sirve, y es la mejor opción local que vimos hasta ahora** para las columnas Mínimo y Recomendado.
+El precio de lista compite con Hetzner, la residencia de datos en Argentina es un argumento
+comercial real frente a un laboratorio, y el marketplace despliega el stack que este documento ya
+recomendaba.
+
+Lo que **no** resuelve es la parte gestionada de la base: PITR, réplica y actualizaciones son
+trabajo propio. Si el objetivo es validar con uno o dos clientes, eso es un fin de semana de setup
+y vale la pena. Si el objetivo fuera crecer a diez clientes sin sumar a nadie de infraestructura,
+ahí sí conviene pagar un Postgres gestionado, aunque salga en dólares.
+
 ## Qué preguntarle a cada proveedor que cotices
 
 1. ¿Dónde quedan físicamente los datos y puedo elegir la región?
