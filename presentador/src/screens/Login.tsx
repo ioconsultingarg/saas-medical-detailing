@@ -6,6 +6,7 @@ import { apm, visitasDelDia } from '../data/agenda'
 import { productos } from '../data/productos'
 import { fechaLarga } from '../lib/formato'
 import { Marca } from '../components/Marca'
+import { useTemaFijoOscuro } from '../lib/tema'
 import { useDemo } from '../state/demo'
 import { CUENTAS, useSesion, type Rol } from '../state/sesion'
 
@@ -73,6 +74,7 @@ function VistaPreviaDia() {
 }
 
 export function Login() {
+  useTemaFijoOscuro()   // el ingreso no ofrece eleccion de apariencia
   const { ingresar } = useSesion()
   const { pendientes } = useDemo()
   const idEmail = useId()

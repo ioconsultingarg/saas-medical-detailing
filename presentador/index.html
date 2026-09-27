@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es" data-tema="oscuro" style="color-scheme: dark">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="%BASE_URL%icon.svg" />
@@ -12,6 +12,17 @@
     <meta name="theme-color" content="#0a0f16" />
     <meta name="description" content="IO-Pharma: e-detailing y CRM para laboratorios. Ruta del día, presentaciones interactivas, muestras con trazabilidad y cierre de visita, con o sin conexión." />
     <title>IO-Pharma · e-detailing y CRM para laboratorios</title>
+    <script>
+      // el tema se resuelve antes del primer pintado: oscuro salvo que la persona haya elegido claro
+      (function () {
+        var t = 'oscuro'
+        try {
+          if (localStorage.getItem('io-pharma-tema') === 'claro') t = 'claro'
+        } catch (e) {}
+        document.documentElement.dataset.tema = t
+        document.documentElement.style.colorScheme = t === 'oscuro' ? 'dark' : 'light'
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

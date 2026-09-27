@@ -11,3 +11,7 @@ manual/__pycache__/
 # skills de terceros: se usan localmente, no se publican
 .agents/skills/
 .claude/skills/
+
+# material pesado que se regenera con los scripts
+manual/reel-temp/
+Reel-IO-Pharma.mp4

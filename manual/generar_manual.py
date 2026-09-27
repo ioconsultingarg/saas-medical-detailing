@@ -492,12 +492,15 @@ def construir():
         'En iPhone, una aplicación web que no está instalada pierde sus datos guardados a los pocos días de no usarse. '
         'Instalada, no: queda lista para trabajar sin señal.', TINTA3, FONDO)]
 
-    f += [P('Por qué la app es oscura', 'h2')]
+    f += [P('Apariencia: arranca en oscuro', 'h2')]
     f += [P(
-        'La interfaz trabaja siempre en modo oscuro. No es una preferencia estética: la visita ocurre en consultorios, '
-        'pasillos y salas de espera, muchas veces con poca luz, y una pantalla clara encandila y delata desde lejos lo que '
-        'se está mirando. El modo oscuro además consume menos batería en las pantallas OLED de tablets y celulares, que es '
-        'la diferencia entre llegar o no al final de la jornada.')]
+        'La app se abre siempre en modo oscuro, y el ingreso no ofrece otra opción. No es una preferencia estética: la visita '
+        'ocurre en consultorios, pasillos y salas de espera, muchas veces con poca luz, y una pantalla clara encandila y '
+        'delata desde lejos lo que se está mirando. Además consume menos batería en las pantallas OLED, que es la diferencia '
+        'entre llegar o no al final de la jornada.')]
+    f += [P(
+        'Una vez adentro, quien prefiera el modo claro lo cambia desde <b>Tu cuenta · Apariencia</b> y la elección le queda '
+        'guardada en ese dispositivo.')]
     f += [Spacer(1, 4), aviso(
         'La presentación es la excepción',
         'Todo lo que ve el médico —diapositivas, estudios, fichas técnicas— se muestra siempre en claro, con la marca del '

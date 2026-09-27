@@ -183,9 +183,9 @@ export function Integraciones() {
         </h2>
         <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {conectores.map((c) => (
-            <li key={c.id}>
+            <li key={c.id} className="min-w-0">
               <button type="button" onClick={() => setConector(c)} className="press card flex h-full w-full cursor-pointer flex-col gap-3 p-4 text-left hover:border-line-2 hover:shadow-(--shadow-float)">
-                <span className="flex items-center gap-3">
+                <span className="flex min-w-0 items-center gap-3">
                   <span aria-hidden="true" className="flex size-11 shrink-0 items-center justify-center rounded-xl text-[13px] font-bold text-white" style={{ background: c.color }}>
                     {c.iniciales}
                   </span>
@@ -194,16 +194,16 @@ export function Integraciones() {
                     <span className="block truncate text-[13px] text-ink-3">{c.sistema}</span>
                   </span>
                   {c.estado === 'conectado' ? (
-                    <span className="chip border-transparent bg-ok-soft text-ok">
+                    <span className="chip shrink-0 border-transparent bg-ok-soft text-ok">
                       <CheckCircle2 size={12} aria-hidden="true" />
                       Conectado
                     </span>
                   ) : (
-                    <span className="chip">Disponible</span>
+                    <span className="chip shrink-0">Disponible</span>
                   )}
                 </span>
-                <span className="flex flex-col gap-1 text-[13px] text-ink-2">
-                  <span className="flex items-center gap-1.5">
+                <span className="flex min-w-0 flex-col gap-1 text-[13px] text-ink-2">
+                  <span className="flex min-w-0 items-center gap-1.5">
                     <ArrowLeftRight size={13} aria-hidden="true" className="text-ink-3" />
                     {c.sentido}
                   </span>

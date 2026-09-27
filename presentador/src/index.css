@@ -424,8 +424,21 @@
 [data-tema='oscuro'] .teselas-neutras {
   filter: grayscale(1) invert(1) brightness(0.86) contrast(0.95);
 }
+/* el credito del mapa venia por debajo del minimo de contraste en los dos temas */
 .leaflet-control-attribution {
   font-size: 10px;
+  background: rgb(255 255 255 / 0.9) !important;
+  color: #3d4757 !important;
+}
+.leaflet-control-attribution a {
+  color: #1f4d75 !important;
+}
+[data-tema='oscuro'] .leaflet-control-attribution {
+  background: rgb(10 15 22 / 0.85) !important;
+  color: #a9b6c7 !important;
+}
+[data-tema='oscuro'] .leaflet-control-attribution a {
+  color: #8cc4e8 !important;
 }
 /* El mapa acompaña sin competir: la ruta y los pines llevan el color */
 .teselas-neutras {

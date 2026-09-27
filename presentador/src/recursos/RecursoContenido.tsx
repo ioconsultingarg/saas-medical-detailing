@@ -158,7 +158,10 @@ function Documento({ r }: { r: Extract<Recurso, { tipo: 'documento' }> }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <header className="rounded-xl p-4 text-[color:var(--color-cardio-deep)] oscuro:bg-sunken oscuro:text-ink" style={{ background: p.tinte }}>
+      <header
+        className="rounded-xl bg-(--tinte) p-4 text-[color:var(--color-cardio-deep)] oscuro:bg-sunken oscuro:text-ink"
+        style={{ ['--tinte' as string]: p.tinte }}
+      >
         <div className="flex flex-wrap items-center gap-2">
           <FileText size={16} aria-hidden="true" style={{ color: p.color }} />
           <span className="num text-[12px] font-medium oscuro:!text-ink-2" style={{ color: p.colorOscuro }}>

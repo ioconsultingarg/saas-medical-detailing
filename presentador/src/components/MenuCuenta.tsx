@@ -1,6 +1,7 @@
-import { AlertTriangle, CloudOff, LogOut, Mail, MapPin, RefreshCw } from 'lucide-react'
+import { AlertTriangle, CloudOff, LogOut, Mail, MapPin, Moon, RefreshCw, Sun } from 'lucide-react'
 import { hace } from '../lib/formato'
 import { ir } from '../lib/ruta'
+import { useTema, type Tema } from '../lib/tema'
 import { nombreCorto, useDemo } from '../state/demo'
 import { useSesion } from '../state/sesion'
 import { BotonInstalar } from './Instalar'
@@ -16,6 +17,7 @@ export function iniciales(nombre: string) {
 
 export function MenuCuenta({ abierto, onCerrar }: { abierto: boolean; onCerrar: () => void }) {
   const { sesion, salir } = useSesion()
+  const { tema, cambiar } = useTema()
   const { apm, visitaActiva, pendientes, online, avisar } = useDemo()
 
   if (!sesion) return null
@@ -94,6 +96,37 @@ export function MenuCuenta({ abierto, onCerrar }: { abierto: boolean; onCerrar: 
               </span>
             </p>
           )}
+          <section aria-labelledby="titulo-tema" className="mt-6">
+            <h3 id="titulo-tema" className="mb-2 text-[14px] font-semibold text-ink">
+              Apariencia
+            </h3>
+            <div role="group" aria-labelledby="titulo-tema" className="grid grid-cols-2 gap-1 rounded-xl bg-sunken p-1">
+              {(
+                [
+                  ['oscuro', 'Oscuro', Moon],
+                  ['claro', 'Claro', Sun],
+                ] as [Tema, string, typeof Sun][]
+              ).map(([valor, etiqueta, Icono]) => (
+                <button
+                  key={valor}
+                  type="button"
+                  aria-pressed={tema === valor}
+                  onClick={() => cambiar(valor)}
+                  className={`press flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-lg text-[13px] font-medium ${
+                    tema === valor ? 'bg-elevado text-ink shadow-(--shadow-card)' : 'text-ink-3 hover:text-ink'
+                  }`}
+                >
+                  <Icono size={16} aria-hidden="true" />
+                  {etiqueta}
+                </button>
+              ))}
+            </div>
+            <p className="mt-1.5 text-[12px] leading-relaxed text-ink-3">
+              La app arranca en oscuro: en un consultorio con poca luz, una pantalla clara encandila. Las presentaciones se ven
+              siempre en claro, como las ve el médico.
+            </p>
+          </section>
+
           <div className="mt-5">
             <BotonInstalar className="btn-secondary w-full" />
           </div>
