@@ -492,15 +492,18 @@ def construir():
         'En iPhone, una aplicación web que no está instalada pierde sus datos guardados a los pocos días de no usarse. '
         'Instalada, no: queda lista para trabajar sin señal.', TINTA3, FONDO)]
 
-    f += [P('Apariencia: arranca en oscuro', 'h2')]
+    f += [P('Modo claro y modo oscuro', 'h2')]
     f += [P(
-        'La app se abre siempre en modo oscuro, y el ingreso no ofrece otra opción. No es una preferencia estética: la visita '
-        'ocurre en consultorios, pasillos y salas de espera, muchas veces con poca luz, y una pantalla clara encandila y '
-        'delata desde lejos lo que se está mirando. Además consume menos batería en las pantallas OLED, que es la diferencia '
-        'entre llegar o no al final de la jornada.')]
+        'La app tiene las dos apariencias y cada persona elige la que quiere desde <b>Tu cuenta · Apariencia</b>. La elección '
+        'queda guardada en ese dispositivo: la próxima vez abre como la dejó.')]
     f += [P(
-        'Una vez adentro, quien prefiera el modo claro lo cambia desde <b>Tu cuenta · Apariencia</b> y la elección le queda '
-        'guardada en ese dispositivo.')]
+        'La que viene puesta de fábrica es la <b>oscura</b>, y no por una cuestión estética: la visita ocurre en consultorios, '
+        'pasillos y salas de espera, muchas veces con poca luz, donde una pantalla clara encandila y deja ver desde lejos lo '
+        'que se está mirando. Además consume menos batería en las pantallas OLED, que es la diferencia entre llegar o no al '
+        'final de la jornada. Quien prefiera la clara la cambia en dos toques y listo.')]
+    f += [P(
+        'La única pantalla que no ofrece la elección es la de ingreso, que se muestra siempre en oscuro: todavía no hay una '
+        'persona identificada de quien respetar la preferencia.')]
     f += [Spacer(1, 4), aviso(
         'La presentación es la excepción',
         'Todo lo que ve el médico —diapositivas, estudios, fichas técnicas— se muestra siempre en claro, con la marca del '
