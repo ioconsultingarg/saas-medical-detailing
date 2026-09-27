@@ -288,6 +288,71 @@ migración que ensayar y darlo de baja después, aprovechando que el cobro se pr
 7. ¿Firman acuerdo de tratamiento de datos y detallan subprocesadores?
 8. ¿Puedo restaurar un backup a un servidor nuevo para probarlo, sin tocar el de producción?
 
+### Lo que falta, ¿se puede pagar en pesos?
+
+Relevado el 27/09/2026.
+
+| Falta | Opción argentina, en pesos | Veredicto |
+| --- | --- | --- |
+| **Email transaccional** | **DonWeb · EnvíaloSimple Transaccional**: API y SMTP relay, misma factura. Básico $10.500/mes por 2.000 envíos, IVA incluido. Prueba de 1.000 envíos | ✅ Existe y es bueno, pero **sobredimensionado** para este volumen |
+| **Almacenamiento de objetos S3** | **Nubi (nubi2go)**: S3-compatible, pero factura **en dólares** y a **US$ 0,40 por GB al mes**. **ARSAT Nube**: Tier III en Benavídez, factura en pesos, pero no publica object storage ni precios: hay que pedir cotización | ⚠️ Técnicamente sí, económicamente no |
+| **PITR de la base** | Nadie lo vende como servicio acá | Se arma con `pgBackRest`, va contra el bucket que elijas |
+| **Transcripción de voz** | No hay proveedor argentino | Ver abajo: hay un camino sin dólares |
+| **LLM** | No hay proveedor argentino a nivel útil | Dólares, sin vuelta |
+| **Monitoreo de errores** | Sentry autohospedado o GlitchTip, en tu propio Cloud Server | ✅ Gratis, y los datos quedan en Argentina |
+
+### La cuenta que da vuelta la conclusión
+
+Pagar todo en pesos sale **más caro** que la mezcla, y por bastante:
+
+| | En pesos, con proveedor argentino | Alternativa | Diferencia |
+| --- | --- | --- | --- |
+| Email (≈ 500 envíos/mes reales) | $10.500 · DonWeb Básico | **$0** · Resend regala 3.000/mes | $10.500 |
+| Objetos, 50 GB | ≈ $40.000 · Nubi a US$ 0,40/GB | **$0** · Cloudflare R2 regala 10 GB y no cobra egreso | ≈ $40.000 |
+
+Los planes gratuitos **no requieren tarjeta**, así que no hay pago en dólares ni percepciones. El
+objetivo "todo en pesos" tiene sentido para lo que es grande y recurrente —el servidor— y deja de
+tenerlo para lo chico, donde la versión gratuita del proveedor del exterior cuesta cero.
+
+### Y la IA, que es lo único inevitable
+
+También tiene un camino sin dólares, al menos hasta el primer cliente que pague:
+
+- **La transcripción ya funciona sin servidor.** La app usa la Web Speech API del navegador: gratis,
+  sin API key, sin cuenta. Limitación real: necesita conexión y anda bien en Chrome y Edge. Para la
+  demo y el primer cliente alcanza.
+- **La extracción del reporte ya es local.** Las reglas que tiene hoy la demo corren en el
+  dispositivo y no llaman a ningún modelo.
+
+Recién cuando un cliente exija que el dictado ande sin señal, o que el asistente responda preguntas
+abiertas de verdad, aparece el gasto en dólares. Y para entonces ya hay una factura que lo paga.
+
+### Dónde guardar cada cosa, que no es lo mismo
+
+Esto importa más que el precio, porque toca el argumento de venta:
+
+- **El material aprobado** (presentaciones, estudios, fichas) no es dato personal. Puede vivir en
+  **Cloudflare R2** sin problema, y encima resuelve el egreso.
+- **Las firmas de recepción de muestras sí son dato personal de un profesional de la salud.** Esas
+  van en Postgres o en el volumen del servidor, que está **en Argentina**. Son imágenes chicas: no
+  justifican un bucket.
+
+Así se cumplen las dos cosas: el material pesado sale por un CDN que no cobra egreso, y el dato
+sensible nunca se va del país.
+
+### Total mensual del arranque
+
+| Concepto | Pesos |
+| --- | --- |
+| Cloud Server 4 vCPU / 8 GB (lista) | $34.830 |
+| Backups diarios | a cotizar |
+| Dominio | incluido el primer año |
+| Email transaccional | $0 (Resend) o $10.500 (DonWeb, misma factura) |
+| Objetos y CDN | $0 hasta 10 GB (R2) |
+| Monitoreo de errores | $0 |
+| IA | $0 hasta que un cliente la exija de verdad |
+| **Total** | **≈ $35.000 – $45.000** |
+
 ### Veredicto
 
 **Sirve, y es la mejor opción local que vimos hasta ahora** para las columnas Mínimo y Recomendado.
