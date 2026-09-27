@@ -13,8 +13,11 @@ from reportlab.lib.enums import TA_JUSTIFY, TA_RIGHT
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import mm
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import (
     BaseDocTemplate,
+    Flowable,
     Image,
     Frame,
     KeepTogether,
@@ -27,6 +30,22 @@ from reportlab.platypus import (
     TableStyle,
 )
 from reportlab.platypus.tableofcontents import TableOfContents
+
+# ---------------------------------------------------------------- tipografía de marca
+FUENTES = Path(__file__).resolve().parent / 'fuentes'
+SANS, SANS_MEDIA, SANS_NEGRITA, MONO, MONO_MEDIA = 'Helvetica', 'Helvetica', 'Helvetica-Bold', 'Courier', 'Courier-Bold'
+
+if (FUENTES / 'IOSans-Regular.ttf').exists():
+    for nombre, archivo in [
+        ('IOSans', 'IOSans-Regular.ttf'),
+        ('IOSans-Media', 'IOSans-Medium.ttf'),
+        ('IOSans-Negrita', 'IOSans-Bold.ttf'),
+        ('IOMono', 'IOMono-Regular.ttf'),
+        ('IOMono-Media', 'IOMono-Medium.ttf'),
+    ]:
+        pdfmetrics.registerFont(TTFont(nombre, str(FUENTES / archivo)))
+    pdfmetrics.registerFontFamily('IOSans', normal='IOSans', bold='IOSans-Negrita', italic='IOSans', boldItalic='IOSans-Negrita')
+    SANS, SANS_MEDIA, SANS_NEGRITA, MONO, MONO_MEDIA = 'IOSans', 'IOSans-Media', 'IOSans-Negrita', 'IOMono', 'IOMono-Media'
 
 # ---------------------------------------------------------------- identidad
 
@@ -42,7 +61,17 @@ CARDIO = colors.HexColor('#0a6b5d')
 CELESTE = colors.HexColor('#7cc4ee')
 OK = colors.HexColor('#047857')
 
-VERSION = '1.0'
+# color propio de cada parte, para que el lector sepa dónde está sin leer el encabezado
+COLOR_PARTE = {
+    '1': colors.HexColor('#1d5f8a'),
+    '2': colors.HexColor('#0a6b5d'),
+    '3': colors.HexColor('#1d5f8a'),
+    '4': colors.HexColor('#5b3fd6'),
+    '5': colors.HexColor('#a15c07'),
+    '6': colors.HexColor('#56617a'),
+}
+
+VERSION = '1.1'
 FECHA = date.today().strftime('%m/%Y')
 
 MARGEN = 20 * mm
@@ -58,21 +87,44 @@ def estilo(nombre, **kw):
 
 
 E = {
-    'h1': estilo('h1', fontName='Helvetica-Bold', fontSize=20, leading=24, textColor=TINTA, spaceBefore=0, spaceAfter=4),
-    'h2': estilo('h2', fontName='Helvetica-Bold', fontSize=13.5, leading=17, textColor=TINTA, spaceBefore=16, spaceAfter=5),
-    'h3': estilo('h3', fontName='Helvetica-Bold', fontSize=11, leading=14, textColor=TINTA2, spaceBefore=11, spaceAfter=3),
-    'p': estilo('p', fontSize=9.6, leading=14.4, textColor=TINTA2, alignment=TA_JUSTIFY, spaceAfter=7),
-    'lead': estilo('lead', fontSize=10.6, leading=16, textColor=TINTA3, spaceAfter=10),
-    'li': estilo('li', fontSize=9.6, leading=14, textColor=TINTA2, leftIndent=10, bulletIndent=1, spaceAfter=3),
-    'celda': estilo('celda', fontSize=9, leading=12.6, textColor=TINTA2),
-    'celda_b': estilo('celda_b', fontName='Helvetica-Bold', fontSize=9, leading=12.6, textColor=TINTA),
-    'cab': estilo('cab', fontName='Helvetica-Bold', fontSize=8, leading=11, textColor=colors.white),
-    'nota': estilo('nota', fontSize=9.2, leading=13.4, textColor=TINTA2),
-    'pie': estilo('pie', fontSize=7.6, leading=10, textColor=TINTA3),
-    'h1_simple': estilo('h1_simple', fontName='Helvetica-Bold', fontSize=20, leading=24, textColor=TINTA, spaceAfter=4),
-    'toc1': estilo('toc1', fontName='Helvetica-Bold', fontSize=10.5, leading=15, spaceBefore=5, textColor=TINTA),
-    'toc2': estilo('toc2', fontSize=9.2, leading=12.6, textColor=TINTA2, leftIndent=14),
+    'h1': estilo('h1', fontName=SANS_NEGRITA, fontSize=21, leading=25, textColor=TINTA, spaceBefore=0, spaceAfter=4),
+    'h2': estilo('h2', fontName=SANS_NEGRITA, fontSize=13.5, leading=17.5, textColor=TINTA, spaceBefore=17, spaceAfter=5),
+    'h3': estilo('h3', fontName=SANS_MEDIA, fontSize=11, leading=14, textColor=TINTA, spaceBefore=11, spaceAfter=3),
+    'p': estilo('p', fontName=SANS, fontSize=9.8, leading=15, textColor=TINTA2, alignment=TA_JUSTIFY, spaceAfter=7),
+    'lead': estilo('lead', fontName=SANS, fontSize=11, leading=16.5, textColor=TINTA3, spaceAfter=10),
+    'li': estilo('li', fontName=SANS, fontSize=9.8, leading=14.6, textColor=TINTA2, leftIndent=11, bulletIndent=1, spaceAfter=3.5),
+    'celda': estilo('celda', fontName=SANS, fontSize=9, leading=13, textColor=TINTA2),
+    'celda_b': estilo('celda_b', fontName=SANS_MEDIA, fontSize=9, leading=13, textColor=TINTA),
+    'cab': estilo('cab', fontName=SANS_MEDIA, fontSize=8, leading=11, textColor=colors.white),
+    'nota': estilo('nota', fontName=SANS, fontSize=9.4, leading=14, textColor=TINTA2),
+    'pie': estilo('pie', fontName=SANS, fontSize=7.6, leading=10, textColor=TINTA3),
+    'h1_simple': estilo('h1_simple', fontName=SANS_NEGRITA, fontSize=21, leading=25, textColor=TINTA, spaceAfter=4),
+    'toc1': estilo('toc1', fontName=SANS_NEGRITA, fontSize=10.5, leading=16, spaceBefore=8, textColor=TINTA),
+    'toc2': estilo('toc2', fontName=SANS, fontSize=9.2, leading=13.8, textColor=TINTA2, leftIndent=14),
+    'dato': estilo('dato', fontName=MONO_MEDIA, fontSize=22, leading=24, textColor=TINTA),
+    'dato_pie': estilo('dato_pie', fontName=SANS, fontSize=8.4, leading=11.4, textColor=TINTA3),
 }
+
+
+def dato(valor, etiqueta):
+    """Cifra destacada, para los números que conviene que queden."""
+    return [Paragraph(valor, E['dato']), Spacer(1, 3), Paragraph(etiqueta, E['dato_pie'])]
+
+
+def datos(items, color=ACENTO):
+    """Fila de cifras destacadas sobre fondo suave."""
+    fila = [dato(v, t) for v, t in items]
+    ancho = ANCHO_UTIL / len(items)
+    t = Table([fila], colWidths=[ancho] * len(items))
+    t.setStyle(TableStyle([
+        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+        ('BACKGROUND', (0, 0), (-1, -1), FONDO),
+        ('LINEBEFORE', (0, 0), (0, -1), 2.2, color),
+        ('TOPPADDING', (0, 0), (-1, -1), 12),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 12),
+        ('LEFTPADDING', (0, 0), (-1, -1), 12),
+    ]))
+    return KeepTogether([Spacer(1, 4), t, Spacer(1, 12)])
 
 
 def P(texto, e='p'):
@@ -80,7 +132,7 @@ def P(texto, e='p'):
 
 
 def vinetas(items, color=ACENTO):
-    return [Paragraph(f'<font color="{color.hexval()}">▪</font>&nbsp;&nbsp;{t}', E['li']) for t in items]
+    return [Paragraph(f'<font color="{color.hexval()}">•</font>&nbsp;&nbsp;{t}', E['li']) for t in items]
 
 
 def pasos(items):
@@ -149,7 +201,7 @@ def figura(nombre, pie, ancho_mm=150):
     ]))
     epigrafe = Paragraph(
         f'<font color="{TINTA.hexval()}"><b>Figura {_figuras[0]}</b></font> \u00b7 {pie}',
-        estilo(f'pie{_figuras[0]}', fontSize=8.4, leading=11.6, textColor=TINTA3, spaceBefore=4, spaceAfter=12),
+        estilo(f'pie{_figuras[0]}', fontName=SANS, fontSize=8.4, leading=11.6, textColor=TINTA3, spaceBefore=4, spaceAfter=12),
     )
     contenedor = Table([[marco], [epigrafe]], colWidths=[ancho])
     contenedor.setStyle(TableStyle([
@@ -183,15 +235,44 @@ def aviso(titulo, texto, color=ACENTO, fondo=ACENTO_SUAVE):
 # ---------------------------------------------------------------- portada y páginas
 
 def logo(c, x, y, lado=16 * mm, sobre_oscuro=False):
-    """Monograma IO: fondo claro sobre tinta, fondo tinta sobre claro."""
+    """Monograma IO con su punto: la marca en su versión más simple."""
     c.saveState()
     c.setFillColor(colors.white if sobre_oscuro else TINTA)
-    c.roundRect(x, y, lado, lado, lado * 0.28, stroke=0, fill=1)
+    c.roundRect(x, y, lado, lado, lado * 0.26, stroke=0, fill=1)
     c.setFillColor(TINTA if sobre_oscuro else colors.white)
-    c.setFont('Helvetica-Bold', lado * 0.42)
-    c.drawCentredString(x + lado * 0.46, y + lado * 0.33, 'IO')
+    c.setFont(SANS_NEGRITA, lado * 0.40)
+    c.drawCentredString(x + lado * 0.45, y + lado * 0.34, 'IO')
     c.setFillColor(CELESTE)
-    c.circle(x + lado * 0.8, y + lado * 0.26, lado * 0.075, stroke=0, fill=1)
+    c.circle(x + lado * 0.79, y + lado * 0.27, lado * 0.07, stroke=0, fill=1)
+    c.restoreState()
+
+
+def red(c, x, y, ancho, alto, nodos, semilla=7, opacidad=0.5):
+    """Trama de nodos conectados: la metáfora de datos que conecta a la marca."""
+    import math
+
+    puntos = []
+    for i in range(nodos):
+        a = (semilla * (i + 1) * 2.399) % (2 * math.pi)
+        r = ((i * 37 + semilla * 13) % 100) / 100
+        puntos.append((x + ancho * ((math.cos(a) * r + 1) / 2), y + alto * ((math.sin(a) * r + 1) / 2)))
+
+    c.saveState()
+    c.setLineWidth(0.5)
+    for i, (px, py) in enumerate(puntos):
+        for qx, qy in puntos[i + 1:]:
+            d = math.hypot(px - qx, py - qy)
+            if d < min(ancho, alto) * 0.34:
+                c.setStrokeColor(CELESTE)
+                c.setFillColor(CELESTE)
+                c.setStrokeAlpha(opacidad * 0.5)
+                c.line(px, py, qx, qy)
+    c.setStrokeAlpha(1)
+    for i, (px, py) in enumerate(puntos):
+        c.setFillColor(CELESTE if i % 3 else colors.white)
+        c.setFillAlpha(opacidad)
+        c.circle(px, py, 1.4 + (i % 4) * 0.9, stroke=0, fill=1)
+    c.setFillAlpha(1)
     c.restoreState()
 
 
@@ -199,65 +280,68 @@ def portada(c, doc):
     ancho, alto = A4
     c.saveState()
     c.setFillColor(TINTA)
-    c.rect(0, alto * 0.42, ancho, alto * 0.58, stroke=0, fill=1)
+    c.rect(0, alto * 0.38, ancho, alto * 0.62, stroke=0, fill=1)
+    red(c, ancho * 0.05, alto * 0.62, ancho * 0.9, alto * 0.34, 26, semilla=11, opacidad=0.55)
 
-    # trama de ruta, la metáfora del día del visitador
-    c.setStrokeColor(CELESTE)
-    c.setLineWidth(1)
-    c.setDash(2, 7)
-    c.setFillColor(TINTA)
-    p = c.beginPath()
-    p.moveTo(ancho * 0.1, alto * 0.655)
-    p.curveTo(ancho * 0.34, alto * 0.7, ancho * 0.4, alto * 0.79, ancho * 0.63, alto * 0.83)
-    p.curveTo(ancho * 0.86, alto * 0.87, ancho * 0.82, alto * 0.92, ancho * 0.94, alto * 0.955)
-    c.drawPath(p)
-    c.setDash()
-    for fx, fy in [(0.1, 0.655), (0.63, 0.83), (0.94, 0.955)]:
-        c.setStrokeColor(colors.white)
-        c.setLineWidth(1.4)
-        c.circle(ancho * fx, alto * fy, 4.5, stroke=1, fill=0)
-
-    logo(c, MARGEN, alto - 40 * mm, 18 * mm, sobre_oscuro=True)
+    logo(c, MARGEN, alto - 42 * mm, 20 * mm, sobre_oscuro=True)
 
     c.setFillColor(colors.white)
-    c.setFont('Helvetica-Bold', 34)
-    c.drawString(MARGEN, alto * 0.53, 'Manual de uso')
-    c.setFont('Helvetica', 15)
+    c.setFont(SANS_NEGRITA, 40)
+    c.drawString(MARGEN, alto * 0.485, 'Manual de uso')
+    c.setFont(SANS, 15)
     c.setFillColor(colors.HexColor('#c9d6e3'))
-    c.drawString(MARGEN, alto * 0.485, 'IO-Pharma · e-detailing y CRM para laboratorios')
+    c.drawString(MARGEN, alto * 0.44, 'IO-Pharma · e-detailing y CRM para laboratorios')
 
+    # dos bloques que anticipan la estructura del documento
+    c.setFillColor(CELESTE)
+    c.rect(MARGEN, alto * 0.305, 26 * mm, 2.5, stroke=0, fill=1)
     c.setFillColor(TINTA)
-    c.setFont('Helvetica-Bold', 11)
-    c.drawString(MARGEN, alto * 0.33, 'Qué se puede hacer, de punta a punta')
-    c.setFont('Helvetica', 10)
+    c.setFont(SANS_NEGRITA, 12)
+    c.drawString(MARGEN, alto * 0.265, 'Qué se puede hacer, de punta a punta')
+    c.setFont(SANS, 10.5)
     c.setFillColor(TINTA3)
-    c.drawString(MARGEN, alto * 0.30, 'Parte 1: la app del visitador médico.')
-    c.drawString(MARGEN, alto * 0.272, 'Parte 2: el portal del laboratorio.')
+    c.drawString(MARGEN, alto * 0.232, 'Parte 1 · La app del visitador médico, con o sin conexión.')
+    c.drawString(MARGEN, alto * 0.205, 'Parte 2 · El portal del laboratorio: material, cuentas y cumplimiento.')
 
-    c.setFont('Helvetica', 9)
-    c.drawString(MARGEN, 28 * mm, f'Versión {VERSION} · {FECHA}')
-    c.drawString(MARGEN, 23 * mm, 'IO Consulting')
     c.setFillColor(LINEA)
-    c.rect(MARGEN, 34 * mm, ANCHO_UTIL, 0.8, stroke=0, fill=1)
+    c.rect(MARGEN, 30 * mm, ANCHO_UTIL, 0.8, stroke=0, fill=1)
+    c.setFont(MONO, 8.6)
+    c.setFillColor(TINTA3)
+    c.drawString(MARGEN, 24 * mm, f'Versión {VERSION} · {FECHA}')
+    c.drawRightString(ancho - MARGEN, 24 * mm, 'IO Consulting')
     c.restoreState()
 
 
 def pagina(c, doc):
     ancho, alto = A4
+    seccion_actual = getattr(doc, 'seccion_actual', '')
+    color = getattr(doc, 'color_actual', ACENTO)
+    if doc.page <= 2:  # el indice todavia no pertenece a ninguna parte
+        seccion_actual, color = '', ACENTO
     c.saveState()
+
     c.setFillColor(TINTA3)
-    c.setFont('Helvetica', 7.6)
+    c.setFont(SANS, 7.8)
     c.drawString(MARGEN, alto - 13 * mm, 'IO-Pharma · Manual de uso')
-    c.drawRightString(ancho - MARGEN, alto - 13 * mm, f'Versión {VERSION}')
+    if seccion_actual:
+        c.setFillColor(color)
+        c.setFont(SANS_MEDIA, 7.8)
+        c.drawRightString(ancho - MARGEN, alto - 13 * mm, seccion_actual)
     c.setFillColor(LINEA)
     c.rect(MARGEN, alto - 15 * mm, ANCHO_UTIL, 0.5, stroke=0, fill=1)
+
     c.rect(MARGEN, 15 * mm, ANCHO_UTIL, 0.5, stroke=0, fill=1)
     c.setFillColor(TINTA3)
-    c.setFont('Helvetica', 7.6)
-    c.drawString(MARGEN, 11 * mm, 'Documento de demostración · marcas y datos ficticios')
-    c.setFont('Helvetica-Bold', 8.4)
-    c.setFillColor(TINTA)
-    c.drawRightString(ancho - MARGEN, 11 * mm, str(doc.page - 1))
+    c.setFont(SANS, 7.6)
+    c.drawString(MARGEN, 10.6 * mm, 'Documento de demostración · marcas y datos ficticios')
+
+    # número de página en una pastilla del color de la parte
+    numero = str(doc.page - 1)
+    c.setFillColor(color)
+    c.roundRect(ancho - MARGEN - 11 * mm, 8.6 * mm, 11 * mm, 6 * mm, 3 * mm, stroke=0, fill=1)
+    c.setFillColor(colors.white)
+    c.setFont(MONO_MEDIA, 8.4)
+    c.drawCentredString(ancho - MARGEN - 5.5 * mm, 10.5 * mm, numero)
     c.restoreState()
 
 
@@ -274,26 +358,61 @@ class Manual(BaseDocTemplate):
         marco = Frame(MARGEN, 20 * mm, ANCHO_UTIL, A4[1] - 42 * mm, id='cuerpo')
         self.addPageTemplates([
             PageTemplate(id='portada', frames=[marco], onPage=portada),
-            PageTemplate(id='cuerpo', frames=[marco], onPage=pagina),
+            # el encabezado se dibuja al cerrar la pagina: recien ahi se sabe en que parte estamos
+            PageTemplate(id='cuerpo', frames=[marco], onPageEnd=pagina),
         ])
 
     def afterFlowable(self, flowable):
         if not isinstance(flowable, Paragraph):
             return
         estilo_nombre = flowable.style.name
-        if estilo_nombre == 'h1':
-            self.notify('TOCEntry', (0, flowable.getPlainText(), self.page - 1))
+        texto = flowable.getPlainText()
+        if estilo_nombre.startswith('oculto'):
+            self.seccion_actual = texto
+            self.color_actual = COLOR_PARTE.get(texto.split(' ')[0], ACENTO)
+            self.notify('TOCEntry', (0, texto, self.page - 1))
+        elif estilo_nombre == 'h1':
+            self.notify('TOCEntry', (0, texto, self.page - 1))
         elif estilo_nombre == 'h2':
-            self.notify('TOCEntry', (1, flowable.getPlainText(), self.page - 1))
+            self.notify('TOCEntry', (1, texto, self.page - 1))
 
 
 # ---------------------------------------------------------------- contenido
 
+class Apertura(Flowable):
+    """Banda de apertura de parte: número grande y color propio."""
+
+    def __init__(self, numero, titulo, bajada, color):
+        super().__init__()
+        self.numero, self.titulo, self.bajada, self.color = numero, titulo, bajada, color
+        self.width = ANCHO_UTIL
+        self.height = 34 * mm
+
+    def draw(self):
+        c = self.canv
+        c.saveState()
+        c.setFillColor(self.color)
+        c.rect(0, 0, self.width, self.height, stroke=0, fill=1)
+        red(c, self.width * 0.62, 2, self.width * 0.36, self.height - 4, 14, semilla=int(self.numero) * 5 + 3, opacidad=0.35)
+
+        c.setFillColor(colors.white)
+        c.setFont(MONO_MEDIA, 9)
+        c.drawString(11 * mm, self.height - 11 * mm, f'PARTE {self.numero}')
+        c.setFont(SANS_NEGRITA, 21)
+        c.drawString(11 * mm, self.height - 21 * mm, self.titulo)
+        if self.bajada:
+            c.setFont(SANS, 9.6)
+            c.setFillColor(colors.HexColor('#dfe8f2'))
+            c.drawString(11 * mm, self.height - 28.5 * mm, self.bajada[:110])
+        c.restoreState()
+
+
 def seccion(titulo, bajada=None):
-    fl = [P(titulo, 'h1')]
-    if bajada:
-        fl.append(P(bajada, 'lead'))
-    return fl
+    """Título de parte: abre con una banda de color y registra el color de las páginas."""
+    numero = titulo.split(' ')[0]
+    color = COLOR_PARTE.get(numero, ACENTO)
+    marca = Paragraph(titulo, ParagraphStyle(f'oculto{numero}', parent=E['h1'], fontSize=0.1, leading=0.1, textColor=colors.white))
+    return [marca, Apertura(numero, titulo.split('· ')[-1], bajada or '', color), Spacer(1, 12)]
 
 
 def construir():
@@ -306,6 +425,14 @@ def construir():
     # --- índice
     toc = TableOfContents()
     toc.levelStyles = [E['toc1'], E['toc2']]
+    # sin el relleno propio de la tabla el indice entra en una sola pagina
+    toc.tableStyle = TableStyle([
+        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+        ('LEFTPADDING', (0, 0), (-1, -1), 0),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 0),
+        ('TOPPADDING', (0, 0), (-1, -1), 0),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 0),
+    ])
     f += [P('Contenido', 'h1_simple'), Spacer(1, 6), toc, PageBreak()]
 
     # --- 1. Antes de empezar
