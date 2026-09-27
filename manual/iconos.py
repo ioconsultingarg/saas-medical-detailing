@@ -19,17 +19,22 @@ TINTA = '#0b1220'
 CELESTE = '#7cc4ee'
 
 
-def svg(lado=512, escala=1.0):
-    """Monograma IO: cuadrado redondeado con las iniciales y el punto de la marca."""
-    c = lado / 2
-    r = lado * 0.22 * escala
-    fuente = lado * 0.38 * escala
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {lado} {lado}" width="{lado}" height="{lado}">
-  <rect width="{lado}" height="{lado}" rx="{r}" fill="{TINTA}"/>
-  <text x="{c - lado * 0.015 * escala}" y="{c + fuente * 0.36}" text-anchor="middle"
-        font-family="Segoe UI, Helvetica, Arial, sans-serif" font-weight="700"
-        font-size="{fuente}" fill="#ffffff" letter-spacing="{-fuente * 0.03}">IO</text>
-  <circle cx="{c + lado * 0.235 * escala}" cy="{c + lado * 0.1 * escala}" r="{lado * 0.055 * escala}" fill="{CELESTE}"/>
+def marca(color='#ffffff', acento=CELESTE, escala=1.0):
+    """Conector de datos: barra y anillo arman el monograma IO y leen como dos nodos unidos."""
+    e = escala
+    return f'''
+  <g transform="translate({32 - 32 * e} {32 - 32 * e}) scale({e})" fill="none" stroke="{color}" stroke-linecap="round">
+    <path d="M13.5 19 L13.5 45" stroke-width="7.5"/>
+    <path d="M13.5 32 L33 32" stroke-width="5"/>
+    <circle cx="45.5" cy="32" r="12.5" stroke-width="7.5"/>
+  </g>
+  <circle cx="{32 - 32 * e + 25 * e}" cy="32" r="{4.8 * e}" fill="{acento}"/>'''
+
+
+def svg(lado=512, escala=1.0, redondeo=0.22):
+    """Baldosa con la marca; escala < 1 deja el margen que pide un icono recortable."""
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="{lado}" height="{lado}">
+  <rect width="64" height="64" rx="{64 * redondeo}" fill="{TINTA}"/>{marca(escala=escala)}
 </svg>'''
 
 
@@ -58,10 +63,10 @@ def main():
         navegador = p.chromium.launch()
         page = navegador.new_page(device_scale_factor=1)
         png_desde_svg(page, svg(512), PUBLICO / 'icon-512.png', 512)
-        png_desde_svg(page, svg(512), PUBLICO / 'icon-192.png', 192)
-        png_desde_svg(page, svg(512), PUBLICO / 'apple-touch-icon.png', 180, fondo=TINTA)
+        png_desde_svg(page, svg(192), PUBLICO / 'icon-192.png', 192)
+        png_desde_svg(page, svg(180), PUBLICO / 'apple-touch-icon.png', 180, fondo=TINTA)
         # maskable: el contenido entra en el 60 % central para que ningún recorte lo corte
-        png_desde_svg(page, svg(512, 0.62).replace(f'rx="{512 * 0.22 * 0.62}"', 'rx="0"'), PUBLICO / 'icon-maskable-512.png', 512, fondo=TINTA)
+        png_desde_svg(page, svg(512, 0.66, redondeo=0), PUBLICO / 'icon-maskable-512.png', 512, fondo=TINTA)
         navegador.close()
 
     print('Capturas del instalador:')

@@ -5,20 +5,9 @@ import { MonogramaProducto, Segmentado } from '../components/ui'
 import { apm, visitasDelDia } from '../data/agenda'
 import { productos } from '../data/productos'
 import { fechaLarga } from '../lib/formato'
+import { Marca } from '../components/Marca'
 import { useDemo } from '../state/demo'
 import { CUENTAS, useSesion, type Rol } from '../state/sesion'
-
-function Logo({ size = 40 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden="true">
-      <rect width="32" height="32" rx="9" fill="#0b1220" />
-      <text x="14.2" y="21.6" textAnchor="middle" fontFamily="var(--font-sans)" fontSize="13.5" fontWeight="700" fill="#fff" letterSpacing="-0.4">
-        IO
-      </text>
-      <circle cx="24.5" cy="20.4" r="2.5" fill="#7cc4ee" />
-    </svg>
-  )
-}
 
 /** Panel derecho: anticipa el día de trabajo que se abre al ingresar */
 function VistaPreviaDia() {
@@ -129,7 +118,7 @@ export function Login() {
     <div className="grid min-h-dvh bg-surface lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
       <main className="flex min-h-dvh flex-col px-6 pt-[calc(24px+env(safe-area-inset-top))] pb-[calc(24px+env(safe-area-inset-bottom))] sm:px-10">
         <div className="flex items-center gap-3">
-          <Logo size={36} />
+          <Marca size={40} className="text-ink" />
           <div className="leading-tight">
             <div className="text-[16px] font-semibold text-ink">IO-Pharma</div>
             <div className="text-[12px] text-ink-3">e-detailing y CRM para laboratorios</div>

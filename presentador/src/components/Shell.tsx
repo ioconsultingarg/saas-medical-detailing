@@ -7,6 +7,7 @@ import { nombreCorto, useDemo } from '../state/demo'
 import { useAcademia } from '../state/academia'
 import { useSesion } from '../state/sesion'
 import { Ayuda } from './Ayuda'
+import { Marca } from './Marca'
 import { iniciales, MenuCuenta } from './MenuCuenta'
 import { Sheet } from './Sheet'
 
@@ -48,18 +49,6 @@ const gestionLab: ItemNav[] = [
   { href: '#/asistente', etiqueta: 'Asistente', detalle: 'Preguntale a los datos con IA', Icono: Sparkles, activa: (r) => r.nombre === 'asistente' },
   { href: '#/integraciones', etiqueta: 'API', detalle: 'SAP, Salesforce y webhooks', Icono: Plug, activa: (r) => r.nombre === 'integraciones' },
 ]
-
-function Logo({ size = 30 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden="true">
-      <rect width="32" height="32" rx="7" fill="#0b1220" />
-      <text x="14.2" y="21.6" textAnchor="middle" fontFamily="var(--font-sans)" fontSize="13.5" fontWeight="700" fill="#fff" letterSpacing="-0.4">
-        IO
-      </text>
-      <circle cx="24.5" cy="20.4" r="2.5" fill="#7cc4ee" />
-    </svg>
-  )
-}
 
 function EstadoConexion() {
   const { online, pendientes } = useDemo()
@@ -165,7 +154,7 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
         className="fixed inset-y-0 left-0 z-40 hidden w-[96px] flex-col items-center border-r border-line bg-surface pt-[calc(14px+env(safe-area-inset-top))] pb-4 md:flex"
       >
         <a href="#/" aria-label="IO-Pharma, inicio" className="press mb-4 shrink-0 rounded-xl p-1.5">
-          <Logo />
+          <Marca size={30} className="text-ink" />
         </a>
         <div className="flex min-h-0 flex-1 flex-col items-center overflow-y-auto">
           {[principales, secundarios].map((grupo, g) => (
@@ -184,7 +173,7 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
                       href={href}
                       aria-current={actual ? 'page' : undefined}
                       className={`press relative flex w-[80px] flex-col items-center gap-1 rounded-xl px-1 py-2 text-center text-[11px] leading-tight font-medium ${
-                        actual ? 'bg-contraste text-white' : 'text-ink-3 hover:bg-sunken hover:text-ink'
+                        actual ? 'bg-accent-soft text-accent' : 'text-ink-3 hover:bg-sunken hover:text-ink'
                       }`}
                     >
                       <Icono size={20} strokeWidth={actual ? 2.2 : 1.8} aria-hidden="true" />
@@ -221,7 +210,7 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
         <div className="material sticky top-0 z-30 border-b border-line/70 pt-[env(safe-area-inset-top)]">
           <div className="mx-auto flex h-16 max-w-[1440px] items-center gap-3 px-4 sm:px-6 lg:px-8">
             <a href="#/" className="press -ml-1.5 flex size-11 items-center justify-center rounded-xl md:hidden" aria-label="IO-Pharma, inicio">
-              <Logo />
+              <Marca size={28} className="text-ink" />
             </a>
             <div className="hidden min-w-0 items-center gap-2 text-[13px] text-ink-3 md:flex">
               <Stethoscope size={16} aria-hidden="true" />
@@ -279,7 +268,7 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
                   aria-current={actual ? 'page' : undefined}
                   className={`press flex min-h-16 flex-col items-center justify-center gap-1 text-[11px] font-medium ${actual ? 'text-ink' : 'text-ink-3'}`}
                 >
-                  <span className={`relative flex h-7 w-12 items-center justify-center rounded-full ${actual ? 'bg-contraste text-white' : ''}`}>
+                  <span className={`relative flex h-7 w-12 items-center justify-center rounded-full ${actual ? 'bg-accent-soft text-accent' : ''}`}>
                     <Icono size={19} strokeWidth={actual ? 2.2 : 1.8} aria-hidden="true" />
                   </span>
                   {etiqueta}
@@ -296,7 +285,7 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
               aria-current={masActivo ? 'page' : undefined}
               className={`press flex min-h-16 w-full cursor-pointer flex-col items-center justify-center gap-1 text-[11px] font-medium ${masActivo ? 'text-ink' : 'text-ink-3'}`}
             >
-              <span className={`relative flex h-7 w-12 items-center justify-center rounded-full ${masActivo ? 'bg-contraste text-white' : ''}`}>
+              <span className={`relative flex h-7 w-12 items-center justify-center rounded-full ${masActivo ? 'bg-accent-soft text-accent' : ''}`}>
                 <Ellipsis size={19} strokeWidth={masActivo ? 2.2 : 1.8} aria-hidden="true" />
                 <Insignia cantidad={cursosPendientes} className="-top-0.5 right-1" />
               </span>

@@ -7,3 +7,7 @@ __pycache__/
 # capturas regenerables del manual
 manual/capturas/
 manual/__pycache__/
+
+# skills de terceros: se usan localmente, no se publican
+.agents/skills/
+.claude/skills/

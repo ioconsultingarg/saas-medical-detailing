@@ -34,7 +34,7 @@ export function Cuentas() {
       <EncabezadoPantalla
         eyebrow="Portal del laboratorio"
         titulo="Cuentas institucionales"
-        descripcion="Droguerías, cadenas, instituciones y financiadores: dónde se factura de verdad. Todo el historial queda en la cuenta, no en la cabeza del Key Account."
+        descripcion="Droguerías, cadenas, instituciones y financiadores: dónde se factura de verdad. Todo el historial queda en la cuenta, no en la cabeza del responsable."
       />
 
       <dl className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">

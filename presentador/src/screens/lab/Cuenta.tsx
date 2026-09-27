@@ -124,7 +124,7 @@ export function Cuenta({ cuentaId }: { cuentaId: string }) {
               name="titulo-interaccion"
               value={titulo}
               onChange={(e) => setTitulo(e.target.value)}
-              placeholder="Ej.: reunión por la renovación del acuerdo"
+              placeholder="Ej.: reunión por la renovación del acuerdo…"
               className="field mt-3"
             />
             <label className="sr-only" htmlFor="detalle-interaccion">
@@ -136,7 +136,7 @@ export function Cuenta({ cuentaId }: { cuentaId: string }) {
               rows={3}
               value={detalle}
               onChange={(e) => setDetalle(e.target.value)}
-              placeholder="Qué se habló, qué quedó pendiente y con quién."
+              placeholder="Qué se habló, qué quedó pendiente y con quién…"
               className="field mt-2 min-h-20 py-2.5 leading-relaxed"
             />
             <button type="button" className="btn-primary mt-3" onClick={registrar} disabled={!titulo.trim()}>

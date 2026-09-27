@@ -160,15 +160,6 @@ def capturar(page, movil):
     esperar(page, 1500)
     guardar(page, 'lab-asistente')
 
-    # ---------------- la app en modo oscuro
-    sesion(page, SESION_APM)
-    page.evaluate("localStorage.setItem('io-pharma-tema', 'oscuro'); location.hash = '#/'")
-    page.reload(wait_until='networkidle')
-    esperar(page, 1800)
-    page.add_style_tag(content=SIN_MOVIMIENTO)
-    guardar(page, 'apm-hoy-oscuro')
-    page.evaluate("localStorage.setItem('io-pharma-tema', 'claro')")
-
     # ---------------- la misma app en celular
     movil.goto(BASE, wait_until='networkidle')
     sesion(movil, SESION_APM)

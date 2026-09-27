@@ -235,15 +235,23 @@ def aviso(titulo, texto, color=ACENTO, fondo=ACENTO_SUAVE):
 # ---------------------------------------------------------------- portada y páginas
 
 def logo(c, x, y, lado=16 * mm, sobre_oscuro=False):
-    """Monograma IO con su punto: la marca en su versión más simple."""
+    """Conector de datos: la barra y el anillo arman el monograma IO."""
+    u = lado / 64  # la marca se dibuja en una grilla de 64
     c.saveState()
     c.setFillColor(colors.white if sobre_oscuro else TINTA)
-    c.roundRect(x, y, lado, lado, lado * 0.26, stroke=0, fill=1)
-    c.setFillColor(TINTA if sobre_oscuro else colors.white)
-    c.setFont(SANS_NEGRITA, lado * 0.40)
-    c.drawCentredString(x + lado * 0.45, y + lado * 0.34, 'IO')
+    c.roundRect(x, y, lado, lado, lado * 0.24, stroke=0, fill=1)
+    trazo = TINTA if sobre_oscuro else colors.white
+    c.setStrokeColor(trazo)
+    c.setLineCap(1)
+    # la grilla del SVG crece hacia abajo; en el PDF, hacia arriba
+    c.setLineWidth(7.5 * u)
+    c.line(x + 13.5 * u, y + (64 - 19) * u, x + 13.5 * u, y + (64 - 45) * u)
+    c.setLineWidth(5 * u)
+    c.line(x + 13.5 * u, y + 32 * u, x + 33 * u, y + 32 * u)
+    c.setLineWidth(7.5 * u)
+    c.circle(x + 45.5 * u, y + 32 * u, 12.5 * u, stroke=1, fill=0)
     c.setFillColor(CELESTE)
-    c.circle(x + lado * 0.79, y + lado * 0.27, lado * 0.07, stroke=0, fill=1)
+    c.circle(x + 25 * u, y + 32 * u, 4.8 * u, stroke=0, fill=1)
     c.restoreState()
 
 
@@ -484,11 +492,16 @@ def construir():
         'En iPhone, una aplicación web que no está instalada pierde sus datos guardados a los pocos días de no usarse. '
         'Instalada, no: queda lista para trabajar sin señal.', TINTA3, FONDO)]
 
-    f += [P('Modo claro y oscuro', 'h2')]
+    f += [P('Por qué la app es oscura', 'h2')]
     f += [P(
-        'Desde tu cuenta se elige entre claro, oscuro o automático, que sigue la configuración del dispositivo. '
-        'Las presentaciones se ven siempre en claro, porque son el material que mira el médico.')]
-    f += [figura('apm-hoy-oscuro', 'La misma pantalla en modo oscuro, pensada para un consultorio con poca luz.', 160)]
+        'La interfaz trabaja siempre en modo oscuro. No es una preferencia estética: la visita ocurre en consultorios, '
+        'pasillos y salas de espera, muchas veces con poca luz, y una pantalla clara encandila y delata desde lejos lo que '
+        'se está mirando. El modo oscuro además consume menos batería en las pantallas OLED de tablets y celulares, que es '
+        'la diferencia entre llegar o no al final de la jornada.')]
+    f += [Spacer(1, 4), aviso(
+        'La presentación es la excepción',
+        'Todo lo que ve el médico —diapositivas, estudios, fichas técnicas— se muestra siempre en claro, con la marca del '
+        'producto. La app se oscurece; el material científico, no.', TINTA3, FONDO)]
 
     f += [P('La ayuda, siempre a mano', 'h2')]
     f += [P(
