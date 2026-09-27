@@ -10,6 +10,7 @@ Sale: Reel-IO-Pharma.mp4 en la raíz del proyecto.
 """
 
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -203,13 +204,39 @@ def rotulo(entrada, salida, desde, hasta, titulo, bajada):
     ]
 
 
-def componer(crudo, tramos, ritmo, recorte=0.0):
+SUBTITULOS = Path(__file__).resolve().parent / 'reel-subtitulos.srt'
+
+# OJO: el .srt esta escrito a mano contra ESTE corte. Si se vuelve a grabar y los tiempos
+# cambian, hay que re-temporizarlo; los rotulos, en cambio, se re-temporizan solos.
+SUB_Y = (1592, 1660)     # dos renglones en la franja libre entre el telefono y la firma
+SUB_TAM = 40
+
+
+def leer_srt(ruta):
+    """Devuelve [(desde, hasta, [lineas])] con los tiempos en segundos."""
+    def seg(t):
+        h, m, resto = t.split(':')
+        s_, ms = resto.split(',')
+        return int(h) * 3600 + int(m) * 60 + int(s_) + int(ms) / 1000
+
+    bloques = []
+    for bruto in ruta.read_text(encoding='utf-8').replace('\r\n', '\n').strip().split('\n\n'):
+        lineas = [l for l in bruto.strip().split('\n') if l.strip()]
+        if len(lineas) < 3 or '-->' not in lineas[1]:
+            continue
+        a, b = [x.strip() for x in lineas[1].split('-->')]
+        bloques.append((seg(a), seg(b), lineas[2:]))
+    return bloques
+
+
+def componer(crudo, tramos, ritmo, recorte=0.0, subtitulos=False):
     """La pantalla sobre el fondo de la marca, con los rótulos encima."""
     w, h = LIENZO
     pantalla_w = 880
     pantalla_h = round(pantalla_w * ALTO / ANCHO)
-    px, py = (w - pantalla_w) // 2, 320
-    visible_h = h - py - 190   # deja libre la franja donde va la firma de marca
+    px, py = (w - pantalla_w) // 2, 296
+    # queda libre la franja de subtitulos (1600-1740) y la de la firma de marca
+    visible_h = 1284
 
     tramos = [(max(0.0, a - recorte), b - recorte, t, j) for a, b, t, j in tramos]
     filtros = [
@@ -227,10 +254,25 @@ def componer(crudo, tramos, ritmo, recorte=0.0):
         f"[{ultimo}]drawtext=fontfile='{FUENTE}':text='IO-Pharma':fontcolor=0xe9eef8:fontsize=40:"
         f"x=(w-text_w)/2:y=h-118[marca]"
     )
-    filtros.append(
+    cierre = (
         f"[marca]drawtext=fontfile='{FUENTE_LIVIANA}':text='e-detailing y CRM para laboratorios':"
-        f"fontcolor=0x56a9dd:fontsize=29:x=(w-text_w)/2:y=h-64,format=yuv420p[salida]"
+        f"fontcolor=0x56a9dd:fontsize=29:x=(w-text_w)/2:y=h-64"
     )
+    filtros.append(cierre + '[cierre]')
+
+    # los subtitulos tambien son drawtext: asi el tamano y la posicion son pixeles del lienzo
+    ultimo = 'cierre'
+    if subtitulos and SUBTITULOS.exists():
+        for i, (desde, hasta, texto) in enumerate(leer_srt(SUBTITULOS)):
+            for j, linea in enumerate(texto[:2]):
+                etiqueta = f's{i}_{j}'
+                filtros.append(
+                    f"[{ultimo}]drawtext=fontfile='{FUENTE}':text='{escapar(linea)}':fontcolor=0xf8fafc:"
+                    f"fontsize={SUB_TAM}:x=(w-text_w)/2:y={SUB_Y[j]}:expansion=none:box=1:boxcolor=0x060a11@0.82:"
+                    f"boxborderw=14:enable='between(t,{desde},{hasta})'[{etiqueta}]"
+                )
+                ultimo = etiqueta
+    filtros.append(f'[{ultimo}]format=yuv420p[salida]')
 
     print('Componiendo la pieza…')
     subprocess.run(
@@ -242,6 +284,11 @@ def componer(crudo, tramos, ritmo, recorte=0.0):
 
 
 def main():
+    global SALIDA
+    subs = '--subtitulos' in sys.argv
+    if subs:
+        SALIDA = RAIZ / 'Reel-IO-Pharma-subtitulado.mp4'
+
     # `python manual/reel.py --recomponer` rearma la pieza sin volver a grabar
     if '--recomponer' in sys.argv and (TEMP / 'crudo.mp4').exists():
         reloj = Reloj()
@@ -249,7 +296,7 @@ def main():
         cfr = TEMP / 'crudo.mp4'
         real = duracion(cfr)
         recorte = max(0.0, reloj.marcas[0]['t'] - 0.2) if reloj.marcas else 0.0
-        componer(cfr, reloj.tramos(real), max(1.0, (real - recorte) / OBJETIVO), recorte)
+        componer(cfr, reloj.tramos(real), max(1.0, (real - recorte) / OBJETIVO), recorte, subs)
         print('Listo:', SALIDA, '·', round(duracion(SALIDA), 1), 's')
         return
 
@@ -260,7 +307,7 @@ def main():
     # la carga inicial no se muestra: el reel arranca en la primera pantalla util
     recorte = max(0.0, reloj.marcas[0]['t'] - 0.2) if reloj.marcas else 0.0
     ritmo = max(1.0, (real - recorte) / OBJETIVO)   # solo se acelera, nunca se estira
-    componer(cfr, reloj.tramos(real), ritmo, recorte)
+    componer(cfr, reloj.tramos(real), ritmo, recorte, subs)
     print('Listo:', SALIDA, '·', round(duracion(SALIDA), 1), 's ·',
           round(SALIDA.stat().st_size / 1e6, 1), 'MB')
 

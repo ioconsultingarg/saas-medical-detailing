@@ -174,6 +174,61 @@ generar y queda al día. Un video editado a mano envejece con el primer rediseñ
   acelera el video para llegar; nunca lo estira.
 - **El encuadre** (tamaño del teléfono, márgenes, tipografías) está en `componer()`.
 
+### Subtítulos descriptivos
+
+`manual/reel-subtitulos.srt` tiene los doce subtítulos temporizados contra este corte, escritos
+para que el reel se entienda **con el sonido apagado** (que es como se mira el 85 % de los reels).
+No repiten el rótulo: describen lo que está pasando en pantalla.
+
+```bash
+python manual/reel.py --subtitulos              # graba y quema los subtítulos
+python manual/reel.py --recomponer --subtitulos # solo rearma, sin volver a grabar
+```
+
+Sale `Reel-IO-Pharma-subtitulado.mp4`. Se dibujan con `drawtext`, en la franja libre entre el
+teléfono y la firma de marca, así que no tapan nada de la app.
+
+**Cuidado:** el `.srt` está escrito a mano contra este corte. Los rótulos se re-temporizan solos a
+partir de las marcas de la grabación, pero los subtítulos no: si se vuelve a grabar y los tiempos
+se mueven, hay que ajustarlos.
+
+### La música
+
+El script no le pone audio a propósito, para poder elegir una pista con licencia. Una vez que
+tengas el archivo:
+
+```bash
+ffmpeg -i Reel-IO-Pharma-subtitulado.mp4 -i musica.mp3 -filter:a "volume=0.35,afade=t=in:st=0:d=1,afade=t=out:st=28:d=2" -c:v copy -c:a aac -b:a 192k -shortest Reel-IO-Pharma-final.mp4
+```
+
+Prompt para generar la pista en Suno, Udio o ElevenLabs Music:
+
+> Instrumental corporativo moderno y sobrio, 30 segundos exactos, 105 BPM. Piano eléctrico con
+> pulso de sintetizador cálido y percusión suave tipo brush. Sensación de precisión y calma
+> profesional, nada épico ni motivacional de stock. Entra con una nota sostenida, suma pulso a los
+> 4 segundos, un pequeño realce a los 12 y a los 22, y baja en los últimos 3 segundos. Sin voces,
+> sin percusión fuerte, sin risers dramáticos. Referencia: la música de un video de producto de
+> Linear o Stripe.
+
+### Sobre "que lo haga una IA"
+
+Nano Banana (Gemini 2.5 Flash Image / Nano Banana Pro) es un modelo de **imágenes**: genera y edita
+fotos fijas. No abre un MP4, no agrega pistas de audio y no quema subtítulos temporizados. Veo 3 y
+Flow sí hacen video con audio, pero **generan** a partir de un texto: no toman este archivo para
+editarlo.
+
+Herramientas que sí aceptan el MP4 y el SRT: CapCut, Descript, Captions, Clipchamp, Premiere.
+Prompt para las que tienen asistente:
+
+> Tomá este video vertical de 30 segundos (1080×1920). Importá el archivo de subtítulos
+> `reel-subtitulos.srt` sin re-transcribir: los tiempos ya están bien. Ubicá los subtítulos en la
+> franja inferior, entre el teléfono y la firma de marca, centrados, en una tipografía sans serif
+> semibold blanca sobre una caja negra al 80 % de opacidad, sin animación palabra por palabra.
+> Agregá una pista instrumental corporativa sobria a un 35 % de volumen, con entrada de 1 segundo
+> y salida de 2 segundos al final. No cambies el encuadre, no agregues transiciones, no pongas
+> emojis ni stickers, no modifiques los rótulos que ya están en el video. Exportá en H.264,
+> 1080×1920, 30 fps.
+
 ### Texto sugerido para la publicación
 
 > Un visitador médico pierde entre 40 y 60 minutos por día cargando a mano lo que ya hizo.
