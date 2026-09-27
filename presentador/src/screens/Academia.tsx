@@ -69,7 +69,7 @@ export function Academia() {
                     </div>
                   </div>
                   <div className="relative flex flex-wrap gap-2 px-5 pb-5 md:px-6 md:pb-6">
-                    <a href={`#/academia/curso/${enCurso.id}?l=${destino}`} className="btn bg-white text-ink hover:bg-white/90">
+                    <a href={`#/academia/curso/${enCurso.id}?l=${destino}`} className="btn bg-white text-[#0b1220] hover:bg-white/90">
                       {paso.tipo === 'leccion' ? (hechas > 0 ? 'Continuar lección' : 'Empezar') : 'Rendir evaluación'}
                       <ArrowRight size={17} aria-hidden="true" />
                     </a>

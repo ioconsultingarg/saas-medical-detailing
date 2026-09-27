@@ -173,7 +173,7 @@ export function StockPanel({ productosEnFoco }: Props) {
               <button type="button" className="btn text-white/80 hover:bg-white/10" onClick={() => despachar({ tipo: 'vaciarCarrito' })}>
                 Vaciar la solicitud
               </button>
-              <button type="button" className="btn bg-white text-ink hover:bg-white/90" onClick={solicitar}>
+              <button type="button" className="btn bg-white text-[#0b1220] hover:bg-white/90" onClick={solicitar}>
                 <Truck size={17} aria-hidden="true" />
                 {visitaActiva ? 'Enviar al consultorio' : 'Solicitar envío'}
               </button>

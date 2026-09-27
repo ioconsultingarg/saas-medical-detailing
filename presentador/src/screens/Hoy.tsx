@@ -149,7 +149,7 @@ export function Hoy() {
               <div className="relative flex flex-wrap gap-2 px-5 pb-5 md:px-6 md:pb-6">
                 {visitaActiva ? (
                   <>
-                    <a href={`#/presentar/${presentacionSugerida(destacada)}`} className="btn bg-white text-ink hover:bg-white/90">
+                    <a href={`#/presentar/${presentacionSugerida(destacada)}`} className="btn bg-white text-[#0b1220] hover:bg-white/90">
                       <Play size={17} aria-hidden="true" />
                       Presentar
                     </a>
@@ -270,7 +270,9 @@ export function Hoy() {
           </section>
         </div>
 
-        <section aria-label="Mapa de la ruta del día" className="order-first h-[300px] min-w-0 sm:h-[360px] lg:sticky lg:top-24 lg:order-none lg:h-[calc(100dvh-128px)]">
+        {/* el pie va dentro del alto reservado: si no, la tarjeta siguiente lo tapaba */}
+        <section aria-label="Mapa de la ruta del día" className="order-first flex h-[330px] min-w-0 flex-col sm:h-[390px] lg:sticky lg:top-24 lg:order-none lg:h-[calc(100dvh-128px)]">
+          <div className="min-h-0 flex-1">
           <MapaRuta
             visitas={visitasDelDia}
             registros={estado.registros}
@@ -279,7 +281,8 @@ export function Hoy() {
             online={online}
             onSeleccionar={setSeleccionId}
           />
-          <p className="mt-2 text-[12px] text-ink-3">Ubicación simulada para la demo · la geocerca valida 250 m.</p>
+          </div>
+          <p className="mt-2 shrink-0 text-[12px] text-ink-3">Ubicación simulada para la demo · la geocerca valida 250 m.</p>
         </section>
       </div>
     </div>

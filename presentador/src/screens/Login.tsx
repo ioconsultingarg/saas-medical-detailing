@@ -225,7 +225,7 @@ export function Login() {
             <button type="submit" className="btn-primary min-h-12 w-full text-[16px]" disabled={enviando}>
               {enviando ? (
                 <>
-                  <span aria-hidden="true" className="spinner size-4 rounded-full border-2 border-white/30 border-t-white" />
+                  <span aria-hidden="true" className="spinner size-4 rounded-full border-2 border-current/30 border-t-current" />
                   Ingresando…
                 </>
               ) : (

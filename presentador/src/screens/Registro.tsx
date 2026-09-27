@@ -55,7 +55,7 @@ export function Pasos({ actual }: { actual: 1 | 2 }) {
         return (
           <li key={p} className="flex items-center gap-2" aria-current={activo ? 'step' : undefined}>
             {i > 0 && <span aria-hidden="true" className="h-px w-6 bg-line-2" />}
-            <span className={`num flex size-6 items-center justify-center rounded-full text-[12px] ${activo ? 'bg-contraste text-white' : hecho ? 'bg-ok text-white' : 'bg-sunken text-ink-3'}`}>
+            <span className={`num flex size-6 items-center justify-center rounded-full text-[12px] ${activo ? 'bg-contraste text-white' : hecho ? 'bg-ok text-sobre-estado' : 'bg-sunken text-ink-3'}`}>
               {hecho ? <Check size={13} aria-hidden="true" /> : n}
             </span>
             <span className={activo ? 'font-semibold text-ink' : 'text-ink-3'}>

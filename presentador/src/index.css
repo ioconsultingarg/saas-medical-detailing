@@ -21,10 +21,19 @@
   --color-line: #e2e6ec;
   --color-line-2: #cbd3dd;
 
-  /* superficie de enfasis: tarjetas oscuras, botones principales y barras */
+  /* superficie de enfasis: tarjetas oscuras y barras */
   --color-contraste: #0b1220;
   --color-contraste-alto: #1c2536;
   --color-sobre-contraste: #ffffff;
+
+  /* accion principal: se invierte con el tema para que siempre sea lo mas fuerte de la pantalla */
+  --color-boton: #0b1220;
+  --color-boton-hover: #1c2536;
+  --color-sobre-boton: #ffffff;
+  /* texto sobre los colores solidos de estado (ok, warn, bad) */
+  --color-sobre-estado: #ffffff;
+  /* pastilla que se levanta sobre una pista hundida: segmentados y pestanas */
+  --color-elevado: #ffffff;
 
   --color-accent: #0369a1;
   --color-accent-soft: #e3f1f9;
@@ -129,6 +138,14 @@
   --color-contraste: #1d2938;
   --color-contraste-alto: #27364a;
 
+  /* en oscuro la accion principal es una pastilla clara: el maximo contraste disponible */
+  --color-boton: #e8eef8;
+  --color-boton-hover: #ffffff;
+  --color-sobre-boton: #0b1220;
+  --color-sobre-estado: #0b1220;
+  /* en oscuro lo que se levanta aclara, no oscurece */
+  --color-elevado: #2b3a4f;
+
   --color-accent: #56a9dd;
   --color-accent-soft: #10273a;
   --color-ia: #a99bf0;
@@ -213,7 +230,7 @@
   @apply press inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-[10px] px-4 text-[15px] font-semibold whitespace-nowrap select-none disabled:cursor-not-allowed disabled:opacity-45;
 }
 @utility btn-primary {
-  @apply btn bg-ink text-white hover:bg-[#1c2536];
+  @apply btn bg-boton text-sobre-boton hover:bg-boton-hover;
 }
 @utility btn-accent {
   @apply btn bg-accent text-white hover:bg-[#075985];
@@ -305,6 +322,34 @@
   /* Lienzo de diapositiva: tipografía en unidades del contenedor, escala a cualquier tamaño */
   /* la presentacion la ve el medico: no cambia con el tema del visitador */
   .lienzo {
+    /* la diapositiva no sigue el tema de la app: se redeclara la paleta clara entera */
+    --color-ink: #0b1220;
+    --color-ink-2: #334155;
+    --color-ink-3: #56617a;
+    --color-paper: #f7f8fa;
+    --color-surface: #ffffff;
+    --color-sunken: #eef1f5;
+    --color-line: #e2e6ec;
+    --color-line-2: #cbd3dd;
+    --color-contraste: #0b1220;
+    --color-contraste-alto: #1c2536;
+    --color-boton: #0b1220;
+    --color-boton-hover: #1c2536;
+    --color-sobre-boton: #ffffff;
+    --color-sobre-estado: #ffffff;
+    --color-elevado: #ffffff;
+    --color-accent: #0369a1;
+    --color-accent-soft: #e3f1f9;
+    --color-ia: #5b3fd6;
+    --color-ia-soft: #efe9fb;
+    --color-ok: #047857;
+    --color-ok-soft: #e3f4ec;
+    --color-warn: #a15c07;
+    --color-warn-soft: #fdf1dc;
+    --color-bad: #b42318;
+    --color-bad-soft: #fcebea;
+    --color-cardio-tint: #e4f2ee;
+    --color-respira-tint: #e6eef6;
     color-scheme: light;
     container-type: inline-size;
     aspect-ratio: 16 / 10;

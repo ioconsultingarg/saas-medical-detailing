@@ -97,7 +97,7 @@ export function Segmentado<T extends string>({
             aria-pressed={activo}
             onClick={() => onCambio(o.valor)}
             className={`press inline-flex min-h-10 cursor-pointer items-center gap-1.5 rounded-lg px-3.5 text-[14px] font-medium whitespace-nowrap ${
-              activo ? 'bg-surface text-ink shadow-(--shadow-card)' : 'text-ink-3 hover:text-ink'
+              activo ? 'bg-elevado text-ink shadow-(--shadow-card)' : 'text-ink-3 hover:text-ink'
             }`}
           >
             {o.texto}

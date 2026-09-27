@@ -222,12 +222,12 @@ export function ReporteVoz({ visita, onAplicar }: Props) {
           {fase === 'inicio' && (
             <div className="flex flex-wrap items-center gap-2">
               {puedeDictar && (
-                <button type="button" onClick={grabar} className="btn bg-white text-ink hover:bg-white/90">
+                <button type="button" onClick={grabar} className="btn bg-white text-[#0b1220] hover:bg-white/90">
                   <Mic size={17} aria-hidden="true" />
                   Grabar reporte
                 </button>
               )}
-              <button type="button" onClick={ejemplo} className={puedeDictar ? 'btn text-white hover:bg-white/10' : 'btn bg-white text-ink hover:bg-white/90'}>
+              <button type="button" onClick={ejemplo} className={puedeDictar ? 'btn text-white hover:bg-white/10' : 'btn bg-white text-[#0b1220] hover:bg-white/90'}>
                 <AudioLines size={17} aria-hidden="true" />
                 {puedeDictar ? 'Probar con un audio de ejemplo' : 'Usar audio de ejemplo'}
               </button>
@@ -240,7 +240,7 @@ export function ReporteVoz({ visita, onAplicar }: Props) {
               <span className="num text-[15px] text-white/80" aria-label="Duración de la grabación">
                 {cronometro(ahora - inicioGrabacion)}
               </span>
-              <button type="button" onClick={terminar} className="btn bg-white text-ink hover:bg-white/90">
+              <button type="button" onClick={terminar} className="btn bg-white text-[#0b1220] hover:bg-white/90">
                 <Square size={14} aria-hidden="true" className="fill-ink" />
                 Terminar
               </button>
@@ -279,7 +279,7 @@ export function ReporteVoz({ visita, onAplicar }: Props) {
             const actual = i === paso
             return (
               <li key={p} className={`flex items-center gap-3 text-[14px] ${hecho ? 'text-ink' : actual ? 'text-ink' : 'text-ink-3'}`}>
-                <span className={`flex size-6 items-center justify-center rounded-full ${hecho ? 'bg-ok text-white' : 'bg-sunken'}`}>
+                <span className={`flex size-6 items-center justify-center rounded-full ${hecho ? 'bg-ok text-sobre-estado' : 'bg-sunken'}`}>
                   {hecho ? <Check size={13} aria-hidden="true" /> : actual ? <span className="spinner size-3.5 rounded-full border-2 border-ink-3 border-t-transparent" /> : null}
                 </span>
                 {p}
@@ -397,7 +397,7 @@ export function ReporteVoz({ visita, onAplicar }: Props) {
                     ) : (
                       <button
                         type="button"
-                        className="btn mt-3 bg-bad text-white hover:bg-bad/90"
+                        className="btn mt-3 bg-bad text-sobre-estado hover:bg-bad/90"
                         onClick={() => {
                           despachar({ tipo: 'farmacovigilancia', fragmento: r.eventoAdverso! })
                           setNotificado(true)

@@ -339,7 +339,7 @@ export function Presentar({ presentacionId }: { presentacionId: string }) {
               type="button"
               onClick={() => setAnotando((v) => !v)}
               aria-pressed={anotando}
-              className={`press flex size-11 cursor-pointer items-center justify-center rounded-xl ${anotando ? 'bg-white text-ink' : 'text-white/85 hover:bg-white/10'}`}
+              className={`press flex size-11 cursor-pointer items-center justify-center rounded-xl ${anotando ? 'bg-white text-[#0b1220]' : 'text-white/85 hover:bg-white/10'}`}
               aria-label="Anotar sobre la pantalla"
             >
               <PenLine size={19} aria-hidden="true" />
@@ -349,7 +349,7 @@ export function Presentar({ presentacionId }: { presentacionId: string }) {
             </button>
             <button type="button" onClick={() => setPanel('stock')} className="press relative flex size-11 cursor-pointer items-center justify-center rounded-xl text-white/85 hover:bg-white/10" aria-label={`Stock y muestras${unidadesCarrito ? `, ${unidadesCarrito} en el carrito` : ''}`}>
               <Boxes size={19} aria-hidden="true" />
-              {unidadesCarrito > 0 && <span className="num absolute top-1.5 right-1.5 min-w-4 rounded-full bg-[#34d399] px-1 text-[10px] leading-4 text-ink">{unidadesCarrito}</span>}
+              {unidadesCarrito > 0 && <span className="num absolute top-1.5 right-1.5 min-w-4 rounded-full bg-[#34d399] px-1 text-[10px] leading-4 text-[#0b1220]">{unidadesCarrito}</span>}
             </button>
             <button type="button" onClick={() => setLimpio(true)} className="press hidden size-11 cursor-pointer items-center justify-center rounded-xl text-white/85 hover:bg-white/10 sm:flex" aria-label="Pantalla limpia">
               <Maximize2 size={18} aria-hidden="true" />
@@ -450,7 +450,7 @@ export function Presentar({ presentacionId }: { presentacionId: string }) {
                   type="button"
                   onClick={() => pasar(i)}
                   aria-current={actual ? 'step' : undefined}
-                  className={`press flex min-h-12 cursor-pointer items-center gap-2 rounded-xl px-3 text-left text-[13px] font-medium ${actual ? 'bg-white text-ink' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}
+                  className={`press flex min-h-12 cursor-pointer items-center gap-2 rounded-xl px-3 text-left text-[13px] font-medium ${actual ? 'bg-white text-[#0b1220]' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}
                 >
                   <span className="num flex size-6 items-center justify-center rounded-md text-[11px]" style={{ background: actual ? p.color : 'rgb(255 255 255 / 0.1)', color: '#fff' }}>
                     {i + 1}

@@ -103,7 +103,7 @@ function TarjetaPresentacion({ p, destacada }: { p: Presentacion; destacada?: bo
           {p.tipo === 'personal' && (
             <button
               type="button"
-              className={confirmando ? 'btn bg-bad text-white hover:bg-bad/90' : 'btn-icon'}
+              className={confirmando ? 'btn bg-bad text-sobre-estado hover:bg-bad/90' : 'btn-icon'}
               aria-label={confirmando ? `Confirmar borrado de ${p.titulo}` : `Borrar ${p.titulo}`}
               onClick={() => {
                 if (!confirmando) return setConfirmando(true)
@@ -169,7 +169,7 @@ export function Biblioteca() {
             </span>
             <span className="block truncate text-[13px] text-white/65">{para.nota}</span>
           </span>
-          <span className="btn w-full bg-white text-ink sm:w-auto">
+          <span className="btn w-full bg-boton text-sobre-boton sm:w-auto">
             <Play size={16} aria-hidden="true" />
             Presentar
           </span>

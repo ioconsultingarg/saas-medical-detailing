@@ -238,7 +238,7 @@ export function Licitaciones() {
                         onClick={() => despachar({ tipo: 'requisito', id: r.id, listo: !listo })}
                         className="press flex min-h-11 w-full cursor-pointer items-center gap-3 rounded-xl border border-line px-3 text-left text-[14px] hover:border-line-2"
                       >
-                        <span className={`flex size-5 shrink-0 items-center justify-center rounded-md border ${listo ? 'border-ok bg-ok text-white' : 'border-line-2'}`}>
+                        <span className={`flex size-5 shrink-0 items-center justify-center rounded-md border ${listo ? 'border-ok bg-ok text-sobre-estado' : 'border-line-2'}`}>
                           {listo && <Check size={13} aria-hidden="true" />}
                         </span>
                         <span className={listo ? 'text-ink-3 line-through' : 'text-ink'}>{r.texto}</span>

@@ -104,7 +104,7 @@ function VisitaEnCurso() {
       <span className="num text-[13px] text-white/80" aria-label="Tiempo de visita">
         {cronometro(ahora - inicio)}
       </span>
-      <a href="#/cierre" className="press inline-flex min-h-9 items-center rounded-full bg-white px-3 text-[13px] font-semibold text-ink hover:bg-white/90">
+      <a href="#/cierre" className="press inline-flex min-h-9 items-center rounded-full bg-white px-3 text-[13px] font-semibold text-[#0b1220] hover:bg-white/90">
         Cerrar visita
       </a>
     </div>
@@ -114,7 +114,7 @@ function VisitaEnCurso() {
 function Insignia({ cantidad, className }: { cantidad: number; className: string }) {
   if (cantidad <= 0) return null
   return (
-    <span aria-hidden="true" className={`num absolute min-w-4 rounded-full bg-warn px-1 text-[10px] leading-4 text-white ${className}`}>
+    <span aria-hidden="true" className={`num absolute min-w-4 rounded-full bg-warn px-1 text-[10px] leading-4 text-sobre-estado ${className}`}>
       {cantidad}
     </span>
   )
@@ -162,7 +162,7 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
       {/* Riel lateral: tablet y desktop */}
       <nav
         aria-label="Principal"
-        className="fixed inset-y-0 left-0 z-40 hidden w-[88px] flex-col items-center border-r border-line bg-surface pt-[calc(14px+env(safe-area-inset-top))] pb-4 md:flex"
+        className="fixed inset-y-0 left-0 z-40 hidden w-[96px] flex-col items-center border-r border-line bg-surface pt-[calc(14px+env(safe-area-inset-top))] pb-4 md:flex"
       >
         <a href="#/" aria-label="IO-Pharma, inicio" className="press mb-4 shrink-0 rounded-xl p-1.5">
           <Logo />
@@ -183,7 +183,7 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
                     <a
                       href={href}
                       aria-current={actual ? 'page' : undefined}
-                      className={`press relative flex w-[72px] flex-col items-center gap-1 rounded-xl py-2 text-[12px] font-medium ${
+                      className={`press relative flex w-[80px] flex-col items-center gap-1 rounded-xl px-1 py-2 text-center text-[11px] leading-tight font-medium ${
                         actual ? 'bg-contraste text-white' : 'text-ink-3 hover:bg-sunken hover:text-ink'
                       }`}
                     >
@@ -208,7 +208,7 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
           aria-haspopup="dialog"
           aria-expanded={cuentaAbierta}
           aria-label={`Cuenta de ${nombre}`}
-          className="press mt-3 flex w-[72px] shrink-0 cursor-pointer flex-col items-center gap-1 rounded-xl py-2 text-[12px] font-medium text-ink-3 hover:bg-sunken hover:text-ink"
+          className="press mt-3 flex w-[80px] shrink-0 cursor-pointer flex-col items-center gap-1 rounded-xl py-2 text-[11px] font-medium text-ink-3 hover:bg-sunken hover:text-ink"
         >
           <span aria-hidden="true" className="flex size-10 items-center justify-center rounded-full bg-sunken text-[13px] font-semibold text-ink-2">
             {iniciales(nombre)}
@@ -217,7 +217,7 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
         </button>
       </nav>
 
-      <div className="md:pl-[88px]">
+      <div className="md:pl-[96px]">
         <div className="material sticky top-0 z-30 border-b border-line/70 pt-[env(safe-area-inset-top)]">
           <div className="mx-auto flex h-16 max-w-[1440px] items-center gap-3 px-4 sm:px-6 lg:px-8">
             <a href="#/" className="press -ml-1.5 flex size-11 items-center justify-center rounded-xl md:hidden" aria-label="IO-Pharma, inicio">
@@ -324,7 +324,7 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
                   <span className="flex items-center gap-2 text-[15px] font-semibold text-ink">
                     {etiqueta === 'API' ? 'Integraciones y API' : etiqueta}
                     {href === '#/academia' && cursosPendientes > 0 && (
-                      <span className="num rounded-full bg-warn px-1.5 text-[11px] leading-5 text-white">{cursosPendientes}</span>
+                      <span className="num rounded-full bg-warn px-1.5 text-[11px] leading-5 text-sobre-estado">{cursosPendientes}</span>
                     )}
                   </span>
                   <span className="block text-[13px] text-ink-3">{detalle}</span>

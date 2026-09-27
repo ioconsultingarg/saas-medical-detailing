@@ -106,7 +106,7 @@ function Pensando({ onFin }: { onFin: () => void }) {
     <ol aria-live="polite" className="flex flex-col gap-2">
       {pasosPensando.map((p, i) => (
         <li key={p} className={`flex items-center gap-2.5 text-[14px] ${i <= paso ? 'text-ink-2' : 'text-ink-3/60'}`}>
-          <span className={`flex size-5 items-center justify-center rounded-full ${i < paso ? 'bg-ok text-white' : 'bg-sunken'}`}>
+          <span className={`flex size-5 items-center justify-center rounded-full ${i < paso ? 'bg-ok text-sobre-estado' : 'bg-sunken'}`}>
             {i < paso ? <Check size={11} aria-hidden="true" /> : i === paso ? <span className="spinner size-3 rounded-full border-2 border-ink-3 border-t-transparent" /> : null}
           </span>
           {p}

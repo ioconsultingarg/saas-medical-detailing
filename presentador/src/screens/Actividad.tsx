@@ -197,7 +197,7 @@ export function Actividad() {
 
           <button
             type="button"
-            className={confirmando ? 'btn bg-bad text-white hover:bg-bad/90' : 'btn-ghost self-start'}
+            className={confirmando ? 'btn bg-bad text-sobre-estado hover:bg-bad/90' : 'btn-ghost self-start'}
             onClick={() => {
               if (!confirmando) return setConfirmando(true)
               despachar({ tipo: 'reiniciar' })

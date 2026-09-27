@@ -25,7 +25,7 @@ function Puntajes({ a }: { a: Analisis }) {
           <span className="font-mono text-[10px] text-ink-3">{letra}</span>
           <span aria-hidden="true" className="flex gap-0.5">
             {[1, 2, 3, 4, 5].map((n) => (
-              <span key={n} className={`h-3 w-1 rounded-full ${n <= valor ? 'bg-contraste' : 'bg-line'}`} />
+              <span key={n} className={`h-3 w-1 rounded-full ${n <= valor ? 'bg-ink' : 'bg-line-2'}`} />
             ))}
           </span>
           <span className="sr-only">{`${letra}: ${valor} de 5`}</span>

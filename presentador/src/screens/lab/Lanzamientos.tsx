@@ -115,7 +115,7 @@ export function Lanzamientos() {
                     onClick={() => despachar({ tipo: 'hito', id: h.id, listo: !h.listo })}
                     className="press flex w-full cursor-pointer items-start gap-3 rounded-xl px-2 py-2.5 text-left hover:bg-sunken"
                   >
-                    <span className={`mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-md border ${h.listo ? 'border-ok bg-ok text-white' : atrasado ? 'border-bad' : 'border-line-2'}`}>
+                    <span className={`mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-md border ${h.listo ? 'border-ok bg-ok text-sobre-estado' : atrasado ? 'border-bad' : 'border-line-2'}`}>
                       {h.listo && <Check size={13} aria-hidden="true" />}
                     </span>
                     <span className="min-w-0 flex-1">
