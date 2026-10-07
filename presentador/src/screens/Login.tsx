@@ -1,6 +1,5 @@
 import { useId, useRef, useState, type FormEvent } from 'react'
 import { ArrowRight, CalendarRange, CloudOff, Eye, EyeOff, KeyRound, Lock, MapPin, ShieldCheck } from 'lucide-react'
-import { AvisoInstalar } from '../components/Instalar'
 import { MonogramaProducto, Segmentado } from '../components/ui'
 import { apm, visitasDelDia } from '../data/agenda'
 import { productos } from '../data/productos'
@@ -134,7 +133,6 @@ export function Login() {
           </p>
 
           <div className="mt-8">
-            <AvisoInstalar />
           </div>
 
           <form className="flex flex-col gap-5" onSubmit={onSubmit} noValidate>

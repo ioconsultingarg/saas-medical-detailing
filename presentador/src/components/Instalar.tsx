@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react'
-import { Download, Share, SquarePlus, X } from 'lucide-react'
+import { useCallback, useEffect, useState } from 'react'
+import { Download, Share, SquarePlus } from 'lucide-react'
 
 /*
  * Instalación de la app en el dispositivo, sin pasar por ninguna tienda.
- * En Android y escritorio el navegador ofrece el diálogo nativo; en iPhone hay que
- * guiar al usuario, porque Safari no expone ese diálogo.
+ *
+ * La oferta vive en un solo lugar: la sección "Instalación" de Tu cuenta. Se muestra
+ * siempre en el mismo sitio y desaparece para siempre cuando la persona instala la app
+ * o cuando dice que no. En Android y escritorio el navegador ofrece el diálogo nativo;
+ * en iPhone hay que guiar los pasos, porque Safari no expone ese diálogo.
  */
 
 interface EventoInstalacion extends Event {
@@ -24,9 +27,18 @@ function esIOS() {
   return /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
 }
 
+function leerDescartada() {
+  try {
+    return localStorage.getItem(CLAVE) === 'descartada'
+  } catch {
+    return false
+  }
+}
+
 export function useInstalacion() {
   const [evento, setEvento] = useState<EventoInstalacion | null>(null)
   const [instalada, setInstalada] = useState(yaInstalada)
+  const [descartada, setDescartada] = useState(leerDescartada)
 
   useEffect(() => {
     function alOfrecer(e: Event) {
@@ -45,93 +57,83 @@ export function useInstalacion() {
     }
   }, [])
 
-  async function instalar() {
+  const descartar = useCallback(() => {
+    setDescartada(true)
+    try {
+      localStorage.setItem(CLAVE, 'descartada')
+    } catch {
+      // sin almacenamiento: la oferta vuelve a aparecer en la próxima sesión
+    }
+  }, [])
+
+  const instalar = useCallback(async () => {
     if (!evento) return false
     await evento.prompt()
     const { outcome } = await evento.userChoice
     setEvento(null)
+    // rechazar el diálogo del navegador cuenta como decir que no
+    if (outcome !== 'accepted') descartar()
     return outcome === 'accepted'
-  }
+  }, [evento, descartar])
 
   return {
     instalada,
+    descartada,
     /** el navegador puede mostrar el diálogo nativo */
     disponible: Boolean(evento),
     /** hay que explicar los pasos a mano */
     manual: !instalada && !evento && esIOS(),
     instalar,
+    descartar,
   }
 }
 
-export function BotonInstalar({ className = 'btn-secondary' }: { className?: string }) {
-  const { instalada, disponible, manual, instalar } = useInstalacion()
-  const [pasos, setPasos] = useState(false)
+/**
+ * Sección de instalación de Tu cuenta: el único lugar donde se ofrece instalar la app.
+ * Devuelve null —y no deja hueco— cuando ya está instalada, cuando se rechazó la oferta
+ * o cuando el navegador no puede instalarla.
+ */
+export function SeccionInstalar() {
+  const { instalada, descartada, disponible, manual, instalar, descartar } = useInstalacion()
 
-  if (instalada || (!disponible && !manual)) return null
-
-  return (
-    <>
-      <button type="button" className={className} onClick={() => (disponible ? void instalar() : setPasos((v) => !v))}>
-        <Download size={16} aria-hidden="true" />
-        Instalar la app
-      </button>
-      {pasos && (
-        <p className="animate-entrar mt-2 flex flex-col gap-1.5 rounded-xl bg-sunken p-3 text-[13px] leading-relaxed text-ink-2">
-          <span className="flex items-center gap-2">
-            <Share size={14} aria-hidden="true" className="shrink-0 text-ink-3" />
-            Tocá Compartir en la barra de Safari.
-          </span>
-          <span className="flex items-center gap-2">
-            <SquarePlus size={14} aria-hidden="true" className="shrink-0 text-ink-3" />
-            Elegí “Agregar a inicio”.
-          </span>
-        </p>
-      )}
-    </>
-  )
-}
-
-/** Aviso en la pantalla de ingreso: es donde tiene sentido invitar a instalarla */
-export function AvisoInstalar() {
-  const { instalada, disponible, manual, instalar } = useInstalacion()
-  const [oculto, setOculto] = useState(() => {
-    try {
-      return localStorage.getItem(CLAVE) === 'oculto'
-    } catch {
-      return false
-    }
-  })
-
-  if (instalada || oculto || (!disponible && !manual)) return null
-
-  function descartar() {
-    setOculto(true)
-    try {
-      localStorage.setItem(CLAVE, 'oculto')
-    } catch {
-      // sin almacenamiento: vuelve a aparecer la próxima vez
-    }
-  }
+  if (instalada || descartada || (!disponible && !manual)) return null
 
   return (
-    <div className="animate-entrar mb-6 flex flex-wrap items-center gap-3 rounded-2xl border border-line bg-sunken p-3.5">
-      <span aria-hidden="true" className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-contraste text-white">
-        <Download size={18} />
-      </span>
-      <div className="min-w-0 flex-1 basis-48">
-        <p className="text-[14px] font-semibold text-ink">Instalala en este dispositivo</p>
-        <p className="text-[13px] leading-snug text-ink-3">
-          {manual ? 'En Safari: Compartir → “Agregar a inicio”. Queda con su ícono y funciona sin conexión.' : 'Queda con su ícono, se abre a pantalla completa y funciona sin conexión.'}
-        </p>
-      </div>
-      {disponible && (
-        <button type="button" className="btn-primary" onClick={() => void instalar()}>
-          Instalar
+    <section aria-labelledby="titulo-instalacion" className="mt-6">
+      <h3 id="titulo-instalacion" className="mb-2 text-[14px] font-semibold text-ink">
+        Instalación
+      </h3>
+
+      {manual ? (
+        <div className="rounded-xl border border-line bg-sunken p-3.5">
+          <p className="text-[13px] leading-relaxed text-ink-2">Para dejarla en tu pantalla de inicio, desde Safari:</p>
+          <ol className="mt-2 flex flex-col gap-1.5 text-[13px] text-ink-2">
+            <li className="flex items-center gap-2">
+              <Share size={15} aria-hidden="true" className="shrink-0 text-ink-3" />
+              Tocá Compartir en la barra del navegador.
+            </li>
+            <li className="flex items-center gap-2">
+              <SquarePlus size={15} aria-hidden="true" className="shrink-0 text-ink-3" />
+              Elegí “Agregar a inicio”.
+            </li>
+          </ol>
+        </div>
+      ) : (
+        <button type="button" className="btn-primary w-full" onClick={() => void instalar()}>
+          <Download size={17} aria-hidden="true" />
+          Instalar la app
         </button>
       )}
-      <button type="button" className="btn-icon" aria-label="No mostrar este aviso" onClick={descartar}>
-        <X size={18} aria-hidden="true" />
+
+      <p className="mt-1.5 text-[12px] leading-relaxed text-ink-3">
+        {manual
+          ? 'Queda con su propio ícono, se abre a pantalla completa y conserva lo que trabajaste aunque pasen días sin abrirla.'
+          : 'Queda con su propio ícono, se abre a pantalla completa y funciona sin conexión.'}
+      </p>
+
+      <button type="button" className="btn-ghost mt-2 min-h-10 w-full text-[13px]" onClick={descartar}>
+        No, gracias
       </button>
-    </div>
+    </section>
   )
 }

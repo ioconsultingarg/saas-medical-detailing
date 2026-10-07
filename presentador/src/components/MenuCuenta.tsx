@@ -4,7 +4,7 @@ import { ir } from '../lib/ruta'
 import { useTema, type Tema } from '../lib/tema'
 import { nombreCorto, useDemo } from '../state/demo'
 import { useSesion } from '../state/sesion'
-import { BotonInstalar } from './Instalar'
+import { SeccionInstalar } from './Instalar'
 import { Sheet } from './Sheet'
 
 export function iniciales(nombre: string) {
@@ -127,9 +127,7 @@ export function MenuCuenta({ abierto, onCerrar }: { abierto: boolean; onCerrar: 
             </p>
           </section>
 
-          <div className="mt-5">
-            <BotonInstalar className="btn-secondary w-full" />
-          </div>
+          <SeccionInstalar />
           <button type="button" className="btn-secondary mt-3 w-full text-bad hover:border-bad/40 hover:bg-bad-soft" onClick={cerrarSesion}>
             <LogOut size={17} aria-hidden="true" />
             Cerrar sesión

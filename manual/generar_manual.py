@@ -483,10 +483,13 @@ def construir():
         'ofrece instalarla, con lo que queda con su ícono, se abre a pantalla completa y funciona sin conexión.')]
     f += [pasos([
         'Abrí la dirección en Chrome, Edge o Safari.',
-        'En Android y en computadora, tocá "Instalar" cuando el navegador lo ofrezca, o el botón que aparece al ingresar.',
-        'En iPhone y iPad: Compartir y después "Agregar a inicio".',
-        'Desde tu cuenta podés instalarla en cualquier momento.',
+        'Entrá a <b>Tu cuenta</b>, tocando tu inicial arriba a la derecha.',
+        'En la sección <b>Instalación</b>, tocá "Instalar la app".',
+        'En iPhone y iPad no hay botón: el navegador no lo permite. Ahí la app muestra los dos pasos, Compartir y "Agregar a inicio".',
     ])]
+    f += [Spacer(1, 2), P(
+        'La invitación aparece una sola vez y en un solo lugar. Si se elige "No, gracias", no vuelve a molestar: a partir de ahí '
+        'la instalación queda donde la ofrece el navegador, en su propia barra de direcciones.')]
     f += [Spacer(1, 6), aviso(
         'Por qué conviene instalarla',
         'En iPhone, una aplicación web que no está instalada pierde sus datos guardados a los pocos días de no usarse. '
