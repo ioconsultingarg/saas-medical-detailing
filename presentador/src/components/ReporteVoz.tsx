@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
+import { motion, useReducedMotion } from 'motion/react'
 import { AlertTriangle, AudioLines, Check, CheckCircle2, ChevronDown, Mic, Package, RotateCcw, ShieldAlert, Sparkles, Square, Star } from 'lucide-react'
 import { apellido } from '../data/crm'
 import { extraer, guionEjemplo, type Entidad, type ExtraccionVoz, type TipoEntidad } from '../lib/extraccionVoz'
 import { cronometro } from '../lib/formato'
 import { prefiereMenosMovimiento } from '../lib/tiempo'
 import { soportaDictado, useDictado } from '../lib/voz'
+import { RESORTE_CAMBIO } from '../lib/resortes'
 import { OrbeVoz } from './OrbeVoz'
 import { useDemo } from '../state/demo'
 import type { Visita } from '../types'
@@ -48,12 +50,35 @@ function Transcripcion({ texto, entidades }: { texto: string; entidades: Entidad
   )
 }
 
+/*
+ * Los campos del CRM no aparecen todos juntos: se completan uno por uno, como si
+ * la extracción los fuera escribiendo. Cada uno entra con un resorte y un destello
+ * del acento que se apaga solo. Es el momento que vende el producto.
+ */
+const CASCADA = {
+  oculto: {},
+  visible: { transition: { staggerChildren: 0.11, delayChildren: 0.12 } },
+}
+
+const CAMPO = {
+  oculto: { opacity: 0, y: 8, backgroundColor: 'rgba(86,169,221,0.16)' },
+  visible: {
+    opacity: 1,
+    y: 0,
+    backgroundColor: 'rgba(86,169,221,0)',
+    transition: { ...RESORTE_CAMBIO, backgroundColor: { duration: 1.1, ease: 'easeOut' } },
+  },
+}
+
 function Campo({ titulo, children }: { titulo: string; children: React.ReactNode }) {
   return (
-    <div className="flex flex-col gap-1.5 border-b border-line py-3 last:border-0 sm:flex-row sm:items-start sm:gap-4">
+    <motion.div
+      variants={CAMPO}
+      className="flex flex-col gap-1.5 rounded-lg border-b border-line px-2 py-3 last:border-0 sm:flex-row sm:items-start sm:gap-4"
+    >
       <dt className="w-32 shrink-0 pt-0.5 text-[13px] text-ink-3">{titulo}</dt>
       <dd className="min-w-0 flex-1 text-[14px] text-ink">{children}</dd>
-    </div>
+    </motion.div>
   )
 }
 
@@ -63,6 +88,7 @@ interface Props {
 }
 
 export function ReporteVoz({ visita, onAplicar }: Props) {
+  const sinMovimiento = useReducedMotion()
   const { estado, online, despachar, avisar } = useDemo()
   const dictado = useDictado()
   const [fase, setFase] = useState<Fase>('inicio')
@@ -287,7 +313,12 @@ export function ReporteVoz({ visita, onAplicar }: Props) {
                 <span className="num">{Math.round(r.cobertura * 100)} %</span> completado
               </span>
             </div>
-            <dl className="mt-2">
+            <motion.dl
+              className="mt-2"
+              variants={CASCADA}
+              initial={sinMovimiento ? false : 'oculto'}
+              animate="visible"
+            >
               <Campo titulo="Médico">
                 {r.medico ? (
                   <span className="flex flex-wrap items-center gap-2">
@@ -352,7 +383,7 @@ export function ReporteVoz({ visita, onAplicar }: Props) {
                 )}
               </Campo>
               <Campo titulo="Próximo paso">{r.proximoPaso ?? <span className="text-ink-3">No se definió</span>}</Campo>
-            </dl>
+            </motion.dl>
 
             {r.eventoAdverso && (
               <div role="alert" className="mt-3 rounded-xl border border-bad/25 bg-bad-soft p-4">

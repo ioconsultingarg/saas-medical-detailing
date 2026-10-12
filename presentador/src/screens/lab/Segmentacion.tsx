@@ -1,9 +1,11 @@
 import { useMemo, useState } from 'react'
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { ArrowRight, Check, Info, Target, TrendingUp, Users, X } from 'lucide-react'
 import { Avatar, BadgeCategoria, Variacion, textoDias } from '../../components/crm'
 import { EncabezadoPantalla, Kpi, MonogramaProducto, NumeroAnimado, Segmentado } from '../../components/ui'
 import { apmPorId } from '../../data/crm'
 import { analizar, descripcionSegmento, etiquetaSegmento, propuestas, type Analisis, type Segmento } from '../../lib/rfm'
+import { RESORTE_LAYOUT } from '../../lib/resortes'
 import { useDemo } from '../../state/demo'
 
 type Vista = 'propuestas' | 'todos'
@@ -39,6 +41,7 @@ export function Segmentacion() {
   const { estado, despachar, avisar } = useDemo()
   const [vista, setVista] = useState<Vista>('propuestas')
   const [descartadas, setDescartadas] = useState<string[]>([])
+  const sinMovimiento = useReducedMotion()
 
   const analisis = useMemo(
     () => analizar({ registros: estado.registros, entregas: estado.entregas, categorias: estado.categorias }),
@@ -103,10 +106,17 @@ export function Segmentacion() {
             <span>{vista === 'propuestas' ? 'Cambio propuesto' : 'Categoría'}</span>
           </div>
           <ul className="divide-y divide-line">
+            <AnimatePresence initial={false}>
             {filas.map((a, i) => (
-              <li
+              <motion.li
                 key={a.medico.id}
-                className="entra-fila grid grid-cols-1 gap-x-4 gap-y-3 px-4 py-4 sm:px-5 lg:grid-cols-[minmax(0,2.2fr)_minmax(0,1.3fr)_minmax(0,1.1fr)_minmax(0,0.9fr)_minmax(0,1.6fr)] lg:items-center"
+                layout={!sinMovimiento}
+                initial={sinMovimiento ? false : { opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                // sale hacia la derecha: la decisión ya se tomó y la fila se va
+                exit={sinMovimiento ? { opacity: 0 } : { opacity: 0, x: 40, height: 0, paddingTop: 0, paddingBottom: 0 }}
+                transition={sinMovimiento ? { duration: 0.12 } : RESORTE_LAYOUT}
+                className="grid grid-cols-1 gap-x-4 gap-y-3 overflow-hidden px-4 py-4 sm:px-5 lg:grid-cols-[minmax(0,2.2fr)_minmax(0,1.3fr)_minmax(0,1.1fr)_minmax(0,0.9fr)_minmax(0,1.6fr)] lg:items-center"
                 style={{ ['--orden' as string]: Math.min(i, 10) }}
               >
                 <span className="flex min-w-0 items-center gap-3">
@@ -176,8 +186,9 @@ export function Segmentacion() {
                 </span>
 
                 <span className="col-span-full text-[13px] leading-relaxed text-ink-2 lg:pl-0">{a.motivo}</span>
-              </li>
+              </motion.li>
             ))}
+            </AnimatePresence>
           </ul>
         </section>
       )}

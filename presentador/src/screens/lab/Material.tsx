@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { AlertTriangle, CheckCircle2, ChevronRight, Clock, FileCheck, FileText, Film, Layers, Plus, Send, Upload, XCircle } from 'lucide-react'
 import { Sheet } from '../../components/Sheet'
 import { ChipProducto, EncabezadoPantalla, Kpi, MonogramaProducto, NumeroAnimado, Segmentado } from '../../components/ui'
 import { etiquetaEstado, etiquetaTipo, piezas, type EstadoPieza, type Pieza, type TipoPieza } from '../../data/portal'
 import { fechaCorta } from '../../lib/formato'
+import { RESORTE_LAYOUT } from '../../lib/resortes'
 import { useDemo } from '../../state/demo'
 
 const estiloEstado: Record<EstadoPieza, string> = {
@@ -32,6 +34,7 @@ export function Material() {
   const { estado, despachar, avisar } = useDemo()
   const [filtro, setFiltro] = useState<Filtro>('todas')
   const [abierta, setAbierta] = useState<Pieza | null>(null)
+  const sinMovimiento = useReducedMotion()
 
   const estadoDe = (p: Pieza) => estado.piezas[p.id] ?? p.estadoInicial
   const conteo = (e: EstadoPieza) => piezas.filter((p) => estadoDe(p) === e).length
@@ -94,11 +97,22 @@ export function Material() {
           <span />
         </div>
         <ul className="divide-y divide-line">
+          <AnimatePresence initial={false}>
           {visibles.map((p, i) => {
             const e = estadoDe(p)
             const Icono = iconoTipo[p.tipo]
             return (
-              <li key={p.id} className="entra-fila" style={{ ['--orden' as string]: Math.min(i, 8) }}>
+              <motion.li
+                key={p.id}
+                layout={!sinMovimiento}
+                initial={sinMovimiento ? false : { opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                // una pieza que cambia de estado deja el filtro actual: se va, no desaparece
+                exit={sinMovimiento ? { opacity: 0 } : { opacity: 0, x: 40, height: 0 }}
+                transition={sinMovimiento ? { duration: 0.12 } : RESORTE_LAYOUT}
+                className="overflow-hidden"
+                style={{ ['--orden' as string]: Math.min(i, 8) }}
+              >
                 <button
                   type="button"
                   onClick={() => setAbierta(p)}
@@ -125,9 +139,10 @@ export function Material() {
                     <span className={`num ${e === 'vencida' ? 'text-bad' : 'text-ink-2'}`}>{p.vigencia}</span>
                   </span>
                 </button>
-              </li>
+              </motion.li>
             )
           })}
+          </AnimatePresence>
         </ul>
       </section>
 
