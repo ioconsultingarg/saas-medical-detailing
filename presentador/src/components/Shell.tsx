@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react'
-import { Boxes, Building2, CalendarRange, ChevronRight, CircleHelp, CloudOff, Ellipsis, FileCheck, Gavel, GraduationCap, Library, Plug, RefreshCw, Rocket, ShieldAlert, Sparkles, Stethoscope, Target, UserCog, Users } from 'lucide-react'
+import { Boxes, Building2, CalendarRange, ChevronRight, CircleHelp, CloudOff, Ellipsis, FileCheck, Gavel, GraduationCap, Library, Plug, RefreshCw, Rocket, Search, ShieldAlert, Sparkles, Stethoscope, Target, UserCog, Users } from 'lucide-react'
 import { cronometro } from '../lib/formato'
 import type { Ruta } from '../lib/ruta'
 import { useAhora } from '../lib/tiempo'
@@ -8,6 +8,7 @@ import { useAcademia } from '../state/academia'
 import { useSesion } from '../state/sesion'
 import { Ayuda } from './Ayuda'
 import { Marca } from './Marca'
+import { Paleta, useAtajoPaleta } from './Paleta'
 import { iniciales, MenuCuenta } from './MenuCuenta'
 import { Sheet } from './Sheet'
 
@@ -116,6 +117,7 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
   const [cuentaAbierta, setCuentaAbierta] = useState(false)
   const [masAbierto, setMasAbierto] = useState(false)
   const [ayudaAbierta, setAyudaAbierta] = useState(false)
+  const [paletaAbierta, setPaletaAbierta] = useState(false)
 
   // la tecla ? abre la ayuda desde cualquier pantalla, salvo mientras se escribe
   useEffect(() => {
@@ -130,6 +132,8 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
+
+  useAtajoPaleta(() => setPaletaAbierta(true))
   const nombre = sesion?.nombre ?? apm.nombre
   const esLab = sesion?.rol === 'lab'
   const principales = esLab ? portal : campo
@@ -221,6 +225,17 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
             <div className="ml-auto flex min-w-0 items-center gap-2">
               {!esLab && <VisitaEnCurso />}
               <EstadoConexion />
+              <button
+                type="button"
+                onClick={() => setPaletaAbierta(true)}
+                aria-haspopup="dialog"
+                aria-expanded={paletaAbierta}
+                aria-label="Buscar (⌘K)"
+                title="Buscar · ⌘K"
+                className="press flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full text-ink-3 hover:bg-sunken hover:text-ink"
+              >
+                <Search size={20} aria-hidden="true" />
+              </button>
               <button
                 type="button"
                 onClick={() => setAyudaAbierta(true)}
@@ -325,6 +340,11 @@ export function Shell({ ruta, children }: { ruta: Ruta; children: ReactNode }) {
         </ul>
       </Sheet>
 
+      <Paleta
+        abierta={paletaAbierta}
+        onCerrar={() => setPaletaAbierta(false)}
+        onAyuda={() => setAyudaAbierta(true)}
+      />
       <Ayuda abierto={ayudaAbierta} onCerrar={() => setAyudaAbierta(false)} ruta={ruta} />
       <MenuCuenta abierto={cuentaAbierta} onCerrar={() => setCuentaAbierta(false)} />
     </div>
