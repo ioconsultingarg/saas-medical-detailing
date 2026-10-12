@@ -57,7 +57,7 @@ const requisitosBase = (prefijo: string, listos: number): Requisito[] =>
 export const licitaciones: Licitacion[] = [
   {
     id: 'l1',
-    organismo: 'Hospital Municipal San Martín',
+    organismo: 'Hospital Demo Municipal',
     expediente: 'EX-2026-00184521',
     objeto: 'Provisión de broncodilatadores inhalatorios para el período 2027',
     productos: ['respira'],
@@ -74,7 +74,7 @@ export const licitaciones: Licitacion[] = [
   },
   {
     id: 'l2',
-    organismo: 'Ministerio de Salud de la Provincia',
+    organismo: 'Ministerio de Salud Demo',
     expediente: 'LP-2026-0912',
     objeto: 'Compra centralizada de hipolipemiantes',
     productos: ['cardio'],
@@ -90,7 +90,7 @@ export const licitaciones: Licitacion[] = [
   },
   {
     id: 'l3',
-    organismo: 'PAMI · Unidad de Gestión Local IV',
+    organismo: 'Obra Social Demo Nacional · UGL IV',
     expediente: 'CD-2026-3344',
     objeto: 'Cobertura de tratamiento crónico cardiometabólico',
     productos: ['cardio'],
@@ -108,7 +108,7 @@ export const licitaciones: Licitacion[] = [
   },
   {
     id: 'l4',
-    organismo: 'Hospital Provincial de Niños',
+    organismo: 'Hospital Demo de Niños',
     expediente: 'EX-2026-00170044',
     objeto: 'Aerocámaras espaciadoras pediátricas',
     productos: ['respira'],
@@ -125,7 +125,7 @@ export const licitaciones: Licitacion[] = [
   },
   {
     id: 'l5',
-    organismo: 'Instituto de Obra Social Provincial',
+    organismo: 'Instituto Demo de Obra Social',
     expediente: 'LPU-2026-0075',
     objeto: 'Provisión de inhaladores para el programa de EPOC',
     productos: ['respira'],
@@ -142,7 +142,7 @@ export const licitaciones: Licitacion[] = [
   },
   {
     id: 'l6',
-    organismo: 'Municipalidad de Rosario · Salud Pública',
+    organismo: 'Municipalidad Demo · Salud Pública',
     expediente: 'CM-2026-0488',
     objeto: 'Botiquín de atención primaria, renglones 4 y 7',
     productos: ['cardio', 'respira'],

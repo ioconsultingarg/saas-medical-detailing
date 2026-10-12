@@ -81,7 +81,7 @@ const semillas: Semilla[] = [
   // Diego Salas · Zona Centro
   ['m13', 'Dra. Graciela Ponce', 'Cardiología', 'A', 'Caballito', 1, 'c', 0.08, 9, 'Clínica Caballito'],
   ['m14', 'Dr. Alejandro Funes', 'Cardiología', 'A', 'Almagro', 1, 'c', -0.31, 64, 'Instituto del Corazón Almagro'],
-  ['m15', 'Dra. Natalia Brizuela', 'Neumonología', 'B', 'Balvanera', 1, 'r', 0.14, 18, 'Hospital de Clínicas'],
+  ['m15', 'Dra. Natalia Brizuela', 'Neumonología', 'B', 'Balvanera', 1, 'r', 0.14, 18, 'Hospital Universitario Demo'],
   ['m16', 'Dr. Sergio Lamas', 'Clínica médica', 'B', 'San Nicolás', 1, 'cr', -0.22, 11, 'Centro Médico Tribunales'],
   ['m17', 'Dra. Paula Etchegaray', 'Medicina interna', 'C', 'Monserrat', 1, 'cr', 0.03, 27, 'Consultorio Monserrat'],
   ['m18', 'Dr. Gustavo Quiroga', 'Neumonología', 'A', 'San Telmo', 1, 'r', 0.21, 6, 'Centro Respiratorio San Telmo'],

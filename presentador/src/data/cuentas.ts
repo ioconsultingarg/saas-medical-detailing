@@ -76,7 +76,7 @@ export const etiquetaMovimiento: Record<Movimiento['tipo'], string> = {
 export const cuentas: Cuenta[] = [
   {
     id: 'c1',
-    nombre: 'Droguería del Litoral',
+    nombre: 'Droguería Demo Litoral',
     tipo: 'drogueria',
     cuit: '30-71234567-4',
     localidad: 'Rosario, Santa Fe',
@@ -103,7 +103,7 @@ export const cuentas: Cuenta[] = [
   },
   {
     id: 'c2',
-    nombre: 'Distribuidora Andes',
+    nombre: 'Distribuidora Demo Cuyo',
     tipo: 'drogueria',
     cuit: '30-70998877-1',
     localidad: 'Mendoza',
@@ -123,7 +123,7 @@ export const cuentas: Cuenta[] = [
   },
   {
     id: 'c3',
-    nombre: 'Farmacias Vital',
+    nombre: 'Farmacias Demo Vital',
     tipo: 'cadena',
     cuit: '30-71555444-8',
     localidad: 'CABA y GBA',
@@ -150,7 +150,7 @@ export const cuentas: Cuenta[] = [
   },
   {
     id: 'c4',
-    nombre: 'Red Farmasalud',
+    nombre: 'Red Demo Farmasalud',
     tipo: 'cadena',
     cuit: '30-71777222-3',
     localidad: 'Córdoba',
@@ -170,7 +170,7 @@ export const cuentas: Cuenta[] = [
   },
   {
     id: 'c5',
-    nombre: 'Hospital Municipal San Martín',
+    nombre: 'Hospital Demo Municipal',
     tipo: 'institucion',
     cuit: '30-99887766-5',
     localidad: 'La Plata, Buenos Aires',
@@ -190,7 +190,7 @@ export const cuentas: Cuenta[] = [
   },
   {
     id: 'c6',
-    nombre: 'Droguería Suramericana',
+    nombre: 'Droguería Demo del Sur',
     tipo: 'drogueria',
     cuit: '30-70445566-9',
     localidad: 'Tucumán',
@@ -210,7 +210,7 @@ export const cuentas: Cuenta[] = [
   },
   {
     id: 'c7',
-    nombre: 'Obra Social Metalúrgicos',
+    nombre: 'Obra Social Demo Gremial',
     tipo: 'financiador',
     cuit: '30-54332211-7',
     localidad: 'CABA',

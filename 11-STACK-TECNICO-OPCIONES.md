@@ -365,6 +365,50 @@ trabajo propio. Si el objetivo es validar con uno o dos clientes, eso es un fin 
 y vale la pena. Si el objetivo fuera crecer a diez clientes sin sumar a nadie de infraestructura,
 ahí sí conviene pagar un Postgres gestionado, aunque salga en dólares.
 
+---
+
+## Lo que no puede sobrevivir a la demo
+
+Tres cosas están resueltas hoy de una manera que es correcta para una demostración pública y
+**sería un problema el día que haya un médico real del otro lado**. Quedan acá para que no se
+pasen por alto en el momento del traspaso.
+
+### El ingreso se valida en el navegador
+
+`src/state/sesion.tsx` compara el correo y la clave contra una constante del código, guarda el rol
+en `localStorage` y distingue en el mensaje de error si la cuenta no existe o si la contraseña está
+mal.
+
+Para una demo con credenciales públicas está bien: no protege nada y no pretende hacerlo. En
+producción:
+
+- El rol va en el **token** y se hace valer con políticas de la base (RLS), nunca en el cliente.
+  Hoy cualquiera puede escribir `rol: 'lab'` en `localStorage` y ver el portal.
+- El error tiene que ser **uno solo**: "Email o contraseña incorrectos". Distinguir los dos casos
+  permite averiguar qué correos están dados de alta.
+- La baja de un visitador tiene que **invalidar la sesión abierta**, no solo impedir el próximo
+  ingreso. Es la contracara del BYOD que ya discutimos.
+
+### El dictado manda audio a Google
+
+La Web Speech API del navegador es gratis y no necesita servidor, pero **el audio se procesa en
+servidores de Google**. En la demo no hay dato de nadie. Con médicos reales hace falta:
+
+- Consentimiento explícito del visitador antes de la primera grabación.
+- Que figure en la política de privacidad del producto, incluida la transferencia internacional.
+- Una alternativa para los laboratorios que no lo acepten: transcripción propia o del lado del
+  servidor, con acuerdo de tratamiento de datos.
+
+### Los mapas usan los tiles públicos de OpenStreetMap
+
+`tile.openstreetmap.org` tiene una **política de uso aceptable** pensada para proyectos chicos, que
+desaconseja explícitamente el uso comercial sistemático. Con un laboratorio y veinte visitadores
+abriendo el mapa varias veces por día, se pasa de largo.
+
+Al pasar a producción hay que mover los tiles a un proveedor con plan comercial —MapTiler, Stadia,
+Protomaps autohospedado— y presupuestarlo. Son entre 0 y 25 dólares por mes en este volumen, pero
+no se puede dejar para después: cortan el servicio sin aviso.
+
 ## Qué preguntarle a cada proveedor que cotices
 
 1. ¿Dónde quedan físicamente los datos y puedo elegir la región?

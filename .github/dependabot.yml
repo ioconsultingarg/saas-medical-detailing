@@ -1,0 +1,25 @@
+# Dependabot: avisa y abre PR cuando una dependencia tiene una vulnerabilidad o
+# queda vieja. Gratis en repositorios públicos.
+version: 2
+updates:
+  # Dependencias de la app
+  - package-ecosystem: npm
+    directory: /presentador
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: deps
+    groups:
+      # Un solo PR por semana con todo lo menor, para no inundar la bandeja
+      menores:
+        update-types: [minor, patch]
+
+  # Acciones del despliegue: mantiene los SHA fijados al día
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: ci
