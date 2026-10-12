@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState, type RefObject } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AlertTriangle, AudioLines, Check, CheckCircle2, ChevronDown, Mic, Package, RotateCcw, ShieldAlert, Sparkles, Square, Star } from 'lucide-react'
 import { apellido } from '../data/crm'
 import { extraer, guionEjemplo, type Entidad, type ExtraccionVoz, type TipoEntidad } from '../lib/extraccionVoz'
 import { cronometro } from '../lib/formato'
 import { prefiereMenosMovimiento } from '../lib/tiempo'
 import { soportaDictado, useDictado } from '../lib/voz'
+import { OrbeVoz } from './OrbeVoz'
 import { useDemo } from '../state/demo'
 import type { Visita } from '../types'
 import { ChipProducto } from './ui'
@@ -20,35 +21,6 @@ const estiloEntidad: Record<TipoEntidad, { clase: string; texto: string }> = {
   feedback: { clase: 'bg-[#efe9fb] text-[#5b3fa6]', texto: 'Feedback' },
   evento: { clase: 'bg-bad-soft text-bad', texto: 'Evento adverso' },
   accion: { clase: '', texto: '' },
-}
-
-/** Onda de audio: se dibuja fuera de React para no re-renderizar a 60 fps */
-function Onda({ nivel, simulada }: { nivel: RefObject<number>; simulada: boolean }) {
-  const barras = useRef<(HTMLSpanElement | null)[]>([])
-  useEffect(() => {
-    let raf = 0
-    const inicio = performance.now()
-    const cuadro = (t: number) => {
-      const s = (t - inicio) / 1000
-      const base = simulada ? 0.3 + 0.35 * Math.abs(Math.sin(s * 2.1)) * (0.6 + 0.4 * Math.sin(s * 5.3)) : nivel.current ?? 0
-      barras.current.forEach((b, i) => {
-        if (!b) return
-        const forma = 0.35 + 0.65 * Math.abs(Math.sin(i * 0.55 + s * (simulada ? 7 : 4)))
-        b.style.transform = `scaleY(${Math.max(0.08, Math.min(1, base * forma * 1.6))})`
-      })
-      raf = requestAnimationFrame(cuadro)
-    }
-    raf = requestAnimationFrame(cuadro)
-    return () => cancelAnimationFrame(raf)
-  }, [nivel, simulada])
-
-  return (
-    <div aria-hidden="true" className="flex h-12 items-center gap-[3px]">
-      {Array.from({ length: 36 }, (_, i) => (
-        <span key={i} ref={(el) => void (barras.current[i] = el)} className="h-full w-[3px] origin-center rounded-full bg-[#7cc4ee]" style={{ transform: 'scaleY(0.08)' }} />
-      ))}
-    </div>
-  )
 }
 
 function Transcripcion({ texto, entidades }: { texto: string; entidades: Entidad[] }) {
@@ -236,7 +208,7 @@ export function ReporteVoz({ visita, onAplicar }: Props) {
 
           {fase === 'grabando' && (
             <div className="flex items-center gap-4">
-              <Onda nivel={simulada ? nivelSimulado : dictado.nivel} simulada={simulada} />
+              <OrbeVoz nivel={simulada ? nivelSimulado : dictado.nivel} simulada={simulada} tamano={96} />
               <span className="num text-[15px] text-white/80" aria-label="Duración de la grabación">
                 {cronometro(ahora - inicioGrabacion)}
               </span>
